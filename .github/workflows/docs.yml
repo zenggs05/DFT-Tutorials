@@ -35,7 +35,7 @@ jobs:
         run: |
           shopt -s nullglob
           for f in google*.html BingSiteAuth.xml baidu_verify_*.html; do
-            cp -v "$f" site/
+            if [ -f "$f" ]; then cp -v "$f" site/; fi
           done
       - uses: actions/upload-pages-artifact@v3
         with:
