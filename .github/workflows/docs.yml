@@ -28,6 +28,15 @@ jobs:
       - run: mkdocs build
         env:
           NO_MKDOCS_2_WARNING: "1"
+      # mkdocs-same-dir drops non-Markdown files in the repo root, so copy
+      # search-engine verification files (Google/Bing/Baidu) into the site verbatim.
+      - name: Copy site-verification files
+        shell: bash
+        run: |
+          shopt -s nullglob
+          for f in google*.html BingSiteAuth.xml baidu_verify_*.html; do
+            cp -v "$f" site/
+          done
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
