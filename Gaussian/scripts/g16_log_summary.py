@@ -82,7 +82,7 @@ RE_S2_ANN = re.compile(r"S\*\*2 before annihilation\s+(-?\d+\.\d+),\s+after\s+(-
 RE_S2 = re.compile(r"<S\*\*2>=\s*(-?\d+\.\d+)")
 RE_TIME = re.compile(r"(Job cpu time|Elapsed time):\s+(\d+)\s+days\s+(\d+)\s+hours\s+(\d+)\s+minutes\s+"
                      r"(\d+(?:\.\d*)?)\s+seconds")
-RE_ERRLINK = re.compile(r"Error termination via Lnk1e(?:\s+in\s+(\S+))?")
+RE_ERRLINK = re.compile(r"Error termination via Lnk1e\b(?:\s+in\s+(\S+))?")
 RE_LINKNUM = re.compile(r"l(\d+)\.exe", re.IGNORECASE)
 RE_ERRREQ = re.compile(r"Error termination request processed by link\s+(\d+)")
 RE_PG = re.compile(r"Full point group\s+(\S+)")
