@@ -1,0 +1,18 @@
+SYSTEM  = MgO conventional cell - Born effective charges and eps_inf (LEPSILON)
+
+PREC    = Accurate
+ENCUT   = 520
+EDIFF   = 1E-8
+ALGO    = Normal
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+
+IBRION  = -1
+NSW     = 0
+LEPSILON = .TRUE.      # DFPT response to an electric field: eps_inf and Z*
+LRPA    = .FALSE.      # include exchange-correlation local fields (needed for Z*)
+# Do NOT set NCORE/NPAR here either.
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

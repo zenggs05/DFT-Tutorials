@@ -1,0 +1,67 @@
+! Chapter 10 example: excited-state character of DMABN (4-(dimethylamino)benzonitrile)
+! Step 1: S0 opt+freq   Step 2: TD (coefficients >= 1e-4 printed for Multiwfn)
+! Steps 3-4: NTOs of S1 and S2 (each written to its own chk)   Step 5: DCT index of S2
+%chk=dmabn_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Opt Freq SCRF=(SMD,Solvent=Acetonitrile)
+
+DMABN S0 opt+freq, B3LYP-D3(BJ)/6-31+G(d), SMD(acetonitrile)
+
+0 1
+ C      -2.325767     1.048396     0.602712
+ N      -1.590254     0.245620    -0.373595
+ C      -2.357358    -0.818113    -1.020608
+ C      -0.205979     0.100546    -0.233727
+ C       0.552366     0.937326     0.606283
+ C       1.943579     0.809208     0.737558
+ C       2.627904    -0.164709     0.016114
+ C       1.912945    -1.000768    -0.836609
+ C       0.521917    -0.861720    -0.958378
+ C       4.048413    -0.300751     0.144891
+ N       5.199033    -0.411997     0.250409
+ H      -1.995316     2.092487     0.586725
+ H      -2.211776     0.640584     1.613176
+ H      -3.397364     1.070193     0.374376
+ H      -2.046869    -0.953265    -2.062199
+ H      -2.252477    -1.764359    -0.478427
+ H      -3.425200    -0.574392    -1.055929
+ H       0.078274     1.724023     1.185985
+ H       2.477896     1.482413     1.404985
+ H       2.422929    -1.765173    -1.419496
+ H       0.023105    -1.535548    -1.648921
+
+--Link1--
+%oldchk=dmabn_opt.chk
+%chk=dmabn_td.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/6-31+G(d) TD=(NStates=6) SCRF=(SMD,Solvent=Acetonitrile)
+   Geom=Check Guess=Read IOp(9/40=4)
+
+DMABN vertical excitations, CAM-B3LYP/6-31+G(d), SMD(acetonitrile)
+
+0 1
+
+--Link1--
+%oldchk=dmabn_td.chk
+%chk=dmabn_nto_s1.chk
+%mem=8GB
+%nprocshared=8
+#p Geom=AllCheck Guess=(Read,Only) Density=(Check,Transition=1) Pop=(Minimal,NTO,SaveNTO)
+
+--Link1--
+%oldchk=dmabn_td.chk
+%chk=dmabn_nto_s2.chk
+%mem=8GB
+%nprocshared=8
+#p Geom=AllCheck Guess=(Read,Only) Density=(Check,Transition=2) Pop=(Minimal,NTO,SaveNTO)
+
+--Link1--
+%oldchk=dmabn_td.chk
+%chk=dmabn_dct_s2.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/6-31+G(d) TD=(Read,NStates=6,Root=2) SCRF=(SMD,Solvent=Acetonitrile)
+   Geom=AllCheck Guess=Read Density=Current Pop=DCT
+

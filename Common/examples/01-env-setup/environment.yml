@@ -1,0 +1,45 @@
+# conda/mamba environment for the DFT tutorials (pre/post-processing only;
+# VASP, Gaussian, CP2K and OpenMX themselves come from your cluster).
+#
+#   mamba env create -f environment.yml          # first time
+#   mamba env update -f environment.yml --prune  # after editing this file
+#   conda activate dft
+#
+# Python 3.12 because: pymatgen >= 2026 and phonopy >= 4.8.2 need >= 3.11,
+# mp-api 0.47 needs >= 3.12, lobsterpy supports < 3.15.
+# Lower bounds (>=) keep the file portable; for an exact, reproducible
+# snapshot export a lock file (see README.md).
+name: dft
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  # numerics and plotting
+  - numpy>=2.0
+  - scipy
+  - matplotlib-base
+  - pandas
+  - h5py
+  # structures, symmetry, k-paths, phonons
+  - ase>=3.28
+  - pymatgen>=2026.3
+  - spglib>=2.5
+  - seekpath
+  - phonopy>=4.8.2
+  # molecules (SMILES -> 3D, chapter 3)
+  - rdkit
+  # notebooks
+  - jupyterlab
+  - ipywidgets
+  # handy command-line tools inside the env
+  - dos2unix
+  - pip:
+      - mp-api>=0.45              # Materials Project new API client
+      - sumo>=3.0                 # band/DOS plots, k-paths
+      - pyprocar>=6.3             # PROCAR fat bands, Fermi surfaces (v6 API)
+      - py4vasp>=0.11             # reads vaspout.h5 (VASP built with HDF5)
+      - cclib==1.8.1              # stable parser; 2.0a1 has Gaussian bugs
+      - goodvibes>=4.4            # quasi-harmonic free energies (Gaussian)
+      - lobsterpy>=0.6            # LOBSTER bonding analysis
+      - dpdispatcher>=1.0         # batch submission to Slurm/PBS/LSF

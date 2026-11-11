@@ -1,0 +1,10 @@
+%oldchk=sn2_ts.chk
+%chk=sn2_irc.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ IRC=(RCFC,Phase=(1,3),MaxPoints=80,StepSize=10,MaxCycle=50) Geom=Check Guess=Read
+
+SN2 IRC in both directions from the converged TS; forward = C-Br bond lengthening
+
+-1 1
+

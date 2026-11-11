@@ -1,0 +1,86 @@
+# DOS and PDOS of graphene with k-points (CP2K >= 2026.2)
+# - SCF on a 21x21x1 Monkhorst-Pack mesh (odd and divisible by 3: contains G and K)
+# - total DOS recomputed non-self-consistently on a dense 60x60x1 mesh (MP_GRID)
+# - k-point PDOS is only written as broadened &CURVE output (no state-resolved file)
+# - k-point symmetry is left OFF (default) so that px/py/pz components stay meaningful
+
+&GLOBAL
+  PROJECT     graphene_dos
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     400
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &KPOINTS
+      ! one k-point along the vacuum direction
+      SCHEME MONKHORST-PACK 21 21 1
+    &END KPOINTS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-8
+      MAX_SCF   100
+      ADDED_MOS 10
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD  BROYDEN_MIXING
+        ALPHA   0.3
+        NBUFFER 8
+      &END MIXING
+      &SMEAR ON
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 300
+      &END SMEAR
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+      &DOS
+        DELTA_E 0.0002            ! Hartree, 0.0054 eV
+        MP_GRID 60 60 1           ! dense mesh for the TOTAL DOS only
+        &PDOS
+          COMPONENTS T            ! columns: s py pz px (d components follow)
+        &END PDOS
+        &CURVE
+          ENERGY_UNIT EV
+          ENERGY_ZERO FERMI       ! metal / semimetal with smearing
+          &BROADEN
+            TYPE  GAUSSIAN
+            WIDTH [eV] 0.1
+          &END BROADEN
+        &END CURVE
+      &END DOS
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ! a = 2.46 Angstrom, 20 Angstrom along z (vacuum)
+      ABC 2.46 2.46 20.0
+      ALPHA_BETA_GAMMA 90.0 90.0 120.0
+      PERIODIC XYZ
+    &END CELL
+    &COORD
+      SCALED
+      C  0.333333333  0.666666667  0.500000000
+      C  0.666666667  0.333333333  0.500000000
+    &END COORD
+    &KIND C
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q4
+      POTENTIAL GTH-PBE-q4
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

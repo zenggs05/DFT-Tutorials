@@ -1,0 +1,8 @@
+%oldchk=ts_opt.chk
+%chk=irc.chk
+#p B3LYP EmpiricalDispersion=GD3BJ def2SVP SCRF=(SMD,Solvent=Toluene) IRC=(RCFC,Phase=(1,6),MaxPoints=50,StepSize=10,MaxCycle=50) Geom=Check Guess=Read
+
+IRC from the Diels-Alder TS; forward = C1-C6 distance increases (towards the reactants)
+
+0 1
+

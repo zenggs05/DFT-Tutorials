@@ -1,0 +1,10 @@
+# Step 1: PBE ground state -> WAVECAR as a starting point for the hybrid run
+SYSTEM  = ZnO PBE pre-run
+PREC    = Accurate
+ENCUT   = 520          # 1.3 x ENMAX(O) = 520 eV
+EDIFF   = 1E-7
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+LWAVE   = .TRUE.
+LCHARG  = .FALSE.

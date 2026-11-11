@@ -1,0 +1,5 @@
+%nprocshared=8
+%mem=12GB
+%chk=opt_maxcycles_calcfc.chk
+#p Opt=(Restart,MaxCycles=300)
+

@@ -1,0 +1,37 @@
+! h2o_opt_tight.inp - tight geometry optimization of H2O before a frequency run
+! Chapter 14, step 1.  Target versions: CP2K 2023.1 ... 2026.2
+!
+!   mpirun -np 8 cp2k.psmp -i h2o_opt_tight.inp -o h2o_opt_tight.out
+!   bash last_frame.sh h2o_opt-pos-1.xyz h2o_opt.xyz
+!
+! MAX_FORCE 1.0E-5 hartree/bohr is ~45x tighter than the default (4.5E-4):
+! residual forces show up as spurious low or imaginary frequencies.
+
+@SET COORD ${COORD-h2o.xyz}
+
+&GLOBAL
+  PROJECT h2o_opt
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+@INCLUDE 'h2o_force_eval.inc'
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 200
+    MAX_FORCE 1.0E-5
+    RMS_FORCE 5.0E-6
+    MAX_DR 1.0E-4
+    RMS_DR 5.0E-5
+  &END GEO_OPT
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+    &END RESTART
+  &END PRINT
+&END MOTION

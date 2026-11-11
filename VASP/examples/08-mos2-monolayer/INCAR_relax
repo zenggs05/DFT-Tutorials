@@ -1,0 +1,21 @@
+SYSTEM  = MoS2 monolayer, PBE-D3(BJ), in-plane relaxation only
+
+PREC    = Accurate
+ENCUT   = 450            # >= 1.3 x max(ENMAX) of Mo_pv / S; ISIF = 3 needs the margin
+EDIFF   = 1E-6
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+ISMEAR  = 0
+SIGMA   = 0.05
+
+IVDW    = 12             # same vdW setting as the bilayer / heterostructure you compare to
+
+IBRION  = 2
+ISIF    = 3
+# relax a1, a2 only and keep c (vacuum) fixed; VASP >= 6.4.3 (6.5.1+ recommended)
+LATTICE_CONSTRAINTS = .TRUE. .TRUE. .FALSE.
+NSW     = 100
+EDIFFG  = -0.01
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

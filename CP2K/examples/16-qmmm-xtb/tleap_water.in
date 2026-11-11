@@ -1,0 +1,10 @@
+# tleap script (AmberTools): build an AMBER topology for the 125-water box
+# of chapter 16. Usage:  tleap -f tleap_water.in
+# Input : water125.pdb (residue name WAT, atom names O H1 H2)
+# Output: water125.prmtop  water125.inpcrd
+source leaprc.water.tip3p
+sys = loadpdb water125.pdb
+set sys box { 15.54 15.54 15.54 }
+check sys
+saveamberparm sys water125.prmtop water125.inpcrd
+quit

@@ -1,0 +1,33 @@
+! Chapter 10 example: ECD of (R)-methyloxirane (propylene oxide)
+! Step 1: opt+freq   Step 2: TD-DFT with a diffuse basis (low-lying states are Rydberg-like)
+! Rotatory strengths are printed automatically by every TD job; use R(velocity)
+%chk=mox_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Opt Freq
+
+(R)-methyloxirane opt+freq, B3LYP-D3(BJ)/def2-TZVP, gas phase
+
+0 1
+ C      -1.213067     0.014264    -0.254999
+ C       0.044295    -0.211739     0.505216
+ C       1.379921     0.199319    -0.052469
+ O       0.932783    -1.165198    -0.086882
+ H      -1.642969     0.984900     0.010350
+ H      -1.048074    -0.000908    -1.337365
+ H      -1.945555    -0.761414    -0.011385
+ H      -0.096051    -0.241705     1.576914
+ H       1.415290     0.737330    -0.991227
+ H       2.173427     0.445152     0.641848
+
+--Link1--
+%oldchk=mox_opt.chk
+%chk=mox_ecd.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/Aug-cc-pVDZ TD=(NStates=20) Geom=Check Guess=Read
+
+(R)-methyloxirane ECD/UV, 20 singlets, CAM-B3LYP/aug-cc-pVDZ, gas phase
+
+0 1
+

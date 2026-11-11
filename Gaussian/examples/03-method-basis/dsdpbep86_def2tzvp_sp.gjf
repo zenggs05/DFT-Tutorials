@@ -1,0 +1,6 @@
+%oldchk=benzene_b3lyp_gd3bj_def2svp.chk
+%chk=benzene_dsdpbep86_def2tzvp_sp.chk
+%mem=8GB
+%nprocshared=8
+#p DSDPBEP86/def2TZVP Geom=AllCheck SP
+

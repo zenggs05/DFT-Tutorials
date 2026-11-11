@@ -1,0 +1,11 @@
+SYSTEM = Si step 2: static SCF on the relaxed cell (writes CHGCAR)
+PREC   = Accurate
+ENCUT  = 400
+EDIFF  = 1E-7
+ISMEAR = -5         # tetrahedron method with Bloechl corrections: accurate E and DOS
+NSW    = 0
+IBRION = -1
+LORBIT = 11
+NEDOS  = 3001
+LWAVE  = .FALSE.
+LCHARG = .TRUE.     # CHGCAR is read by the band step

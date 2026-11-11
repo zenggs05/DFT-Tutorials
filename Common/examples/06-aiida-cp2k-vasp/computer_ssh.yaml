@@ -1,0 +1,8 @@
+# verdi computer configure core.ssh hpc --config computer_ssh.yaml
+username: myname
+port: 22
+look_for_keys: true
+key_filename: /home/myname/.ssh/id_ed25519
+timeout: 60
+allow_agent: true
+safe_interval: 10.0

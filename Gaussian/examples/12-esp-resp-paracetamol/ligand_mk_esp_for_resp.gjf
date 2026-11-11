@@ -1,0 +1,47 @@
+! Chapter 12 example: AMBER-style ESP for RESP fitting of a small ligand (paracetamol)
+! Step 1: HF/6-31G(d) opt (classic AMBER/GAFF protocol)
+! Step 2: HF/6-31G(d) MK ESP. 6/33=2 prints ESP points, 6/41=10 layers, 6/42=17 point density,
+!         6/50=1 writes an Antechamber .gesp file; its name is the last line of the step
+%chk=lig_opt.chk
+%mem=8GB
+%nprocshared=8
+#p HF/6-31G(d) Opt SCF=Tight
+
+Paracetamol HF/6-31G(d) geometry optimization
+
+0 1
+ C       3.691373    -0.360571     0.117591
+ C       2.324738    -0.235562    -0.509254
+ O       2.189776    -0.267602    -1.727077
+ N       1.324123    -0.118925     0.438503
+ C      -0.061788     0.011747     0.213336
+ C      -0.886809     0.103826     1.342915
+ C      -2.270808     0.236126     1.205105
+ C      -2.833598     0.277054    -0.062634
+ O      -4.186799     0.406769    -0.155051
+ C      -2.033565     0.188000    -1.195089
+ C      -0.647108     0.055564    -1.054623
+ H       3.775184     0.274994     1.003877
+ H       3.868912    -1.403154     0.393946
+ H       4.451223    -0.040538    -0.601250
+ H       1.612526    -0.136313     1.408452
+ H      -0.468575     0.074044     2.345249
+ H      -2.905656     0.306769     2.083621
+ H      -4.431592     0.419296    -1.095143
+ H      -2.460147     0.218961    -2.192773
+ H      -0.051411    -0.010485    -1.959704
+
+--Link1--
+%oldchk=lig_opt.chk
+%chk=lig_esp.chk
+%mem=8GB
+%nprocshared=8
+#p HF/6-31G(d) SCF=Tight Geom=Check Guess=Read NoSymm
+   Pop=MK IOp(6/33=2,6/41=10,6/42=17,6/50=1)
+
+Paracetamol HF/6-31G(d) Merz-Kollman ESP points for RESP
+
+0 1
+
+paracetamol.gesp
+

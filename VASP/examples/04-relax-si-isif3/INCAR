@@ -1,0 +1,19 @@
+SYSTEM  = Si bulk relaxation (ISIF=3)
+
+# Electronic part
+PREC    = Accurate
+ENCUT   = 400        # >= 1.3 x ENMAX(Si ~245 eV); required for stress/volume relaxations
+EDIFF   = 1E-6
+ISMEAR  = 0          # Gaussian smearing, semiconductor
+SIGMA   = 0.05
+LREAL   = .FALSE.    # small cell: reciprocal-space projection is more accurate
+
+# Ionic part
+IBRION  = 2          # conjugate gradient, robust default
+ISIF    = 3          # relax positions + cell shape + cell volume
+NSW     = 60
+EDIFFG  = -0.005     # force criterion (stress is also checked for ISIF>=3)
+
+# Output
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

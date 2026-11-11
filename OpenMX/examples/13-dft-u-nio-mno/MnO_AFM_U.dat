@@ -1,0 +1,72 @@
+#
+# MnO, AFM-II order along [111], rhombohedral 4-atom cell
+# GGA-PBE + U (Dudarev), U_eff = 4.0 eV on Mn 1d
+# Mn2+ is d5 high spin: expect a Mulliken moment close to (somewhat below) 5 muB
+# a(rock salt) = 4.445 Ang (close to experiment), h = a/2 = 2.2225 Ang
+# Target: OpenMX 4.0 (for 3.9 delete the scf.Generation.Kpoint line)
+#
+
+System.CurrrentDirectory    ./
+System.Name                 mno_u4
+level.of.stdout             1
+level.of.fileout            1
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+
+#
+# Mn_PBE19 has 15 valence electrons (3s2 3p6 3d5 4s2), O_PBE19 has 6
+#
+Species.Number      2
+<Definition.of.Atomic.Species
+  Mn   Mn6.0-s3p2d2    Mn_PBE19
+  O    O6.0-s2p2d1     O_PBE19
+Definition.of.Atomic.Species>
+
+scf.Hubbard.U               on
+scf.DFTU.Type               1
+scf.Hubbard.Occupation      dual
+<Hubbard.U.values           # eV; Mn6.0-s3p2d2 -> 1s 2s 3s 1p 2p 1d 2d
+  Mn  1s 0.0 2s 0.0 3s 0.0 1p 0.0 2p 0.0 1d 4.0 2d 0.0
+  O   1s 0.0 2s 0.0 1p 0.0 2p 0.0 1d 0.0
+Hubbard.U.values>
+
+#
+# 10.0 + 5.0 = 15 valence electrons, initial moment +/-5 muB on Mn1/Mn2
+# last column: orbital-polarization flag (d5 shell has no orbital degeneracy -> off)
+#
+Atoms.Number        4
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1  Mn   0.00000   0.00000   0.00000   10.0   5.0  off
+  2  Mn   2.22250   2.22250   0.00000    5.0  10.0  off
+  3  O    2.22250   0.00000   0.00000    3.0   3.0  off
+  4  O    2.22250   2.22250   2.22250    3.0   3.0  off
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit   Ang
+<Atoms.UnitVectors
+  4.44500   2.22250   2.22250
+  2.22250   4.44500   2.22250
+  2.22250   2.22250   4.44500
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        on
+scf.ElectronicTemperature   300.0
+scf.energycutoff            250.0
+scf.EigenvalueSolver        Band
+scf.Kgrid                   7 7 7
+scf.Generation.Kpoint       GCenter
+scf.maxIter                 300
+scf.Mixing.Type             RMM-DIISH
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.20
+scf.Mixing.History          30
+scf.Mixing.StartPulay       15
+scf.criterion               1.0e-8
+
+MD.Type                     nomd
+
+Dos.fileout                 on
+Dos.Erange                 -10.0  10.0
+Dos.Kgrid                   11 11 11

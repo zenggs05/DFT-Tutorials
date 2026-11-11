@@ -1,0 +1,30 @@
+# ~/.vaspkit template for VASPKIT 1.5.x  (cp vaspkit_rc.example ~/.vaspkit)
+# Keys follow the "how_to_set_environment_variable" file shipped with
+# VASPKIT; if your version ships a newer template, start from that one
+# and copy only the paths below. Format: KEY  value  # comment
+VASP5                         .TRUE.                  # .FALSE. only for vasp.4.x
+LDA_PATH                      ~/vasp_pp/potpaw_LDA    # LDA PAW potentials
+PBE_PATH                      ~/vasp_pp/potpaw_PBE    # PBE PAW potentials (the one that matters)
+GGA_PATH                      ~/vasp_pp/potpaw_GGA    # PW91 PAW potentials
+POTCAR_TYPE                   PBE                     # PBE, PW91 or LDA
+GW_POTCAR                     .FALSE.                 # .TRUE. picks *_GW potentials
+RECOMMENDED_POTCAR            .TRUE.                  # use the VASP-recommended variants (_pv, _sv, _d)
+SET_FERMI_ENERGY_ZERO         .TRUE.                  # shift E_F to 0 in BAND.dat/DOS.dat
+MINI_INCAR                    .FALSE.                 # .TRUE. writes a shorter INCAR
+USER_DEFINED_INCAR            .FALSE.                 # use your own INCAR templates
+WRITE_SELECTIVE_DYNAMICS      .FALSE.
+PYTHON_BIN                    ~/miniforge3/envs/dft/bin/python3   # Python with numpy/scipy/matplotlib
+PLOT_MATPLOTLIB               .FALSE.
+AUTO_PLOT                     .FALSE.                 # .TRUE. = draw figures automatically (>= 1.3.0)
+VASPKIT_UTILITIES_PATH        ~/software/vaspkit.1.5.1/utilities
+ADVANCED_USER                 .TRUE.
+SET_INCAR_WRITE_MODE          OVERRIDE                # OVERRIDE, APPEND, BACK-UP-OLD, BACK-UP-NEW
+PHS_CORRECTION                .FALSE.
+# default values of some tags
+SYMPREC                       1E-5                    # symmetry tolerance in Angstrom
+EMIN                          -20.0
+EMAX                           20.0
+NEDOS                          2001
+GAMMA_CENTERED                .TRUE.
+VACUUM_THICKNESS               15.0                   # slabs / 2D materials, Angstrom
+CENTER_SLAB                   .TRUE.

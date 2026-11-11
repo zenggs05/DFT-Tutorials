@@ -1,0 +1,26 @@
+SYSTEM   = Si HSE06 SCF + band path (KPOINTS_OPT, VASP >= 6.3)
+
+ISTART   = 1         # PBE WAVECAR of the same uniform mesh (0-pbe-scf)
+PREC     = Accurate
+ENCUT    = 400
+EDIFF    = 1E-6
+ISMEAR   = 0
+SIGMA    = 0.01
+LREAL    = .FALSE.
+NBANDS   = 16
+LORBIT   = 11
+
+LHFCALC  = .TRUE.
+GGA      = PE
+HFSCREEN = 0.2
+AEXX     = 0.25
+ALGO     = Damped
+TIME     = 0.4
+PRECFOCK = Normal
+HFRCUT   = -1        # required for unscreened hybrids with KPOINTS_OPT, recommended for HSE as well
+# KPOINTS_OPT_NKBATCH = 10   # fewer k-points per batch if memory is tight
+
+NSW      = 0
+IBRION   = -1
+LWAVE    = .FALSE.
+LCHARG   = .FALSE.

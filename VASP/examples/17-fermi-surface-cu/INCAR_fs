@@ -1,0 +1,13 @@
+SYSTEM  = Cu fcc non-SCF on a dense uniform mesh (Fermi surface)
+PREC    = Accurate
+ENCUT   = 400          # identical to the SCF run
+ISMEAR  = 1
+SIGMA   = 0.1
+ICHARG  = 11           # density fixed
+NBANDS  = 12           # 11 valence electrons (3d10 4s1): bands 1-5 d, band 6 crosses E_F
+LORBIT  = 11           # PROCAR for orbital-projected Fermi surfaces (vaspkit 264, IFermi projections)
+NEDOS   = 3001
+NSW     = 0
+IBRION  = -1
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.

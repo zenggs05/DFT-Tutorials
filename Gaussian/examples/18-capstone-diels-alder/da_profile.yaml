@@ -1,0 +1,21 @@
+schema: reaction-profile/1.0
+title: Butadiene + ethylene Diels-Alder (SMD toluene)
+units: kcal/mol
+species:
+  diene: {}
+  ene: {}
+  TS: {}
+  P: {}
+points:
+  R: {species: diene + ene, role: reactant}
+  TS: {species: TS, role: ts}
+  P: {species: P, role: product}
+pathways:
+  DA: [R, TS, P]
+goodvibes:
+  sources:
+    default:
+      diene: {files: "reactant_opt"}
+      ene: {files: "reactant2_opt"}
+      TS: {files: "ts_opt"}
+      P: {files: "product_opt"}

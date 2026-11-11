@@ -1,0 +1,97 @@
+# makefile.include.oneapi.changes
+# =============================================================================
+# This is NOT a makefile and NOT a copy of the official template.
+# It only lists the edits we apply on top of arch/makefile.include.oneapi
+# shipped with YOUR VASP release (tested logic: VASP 6.6.x; ifx templates
+# exist since VASP 6.4.3). The official template is licensed material and
+# must not be committed to public repositories.
+#
+# Workflow:
+#   cd vasp.6.6.1
+#   cp arch/makefile.include.oneapi makefile.include
+#   # apply items A-C by hand, then append section D (optional features)
+#   make veryclean && make DEPS=1 -j 16 all
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# A. Compiler wrappers (upper part of the template)
+# -----------------------------------------------------------------------------
+# * FC and FCL must call the Intel MPI Fortran wrapper with ifx.
+#   ifort was removed in oneAPI 2025.x; if the build stops with
+#   "ifort: command not found" use one of:
+#       mpiifort -fc=ifx      (works with Intel MPI 2021.x)
+#       mpiifx                (wrapper available in Intel MPI >= 2021.11)
+# * CC_LIB (icx) and CXX_PARS (icpx) normally need no change.
+# * Check before building:
+#       ifx --version ; icx --version ; echo $MKLROOT
+
+# -----------------------------------------------------------------------------
+# B. Target CPU (after the "Customize as of this point!" marker)
+# -----------------------------------------------------------------------------
+# The template sets VASP_TARGET_CPU to -xHOST (optimise for the build host).
+# Keep it only if you compile ON the Intel node type that will run VASP.
+# Otherwise set an explicit instruction set, for example:
+#   VASP_TARGET_CPU = -march=core-avx2     # AVX2, also safe on AMD Zen
+#   VASP_TARGET_CPU = -xCORE-AVX512        # Intel Skylake-SP and newer
+
+# -----------------------------------------------------------------------------
+# C. MKL
+# -----------------------------------------------------------------------------
+# MKLROOT is assigned with "?=" in the template, i.e. the value exported by
+# "source /opt/intel/oneapi/setvars.sh" or "module load ...mkl" is used.
+# Nothing to edit unless "echo $MKLROOT" prints an empty line.
+# BLACS: the template links the Intel MPI flavour of BLACS. If you combine
+# ifx with OpenMPI instead of Intel MPI, use the OpenMPI flavour
+# (libmkl_blacs_openmpi_lp64) or start from a *_ompi_* template.
+
+# -----------------------------------------------------------------------------
+# D. Lines appended to the END of makefile.include (adapt the paths)
+# -----------------------------------------------------------------------------
+
+# D1. HDF5 (strongly recommended: vaspout.h5, py4vasp, electron-phonon ...)
+#     HDF5 must be compiled with the SAME Fortran compiler (ifx) as VASP.
+CPP_OPTIONS += -DVASP_HDF5
+HDF5_ROOT   ?= $(HOME)/opt/hdf5-1.14.5-oneapi
+LLIBS       += -L$(HDF5_ROOT)/lib -lhdf5_fortran -Wl,-rpath,$(HDF5_ROOT)/lib
+INCS        += -I$(HDF5_ROOT)/include
+
+# D2. Wannier90 2.x/3.x (LWANNIER90). Build a SERIAL libwannier.a
+#     ("make lib" without COMMS=mpi in Wannier90's make.inc).
+#CPP_OPTIONS    += -DVASP2WANNIER90
+#WANNIER90_ROOT ?= $(HOME)/opt/wannier90-3.1.0
+#LLIBS          += -L$(WANNIER90_ROOT)/lib -lwannier
+
+# D3. libbeef (GGA = BF). Not supported by the GPU ports.
+#CPP_OPTIONS  += -Dlibbeef
+#LIBBEEF_ROOT ?= $(HOME)/opt/libbeef
+#LLIBS        += -L$(LIBBEEF_ROOT)/lib -lbeef
+
+# D4. DFT-D4 (IVDW = 13). dftd4 >= 4.0 requires VASP >= 6.6.0;
+#     for dftd4 <= 3.7.0 with VASP 6.6.x use -DDFTD4_API_V3 instead of -DDFTD4.
+#     simple-DFT-D3 (IVDW = 15) requires VASP >= 6.6.0.
+#     Install mctc-lib first; library dir may be lib or lib64.
+#CPP_OPTIONS += -DDFTD4 -DSDFTD3
+#DFTD4_ROOT  ?= $(HOME)/opt/dftd4
+#SDFTD3_ROOT ?= $(HOME)/opt/s-dftd3
+#MCTC_ROOT   ?= $(HOME)/opt/mctc-lib
+#LLIBS       += -L$(DFTD4_ROOT)/lib64 -ldftd4 -lmulticharge
+#LLIBS       += -L$(SDFTD3_ROOT)/lib64 -ls-dftd3
+#LLIBS       += -L$(MCTC_ROOT)/lib64 -lmctc-lib
+#INCS        += -I$(DFTD4_ROOT)/include -I$(SDFTD3_ROOT)/include -I$(MCTC_ROOT)/include
+
+# D5. libMBD (IVDW = 14, VASP >= 6.4.3). Build libMBD with
+#     cmake -DENABLE_SCALAPACK_MPI=OFF  (otherwise NEB results are wrong).
+#CPP_OPTIONS += -DLIBMBD
+#LIBMBD_ROOT ?= $(HOME)/opt/libmbd
+#LLIBS       += -L$(LIBMBD_ROOT)/build/src -lmbd
+#INCS        += -I$(LIBMBD_ROOT)/build/src/modules/
+
+# D6. VASPsol (implicit solvation); copy VASPsol's solvation.F into src/ first.
+#CPP_OPTIONS += -Dsol_compat
+
+# -----------------------------------------------------------------------------
+# E. Quick checks after "make DEPS=1 -j 16 all"
+# -----------------------------------------------------------------------------
+#   ls -lh bin/                               -> vasp_std vasp_gam vasp_ncl
+#   ldd bin/vasp_std | grep "not found"       -> must print nothing
+#   ldd bin/vasp_std | grep -E "mkl|hdf5|mpi" -> expected libraries

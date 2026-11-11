@@ -1,0 +1,7 @@
+%chk=benzene_opt_freq.chk
+#p Opt=(Restart,MaxCycles=200)
+
+--Link1--
+%chk=benzene_opt_freq.chk
+#p B3LYP EmpiricalDispersion=GD3BJ def2SVP Freq Geom=AllCheck Guess=Read
+

@@ -1,0 +1,10 @@
+%nprocshared=8
+%mem=12GB
+%oldchk=opt_maxcycles_calcfc.chk
+%chk=glycine_opt_continue.chk
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt=(CalcFC,MaxCycles=200) Freq Geom=Check Guess=Read
+
+Glycine: continue the optimization from the last geometry stored in the old chk
+
+0 1
+

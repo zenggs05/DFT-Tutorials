@@ -1,0 +1,34 @@
+SYSTEM    = NiO AFM-II, PBE+U (Dudarev), static
+
+# ---- basis / accuracy ----
+PREC      = Accurate
+ENCUT     = 520          # 1.3 x ENMAX(O = 400 eV); keep identical for all runs you compare
+EDIFF     = 1E-6
+NELM      = 150
+LASPH     = .TRUE.       # important for 3d oxides and DFT+U
+LREAL     = .FALSE.
+ALGO      = Normal
+
+# ---- insulator smearing ----
+ISMEAR    = 0
+SIGMA     = 0.05
+
+# ---- spin: AFM-II, one up and one down Ni, O non-magnetic ----
+ISPIN     = 2
+MAGMOM    = 2.0 -2.0 2*0.0
+LORBIT    = 11
+
+# ---- DFT+U (Dudarev, LDAUTYPE = 2: only U_eff = U - J matters) ----
+LDAU      = .TRUE.
+LDAUTYPE  = 2
+LDAUL     = 2 -1         # one value per species in POSCAR order: Ni (d) , O (none)
+LDAUU     = 6.2 0.0      # eV; 6.2 eV = value used by Materials Project for Ni in oxides
+LDAUJ     = 0.0 0.0
+LDAUPRINT = 1            # write on-site occupation matrices to OUTCAR
+LMAXMIX   = 4            # d electrons: needed for mixing and for later ICHARG=11 runs
+
+# ---- static ----
+IBRION    = -1
+NSW       = 0
+LWAVE     = .FALSE.
+LCHARG    = .TRUE.

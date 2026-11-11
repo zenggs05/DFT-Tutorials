@@ -1,0 +1,17 @@
+SYSTEM  = Si conventional cell - tight relaxation before the phonon calculation
+
+PREC    = Accurate
+ENCUT   = 400          # ~1.6 x ENMAX(Si ~245 eV): converged stress, no Pulay error
+EDIFF   = 1E-8
+ALGO    = Normal
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+
+IBRION  = 2
+ISIF    = 3            # relax cell and positions; repeat (CONTCAR -> POSCAR) until stable
+NSW     = 100
+EDIFFG  = -1E-3        # phonons need a structure very close to the minimum
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

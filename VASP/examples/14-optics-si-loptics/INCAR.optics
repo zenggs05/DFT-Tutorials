@@ -1,0 +1,20 @@
+# Step 2: same Hamiltonian, many empty bands, frequency-dependent eps(omega)
+SYSTEM  = Si LOPTICS step 2 (optics)
+ISTART  = 1            # read WAVECAR from step 1
+ALGO    = Exact        # exact diagonalisation: all NBANDS are converged in one step
+NELM    = 1
+NBANDS  = 32           # default would be 8 for Si2; LOPTICS needs 2-3x (test 24/32/48)
+
+PREC    = Accurate     # keep identical to step 1
+ENCUT   = 350
+EDIFF   = 1E-8
+ISMEAR  = 0
+SIGMA   = 0.01         # Gaussian width << CSHIFT, so only the Lorentzian remains
+LREAL   = .FALSE.
+
+LOPTICS = .TRUE.
+CSHIFT  = 0.100        # complex shift (Lorentzian broadening, eV) in Kramers-Kronig
+NEDOS   = 2000         # frequency grid points
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

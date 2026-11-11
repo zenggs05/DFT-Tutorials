@@ -1,0 +1,72 @@
+#
+# Methane (CH4) single-point SCF with OpenMX 4.0
+# DFT-Tutorials, OpenMX chapter 3 (03-input-first-calc.md)
+#
+# Before running: replace the DATA.PATH value below with the absolute
+# path of your DFT_DATA19 directory (the one that contains PAO/ and VPS/).
+#
+
+#
+# File names and output control
+#
+System.CurrrentDirectory      ./          # official spelling: three 'r'
+System.Name                   met
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1           # -1..2, default=1
+level.of.fileout              1           # 0..2,  default=1 (1 writes cube files)
+
+#
+# Definition of atomic species (DFT_DATA19 "Standard" basis sets)
+#   H6.0-s2p1   : 2 s + 1 p radial functions ->  5 basis functions
+#   C6.0-s2p2d1 : 2 s + 2 p + 1 d            -> 13 basis functions
+#
+Species.Number                2
+<Definition.of.Atomic.Species
+  H    H6.0-s2p1      H_PBE19
+  C    C6.0-s2p2d1    C_PBE19
+Definition.of.Atomic.Species>
+
+#
+# Atoms: tetrahedral CH4, C-H = 1.089 Ang, centred in a 10 Ang cubic box.
+# Columns 6-7 = initial up/down electrons; their sum must equal the number
+# of valence electrons of the VPS (C_PBE19: 4, H_PBE19: 1).
+#
+Atoms.Number                  5
+Atoms.SpeciesAndCoordinates.Unit   Ang    # Ang|AU|FRAC
+<Atoms.SpeciesAndCoordinates
+  1   C    5.000000   5.000000   5.000000    2.0  2.0
+  2   H    5.628734   5.628734   5.628734    0.5  0.5
+  3   H    4.371266   4.371266   5.628734    0.5  0.5
+  4   H    4.371266   5.628734   4.371266    0.5  0.5
+  5   H    5.628734   4.371266   4.371266    0.5  0.5
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang         # Ang|AU
+<Atoms.UnitVectors
+  10.0   0.0   0.0
+   0.0  10.0   0.0
+   0.0   0.0  10.0
+Atoms.UnitVectors>
+
+#
+# SCF or electronic system
+#
+scf.XcType                    GGA-PBE     # LDA|LSDA-CA|LSDA-PW|GGA-PBE
+scf.SpinPolarization          off         # On|Off|NC
+scf.ElectronicTemperature     300.0       # K, default=300
+scf.energycutoff              200.0       # Ry; always set it explicitly
+scf.maxIter                   100         # default=40
+scf.EigenvalueSolver          Cluster     # Cluster for isolated molecules
+scf.Kgrid                     1 1 1       # not used by the Cluster solver
+scf.Mixing.Type               RMM-DIIS    # Simple|RMM-DIIS|GR-Pulay|Kerker|RMM-DIISK|RMM-DIISV|RMM-DIISH
+scf.Init.Mixing.Weight        0.30        # default=0.30
+scf.Min.Mixing.Weight         0.001       # default=0.001
+scf.Max.Mixing.Weight         0.40        # default=0.40
+scf.Mixing.History            7           # default=5
+scf.Mixing.StartPulay         5           # default=6
+scf.criterion                 1.0e-8      # Hartree, default=1.0e-6
+
+#
+# MD or geometry optimization
+#
+MD.Type                       Nomd        # single point
+MD.maxIter                    1

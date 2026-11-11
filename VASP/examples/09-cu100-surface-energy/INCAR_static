@@ -1,0 +1,13 @@
+SYSTEM  = Cu static run (oriented bulk / unrelaxed slab)
+
+PREC    = Accurate
+ENCUT   = 500
+EDIFF   = 1E-6
+LREAL   = .FALSE.
+ISMEAR  = 1
+SIGMA   = 0.10
+
+IBRION  = -1
+NSW     = 0
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

@@ -1,0 +1,25 @@
+SYSTEM  = Pt(111) p(2x2) 4-layer slab, relaxation of the top 2 layers
+
+# ---- electronic ----
+PREC    = Accurate
+ENCUT   = 400          # use the SAME value for the bulk reference (surface energy)
+EDIFF   = 1E-6
+NELM    = 200
+LREAL   = .FALSE.      # 16 atoms: reciprocal-space projection is affordable
+ISMEAR  = 1            # metal: Methfessel-Paxton
+SIGMA   = 0.10
+ISPIN   = 1            # Pt is non-magnetic
+
+# ---- ionic: only the 'T T T' atoms of POSCAR move ----
+IBRION  = 2
+ISIF    = 2            # never relax the cell of a slab
+NSW     = 100
+EDIFFG  = -0.02        # eV/A on the free atoms
+
+# ---- dipole correction along z (bottom fixed / top relaxed -> slightly asymmetric) ----
+LDIPOL  = .TRUE.
+IDIPOL  = 3
+DIPOL   = 0.5 0.5 0.5  # centre of mass of the slab in direct coordinates (z matters)
+
+LWAVE   = .TRUE.       # reused by the work-function run
+LCHARG  = .TRUE.

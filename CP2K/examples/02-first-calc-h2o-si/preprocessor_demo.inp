@@ -1,0 +1,73 @@
+! preprocessor_demo.inp - tour of the CP2K input preprocessor
+! Tutorial: CP2K chapter 2, section 6.  Works with CP2K 2023.x - 2026.2.
+!
+! Directives used: @SET, variable expansion, variable with default value,
+! @INCLUDE, @IF / @ENDIF, @PRINT.  Needs h2o.xyz and h2o_kinds.inc.
+!
+!   cp2k.ssmp -e preprocessor_demo.inp                 # show the expanded input
+!   cp2k.ssmp -i preprocessor_demo.inp -o demo.out     # default: DZVP, 350 Ry, OT
+!   cp2k.ssmp -E BASIS=TZV2P -E CUTOFF=500 -i preprocessor_demo.inp -o demo_tzv2p.out
+!   cp2k.ssmp -E USE_OT=0 -i preprocessor_demo.inp -o demo_diag.out
+!   cp2k.ssmp -E XC=BLYP -i preprocessor_demo.inp -o demo_xc.out   # no effect, see below
+!
+! Rules worth remembering:
+!  * variables set with @SET in this file OVERRIDE values given with -E/--set;
+!    only variables written with a default value can be changed from the
+!    command line;
+!  * variable names are case sensitive;
+!  * do not put trailing comments on @SET lines (the rest of the line is the value).
+
+@SET SYSTEM h2o
+@SET XC PBE
+@SET BOX 10.0
+
+@PRINT system=${SYSTEM} xc=${XC} basis=${BASIS-DZVP} cutoff=${CUTOFF-350} ot=${USE_OT-1}
+
+&GLOBAL
+  PROJECT ${SYSTEM}_${BASIS-DZVP}_c${CUTOFF-350}_ot${USE_OT-1}
+  RUN_TYPE ENERGY
+  PRINT_LEVEL ${PL-MEDIUM}
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QS
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    &MGRID
+      CUTOFF ${CUTOFF-350}
+      REL_CUTOFF 50
+    &END MGRID
+    &POISSON
+      PERIODIC NONE
+      POISSON_SOLVER MT
+    &END POISSON
+    &SCF
+      EPS_SCF 1.0E-6
+      MAX_SCF 50
+      @IF ${USE_OT-1} == 1
+      &OT ON
+        MINIMIZER DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      @ENDIF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL ${XC}
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC [angstrom] ${BOX} ${BOX} ${BOX}
+      PERIODIC NONE
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME ${SYSTEM}.xyz
+      COORD_FILE_FORMAT XYZ
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    @INCLUDE 'h2o_kinds.inc'
+  &END SUBSYS
+&END FORCE_EVAL

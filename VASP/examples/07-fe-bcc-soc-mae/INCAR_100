@@ -1,0 +1,24 @@
+SYSTEM     = bcc Fe + SOC, spin quantisation axis [100] (run with vasp_ncl)
+
+PREC       = Accurate
+ENCUT      = 450
+EDIFF      = 1E-8
+LREAL      = .FALSE.
+LASPH      = .TRUE.
+GGA_COMPAT = .FALSE.
+ISMEAR     = -5
+
+LSORBIT    = .TRUE.          # switches on SOC and LNONCOLLINEAR; needs vasp_ncl
+# Do NOT set ISPIN = 2 together with LSORBIT (VASP 6.5.0 stops; ignored otherwise)
+SAXIS      = 1 0 0
+MAGMOM     = 0 0 3.0         # 3 components per atom in the SAXIS frame -> moment along SAXIS
+ICHARG     = 11              # keep the collinear CHGCAR fixed (force theorem)
+ISYM       = -1              # same full k-point set for every spin direction
+LMAXMIX    = 4
+NBANDS     = 32              # 2 x NBANDS of the collinear run
+LORBIT     = 11
+LORBMOM    = .TRUE.          # orbital moments -> "orbital moment (x)" in OUTCAR
+
+NSW        = 0
+LCHARG     = .FALSE.
+LWAVE      = .FALSE.

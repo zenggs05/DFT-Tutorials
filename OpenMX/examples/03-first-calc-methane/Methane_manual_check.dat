@@ -1,0 +1,54 @@
+#
+# Methane (CH4) with the same physical settings as work/Methane.dat of the
+# OpenMX 4.0 distribution (minimal basis H5.0-s1 / C5.0-s1p1, GGA-PBE,
+# 120 Ry, 10 Ang box, C at the origin). Use it ONLY to check an installation:
+# the total energy can be compared with the reference value printed in
+# Sec. 5 of the OpenMX 4.0 manual (Utot = -8.033540953061 Hartree).
+# A minimal basis is not suitable for research calculations.
+#
+
+System.CurrrentDirectory      ./          # official spelling: three 'r'
+System.Name                   metref
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              0           # no cube files needed for this check
+
+Species.Number                2
+<Definition.of.Atomic.Species
+  H    H5.0-s1        H_PBE19
+  C    C5.0-s1p1      C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                  5
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1   C    0.000000   0.000000   0.000000    2.0  2.0
+  2   H   -0.889981  -0.629312   0.000000    0.5  0.5
+  3   H    0.000000   0.629312  -0.889981    0.5  0.5
+  4   H    0.000000   0.629312   0.889981    0.5  0.5
+  5   H    0.889981  -0.629312   0.000000    0.5  0.5
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang
+<Atoms.UnitVectors
+  10.0   0.0   0.0
+   0.0  10.0   0.0
+   0.0   0.0  10.0
+Atoms.UnitVectors>
+
+scf.XcType                    GGA-PBE
+scf.SpinPolarization          off
+scf.ElectronicTemperature     300.0       # K
+scf.energycutoff              120.0       # Ry (same as work/Methane.dat)
+scf.maxIter                   100
+scf.EigenvalueSolver          Cluster
+scf.Kgrid                     1 1 1
+scf.Mixing.Type               RMM-DIIS
+scf.Init.Mixing.Weight        0.30
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.40
+scf.Mixing.History            7
+scf.Mixing.StartPulay         5
+scf.criterion                 1.0e-10     # Hartree, tight on purpose
+
+MD.Type                       Nomd
+MD.maxIter                    1

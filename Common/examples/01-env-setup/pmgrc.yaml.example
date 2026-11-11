@@ -1,0 +1,23 @@
+# pymatgen settings file. Copy to ~/.config/.pmgrc.yaml (current location;
+# the old ~/.pmgrc.yaml is still read as a fallback):
+#   mkdir -p ~/.config && cp pmgrc.yaml.example ~/.config/.pmgrc.yaml
+#   chmod 600 ~/.config/.pmgrc.yaml          # it contains your API key
+# Usually you do not edit it by hand; these commands write it for you:
+#   pmg config -p ~/vasp_pp_raw ~/pmg_potcars
+#   pmg config --add PMG_VASP_PSP_DIR ~/pmg_potcars
+#   pmg config --add PMG_DEFAULT_FUNCTIONAL PBE_54
+#   pmg config --add PMG_MAPI_KEY <32-character key>
+# Environment variables with the same names override this file.
+
+# Directory created by "pmg config -p": contains POT_GGA_PAW_PBE,
+# POT_GGA_PAW_PBE_54, POT_PAW_PBE_64, ... sub-directories.
+PMG_VASP_PSP_DIR: /home/your_name/pmg_potcars
+
+# POTCAR set used by the input sets when nothing else is specified
+# (PBE, PBE_52, PBE_54, PBE_64, LDA, ...). The MP input sets pin their
+# own POTCAR versions; this is only the fallback.
+PMG_DEFAULT_FUNCTIONAL: PBE_54
+
+# Materials Project API key (new API, 32 characters) for
+# pymatgen.ext.matproj.MPRester. mp-api reads MP_API_KEY instead.
+PMG_MAPI_KEY: put-your-32-character-key-here

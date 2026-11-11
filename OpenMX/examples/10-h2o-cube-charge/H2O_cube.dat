@@ -1,0 +1,66 @@
+#
+# H2O molecule: cube output and four kinds of atomic charges
+# (Mulliken, Voronoi, ESP fitting via the 'esp' tool, NPA)
+# Target: OpenMX 4.0 + patch 4.0.1, database DFT_DATA19
+#
+System.CurrrentDirectory    ./                          # note: three r's (official spelling)
+System.Name                 h2o
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            2          # 2: tden/dden/v0/vhart + vxc cubes, .grid, LCAO coefficients
+
+#
+# Species: Standard basis of the DFT_DATA19 table
+#
+Species.Number              2
+<Definition.of.Atomic.Species
+  O   O6.0-s2p2d1   O_PBE19
+  H   H6.0-s2p1     H_PBE19
+Definition.of.Atomic.Species>
+
+#
+# Geometry: approximate experimental gas-phase structure (r = 0.9572 Ang, 104.52 deg)
+# columns: index species x y z n_up n_down   (n_up + n_down = valence electrons)
+#
+Atoms.Number                3
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1  O    0.000000   0.000000   0.000000   3.0  3.0
+  2  H    0.756810   0.586060   0.000000   0.5  0.5
+  3  H   -0.756810   0.586060   0.000000   0.5  0.5
+Atoms.SpeciesAndCoordinates>
+
+# 12 Ang cubic box: room for nice isosurfaces and for ESP sampling shells
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  12.0   0.0   0.0
+   0.0  12.0   0.0
+   0.0   0.0  12.0
+Atoms.UnitVectors>
+
+#
+# SCF
+#
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.EigenvalueSolver        Cluster
+scf.Kgrid                   1 1 1
+scf.energycutoff            250.0      # dense grid for smooth cubes and accurate ESP
+scf.maxIter                 100
+scf.criterion               1.0e-8     # Hartree
+scf.ElectronicTemperature   300.0
+scf.Mixing.Type             RMM-DIIS
+scf.Init.Mixing.Weight      0.30
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.40
+scf.Mixing.History          7
+scf.Mixing.StartPulay       5
+
+MD.Type                     Nomd
+
+#
+# Charge analysis
+#
+Voronoi.charge              on         # Voronoi charges and volumes -> h2o.out
+NBO.switch                  on1        # natural population analysis (cluster) -> stdout; set off if not needed
+HS.fileout                  off        # on: write h2o.scfout for post-processing codes

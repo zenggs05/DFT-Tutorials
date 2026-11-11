@@ -1,0 +1,20 @@
+SYSTEM  = MoS2 partial charge, occupied states E_F-1.0 ... E_F (negative sample bias)
+
+# ---- must be identical to the SCF run ----
+PREC    = Accurate
+ENCUT   = 400
+ISMEAR  = 0
+SIGMA   = 0.05
+NBANDS  = 24
+ISTART  = 1           # read WAVECAR of the SCF run
+
+# ---- partial charge ----
+LPARD   = .TRUE.
+NBMOD   = -3          # EINT is relative to the Fermi energy
+EINT    = -1.0 0.0
+LSEPB   = .FALSE.     # sum over bands  -> one PARCHG file
+LSEPK   = .FALSE.     # sum over k-points
+# LPARDH5 = .TRUE.    # VASP >= 6.5.0 compiled with HDF5: write to vaspout.h5 for py4vasp
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

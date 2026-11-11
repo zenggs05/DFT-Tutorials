@@ -1,0 +1,76 @@
+#
+# Al(111) slab with the effective screening medium (ESM) method, on1 = vacuum|vacuum|vacuum
+# DFT-Tutorials, OpenMX chapter 16 (work function)
+# 6 Al layers + 2 layers of empty atoms (species E) on each side to describe the
+# wave-function tail into the vacuum (atoms 1-2 and 9-10 are empty atoms).
+# Geometry: experimental fcc lattice constant a0 = 4.05 Ang (unrelaxed bulk-terminated slab),
+#           in-plane a = a0/sqrt(2) = 2.8638 Ang, interlayer distance d = a0/sqrt(3) = 2.3383 Ang.
+# Convention required by ESM in OpenMX: the a-axis (first unit vector) is the surface normal and is
+# parallel to x (ESM.direction x); b and c lie in the yz plane; the ESM boundaries are at x = 0 and x = |a|.
+# The slab is centred at x = 25 Ang, so every atom is >= 14 Ang away from both boundaries.
+#
+
+System.CurrrentDirectory      ./          # official spelling: three 'r'
+System.Name                   al111_esm_on1_2e
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              1           # >= 1 is needed to write *.v0.cube
+
+# E = empty atom: Al basis functions on a zero pseudopotential (E.vps), no electrons.
+# Never put comments on the lines inside a <...> block: OpenMX parses them by position.
+Species.Number                2
+<Definition.of.Atomic.Species
+  Al   Al7.0-s2p2d1   Al_PBE19
+  E    Al7.0-s2p2d1   E
+Definition.of.Atomic.Species>
+
+#
+# Al_PBE19 has 3 valence electrons -> 1.5 1.5 ; empty atoms carry 0.0 0.0
+#
+Atoms.Number                  10
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+     1  E      14.477791     0.000000     1.653406    0.0  0.0
+     2  E      16.816060     1.431891     0.826703    0.0  0.0
+     3  Al     19.154329     0.000000     0.000000    1.5  1.5
+     4  Al     21.492597     0.000000     1.653406    1.5  1.5
+     5  Al     23.830866     1.431891     0.826703    1.5  1.5
+     6  Al     26.169134     0.000000     0.000000    1.5  1.5
+     7  Al     28.507403     0.000000     1.653406    1.5  1.5
+     8  Al     30.845671     1.431891     0.826703    1.5  1.5
+     9  E      33.183940     0.000000     0.000000    0.0  0.0
+    10  E      35.522209     0.000000     1.653406    0.0  0.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang
+<Atoms.UnitVectors
+     50.000000     0.000000     0.000000
+      0.000000     2.863782     0.000000
+      0.000000    -1.431891     2.480108
+Atoms.UnitVectors>
+
+#
+# SCF: metal slab with a large vacuum -> small mixing weights to suppress charge sloshing
+#
+scf.XcType                    GGA-PBE
+scf.SpinPolarization          off
+scf.ElectronicTemperature     300.0       # K
+scf.energycutoff              250.0       # Ry, set explicitly
+scf.maxIter                   300
+scf.EigenvalueSolver          Band
+scf.Kgrid                     1 15 15     # no sampling along the surface normal (a-axis)
+scf.Generation.Kpoint         GCenter     # 4.0 default; use Regular to reproduce 3.9 results
+scf.Mixing.Type               RMM-DIISK
+scf.Init.Mixing.Weight        0.02
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.05
+scf.Mixing.History            30
+scf.Mixing.StartPulay         20
+scf.criterion                 1.0e-8      # Hartree
+
+#
+# ESM
+#
+ESM.switch                    on1         # off | on1=v|v|v | on2=m|v|m | on3=v|v|m | on4=on2+field
+ESM.direction                 x           # Cartesian axis of the a-axis (x is the default)
+
+MD.Type                       Nomd

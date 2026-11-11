@@ -1,0 +1,30 @@
+SYSTEM  = Pt adatom hop on Pt(100) - NEB stage 2: climbing-image NEB (VTST)
+
+# ---- electronic part: identical to INCAR_relax ----
+PREC    = Normal
+ENCUT   = 350
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 1
+SIGMA   = 0.20
+ISPIN   = 1
+LREAL   = Auto
+
+# ---- climbing-image NEB ----
+IMAGES  = 3
+SPRING  = -5
+ICHAIN  = 0
+LCLIMB  = .TRUE.       # highest image climbs to the saddle point
+
+# ---- VTST optimiser ----
+IBRION  = 3
+POTIM   = 0
+IOPT    = 1            # 1 = LBFGS (global); use 7 (FIRE) or 3 (QM) if it oscillates
+ISIF    = 2
+NSW     = 300
+EDIFFG  = -0.03        # max force on every image < 0.03 eV/A
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

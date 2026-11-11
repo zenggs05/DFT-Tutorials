@@ -1,0 +1,12 @@
+%chk=h2o_hf_sp.chk
+%mem=1GB
+%nprocshared=2
+#p HF/6-31G(d) SP
+
+water single point, my first Gaussian job
+
+0 1
+O     0.000000    0.000000    0.119262
+H     0.000000    0.763239   -0.477047
+H     0.000000   -0.763239   -0.477047
+

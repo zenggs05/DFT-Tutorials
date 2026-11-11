@@ -1,0 +1,12 @@
+SYSTEM = Si step 3: non-self-consistent band structure
+PREC   = Accurate
+ENCUT  = 400
+ICHARG = 11         # read CHGCAR, keep the density fixed
+ISMEAR = 0          # tetrahedron (-5) is not allowed for line-mode k-points
+SIGMA  = 0.05
+NBANDS = 16         # 4 occupied + 12 empty bands
+NSW    = 0
+IBRION = -1
+LORBIT = 11
+LWAVE  = .FALSE.
+LCHARG = .FALSE.

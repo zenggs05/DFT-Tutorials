@@ -1,0 +1,5 @@
+Explicit list: Chadi-Cohen 2-point set for fcc (format demo)
+2              ! number of k points
+Cartesian      ! units of 2*pi/a, a = scaling factor (line 2) of POSCAR
+  0.25  0.25  0.25   1     ! kx ky kz weight (relative weights)
+  0.75  0.25  0.25   3

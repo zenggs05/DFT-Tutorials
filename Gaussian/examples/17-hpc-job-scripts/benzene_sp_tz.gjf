@@ -1,0 +1,8 @@
+%oldchk=benzene_opt_freq.chk
+%chk=benzene_sp_tz.chk
+#p wB97XD/def2TZVP Geom=Check Guess=Read
+
+Benzene single point at wB97X-D/def2-TZVP on the B3LYP-D3(BJ)/def2-SVP geometry
+
+0 1
+

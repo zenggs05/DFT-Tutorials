@@ -1,0 +1,115 @@
+# Chapter 9, example 3: HSE06 + ADMM for a 64-atom Si supercell (Gamma point only)
+# Two stages in one file, selected with the STAGE variable:
+#   STAGE PBE    -> cheap PBE run, writes si64_PBE-RESTART.wfn
+#   STAGE HSE06  -> HSE06 restarted from that wavefunction (SCREEN_ON_INITIAL_P T)
+#   sed 's/^@SET STAGE .*/@SET STAGE PBE/' si_hse06_admm.inp > si64_pbe.inp
+# Target version: CP2K 2026.2 (CUTOFF_RADIUS is honoured for SHORTRANGE, PR #4945).
+#   CP2K <= 2026.1 accepts the input but ignores CUTOFF_RADIUS for SHORTRANGE and derives
+#   the radius from EPS_SCHWARZ (about 14 A for omega = 0.11, EPS_SCHWARZ 1E-6), which is
+#   larger than L/2 and triggers the "larger than half the minimal cell dimension" warning.
+# Cell: 2x2x2 conventional Si, a = 5.431 A -> L = 10.862 A -> L/2 = 5.43 A
+@SET STAGE HSE06
+@SET RC    5.0
+
+&GLOBAL
+  PROJECT si64_${STAGE}
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    BASIS_SET_FILE_NAME BASIS_ADMM_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+@IF ${STAGE} == HSE06
+    WFN_RESTART_FILE_NAME si64_PBE-RESTART.wfn
+    &AUXILIARY_DENSITY_MATRIX_METHOD
+      ! shortcut: BASIS_PROJECTION, no purification, no exchange scaling
+      ADMM_TYPE ADMM2
+      ! DEFAULT -> short-range PBE exchange (XWPBE) correction for SHORTRANGE
+      EXCH_CORRECTION_FUNC DEFAULT
+    &END AUXILIARY_DENSITY_MATRIX_METHOD
+@ENDIF
+    &MGRID
+      CUTOFF 400
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &SCF
+@IF ${STAGE} == PBE
+      SCF_GUESS ATOMIC
+@ENDIF
+@IF ${STAGE} == HSE06
+      SCF_GUESS RESTART
+@ENDIF
+      EPS_SCF 1.0E-6
+      MAX_SCF 30
+      &OT
+        MINIMIZER DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-6
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+@IF ${STAGE} == PBE
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+@ENDIF
+@IF ${STAGE} == HSE06
+      ! HSE06: E_xc = E_x^PBE - 0.25 E_x^PBE,SR(omega) + 0.25 E_x^HF,SR(omega) + E_c^PBE
+      &XC_FUNCTIONAL
+        &PBE
+          SCALE_X 0.0
+          SCALE_C 1.0
+        &END PBE
+        &XWPBE
+          SCALE_X -0.25
+          SCALE_X0 1.0
+          OMEGA 0.11
+        &END XWPBE
+      &END XC_FUNCTIONAL
+      &HF
+        FRACTION 0.25
+        &INTERACTION_POTENTIAL
+          POTENTIAL_TYPE SHORTRANGE
+          OMEGA 0.11
+          CUTOFF_RADIUS ${RC}
+        &END INTERACTION_POTENTIAL
+        &SCREENING
+          EPS_SCHWARZ 1.0E-6
+          SCREEN_ON_INITIAL_P T
+        &END SCREENING
+        &MEMORY
+          ! MiB per MPI process
+          MAX_MEMORY 3000
+        &END MEMORY
+      &END HF
+@ENDIF
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 10.862 10.862 10.862
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME si64.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Si
+      ! the PBE stage uses the same (hybrid-optimised) basis and potential,
+      ! otherwise its wavefunction would not be a valid restart for HSE06
+      BASIS_SET ORB DZVP-MOLOPT-PBE0-GTH-q4
+@IF ${STAGE} == HSE06
+      BASIS_SET AUX_FIT admm-dzp-q4
+@ENDIF
+      POTENTIAL GTH-PBE0-q4
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

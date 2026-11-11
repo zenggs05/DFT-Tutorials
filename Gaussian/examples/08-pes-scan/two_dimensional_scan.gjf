@@ -1,0 +1,18 @@
+%chk=sn2_2d_scan.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Opt=ModRedundant NoSymm
+
+2D relaxed scan for Cl- + CH3Br: C...Cl 3.0 -> 1.8 A and C-Br 2.0 -> 3.2 A, 7 x 7 points
+
+-1 1
+C     0.000000    0.000000    0.000000
+Cl    0.000000    0.000000   -3.000000
+Br    0.000000    0.000000    2.000000
+H     1.030000    0.000000   -0.325000
+H    -0.515000    0.892006   -0.325000
+H    -0.515000   -0.892006   -0.325000
+
+B 1 2 S 6 -0.2
+B 1 3 S 6 0.2
+

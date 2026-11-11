@@ -1,0 +1,16 @@
+%nprocshared=8
+%mem=12GB
+%chk=acetaldehyde_opt_freq.chk
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt Freq
+
+Acetaldehyde optimization + frequencies, B3LYP-D3(BJ)/def2-SVP
+
+0 1
+C    -0.648568    -0.051139    -0.015523
+C     0.843397     0.072740     0.022052
+O     1.605373    -0.848266    -0.252785
+H    -1.049168     0.669064    -0.732641
+H    -0.933409    -1.061969    -0.317599
+H    -1.049822     0.157790     0.978848
+H     1.232196     1.061779     0.317648
+

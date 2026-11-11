@@ -1,0 +1,28 @@
+%nprocshared=8
+%mem=12GB
+%chk=highlevel_sp_plus_thermo.chk
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt Freq
+
+Ethanol step 1: B3LYP-D3(BJ)/def2-SVP opt + freq (thermal corrections)
+
+0 1
+C    -0.886284     0.164102    -0.072797
+C     0.472700    -0.504171    -0.048378
+O     1.385279     0.279434     0.706651
+H    -0.821053     1.157324    -0.529101
+H    -1.605682    -0.435781    -0.637136
+H    -1.264380     0.305590     0.945012
+H     0.868553    -0.625847    -1.061187
+H     0.405268    -1.491959     0.416669
+H     1.445597     1.151307     0.280268
+
+--Link1--
+%nprocshared=8
+%mem=12GB
+%chk=highlevel_sp_plus_thermo.chk
+#p wB97XD/def2TZVP Geom=Check Guess=Read
+
+Ethanol step 2: wB97X-D/def2-TZVP single point on the optimized geometry
+
+0 1
+

@@ -1,0 +1,53 @@
+# NiO, antiferromagnetic type-II (AFM-II) order along [111]: GGA (no +U) SCF + DOS/PDOS data.
+# Rhombohedral cell with 2 Ni + 2 O built from the rock-salt structure (a = 4.17 A).
+# Ni atom 1 starts with +2 muB, Ni atom 2 with -2 muB. OpenMX 4.0.
+# For DFT+U on the same structure see chapter 13.
+
+System.CurrrentDirectory    ./
+System.Name                 nio_afm
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: dir containing PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+Species.Number              2
+<Definition.of.Atomic.Species
+  Ni   Ni6.0S-s3p2d1   Ni_PBE19S        # 16 valence electrons
+  O    O6.0-s2p2d1     O_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                4
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Ni  0.00  0.00  0.00   9.0  7.0
+  2  Ni  0.50  0.50  0.50   7.0  9.0
+  3  O   0.25  0.25  0.25   3.0  3.0
+  4  O   0.75  0.75  0.75   3.0  3.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  4.170  2.085  2.085
+  2.085  4.170  2.085
+  2.085  2.085  4.170
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        on
+scf.ElectronicTemperature   300.0
+scf.energycutoff            250.0
+scf.maxIter                 200
+scf.EigenvalueSolver        Band
+scf.Kgrid                   8 8 8
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.20
+scf.Mixing.History          30
+scf.Mixing.StartPulay       15
+scf.criterion               1.0e-8
+
+MD.Type                     Nomd
+
+Dos.fileout                 on
+Dos.Erange                  -20.0  10.0    # eV relative to E_F; Ni 3s/3p semicore states lie below this window
+Dos.Kgrid                   14 14 14

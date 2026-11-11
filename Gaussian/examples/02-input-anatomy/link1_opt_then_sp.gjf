@@ -1,0 +1,23 @@
+%chk=h2co_link1.chk
+%mem=2GB
+%nprocshared=4
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt Freq
+
+formaldehyde opt and freq, step 1
+
+0 1
+O     0.000000    0.000000    0.683501
+C     0.000000    0.000000   -0.536614
+H     0.000000    0.934390   -1.124164
+H     0.000000   -0.934390   -1.124164
+
+--Link1--
+%chk=h2co_link1.chk
+%mem=2GB
+%nprocshared=4
+#p wB97XD/def2TZVP Geom=Check Guess=Read SP
+
+formaldehyde single point at the optimized geometry, step 2
+
+0 1
+

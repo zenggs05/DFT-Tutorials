@@ -1,0 +1,45 @@
+#
+# bcc Fe, ferromagnetic, collinear GGA-PBE: metallic SCF settings
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 fe_bcc
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  Fe   Fe5.5H-s3p2d1   Fe_PBE19H    # Standard basis; Fe_PBE19H has 16 valence electrons
+Definition.of.Atomic.Species>
+
+Atoms.Number                1
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1   Fe   0.0  0.0  0.0   9.0  7.0      # up + down = 16; initial moment 2 muB
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  -1.4350   1.4350   1.4350             # bcc primitive vectors, a = 2.87 Ang
+   1.4350  -1.4350   1.4350
+   1.4350   1.4350  -1.4350
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        on
+scf.ElectronicTemperature   600.0       # K; metals: 300-1000 K
+scf.energycutoff            300.0       # Ry; hard VPS with 3s/3p semicore states
+scf.EigenvalueSolver        Band
+scf.Kgrid                   16 16 16
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; remove for OpenMX 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.02
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.20
+scf.Mixing.History          30
+scf.Mixing.StartPulay       15
+scf.Mixing.EveryPulay       1
+scf.maxIter                 200
+scf.criterion               1.0e-8      # Hartree
+
+MD.Type                     Nomd

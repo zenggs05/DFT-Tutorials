@@ -1,0 +1,22 @@
+SYSTEM  = Transition-state check: finite-difference frequencies of the climbing image
+
+# ---- electronic part: identical to the NEB, tighter EDIFF ----
+PREC    = Normal
+ENCUT   = 350
+EDIFF   = 1E-7
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 1
+SIGMA   = 0.20
+ISPIN   = 1
+LREAL   = Auto
+
+# ---- finite differences on the free atoms only (selective dynamics) ----
+IBRION  = 5            # selective dynamics is honoured only by IBRION = 5
+POTIM   = 0.015
+NFREE   = 2
+NSW     = 1
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

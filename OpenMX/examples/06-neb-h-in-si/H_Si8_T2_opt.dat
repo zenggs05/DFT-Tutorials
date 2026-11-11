@@ -1,0 +1,59 @@
+#
+# H in Si (8-atom cubic cell, a = 5.43 Ang): optimize end point T2 = (3/4,3/4,3/4)a
+# H starts at a tetrahedral interstitial site; all atoms are relaxed with RF.
+# The relaxed coordinates are written to H_Si8_T2_opt.dat# and used by build_neb.py.
+# Keep ALL settings identical to H_diffusion_NEB.dat.
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 h_si8_t2
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+Species.Number              2
+<Definition.of.Atomic.Species
+  Si   Si7.0-s2p2d1   Si_PBE19
+  H    H6.0-s2p1      H_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                9
+Atoms.SpeciesAndCoordinates.Unit   Ang   # NEB needs Ang or AU (not FRAC)
+<Atoms.SpeciesAndCoordinates
+  1   Si    0.00000   0.00000   0.00000   2.0  2.0
+  2   Si    0.00000   2.71500   2.71500   2.0  2.0
+  3   Si    2.71500   0.00000   2.71500   2.0  2.0
+  4   Si    2.71500   2.71500   0.00000   2.0  2.0
+  5   Si    1.35750   1.35750   1.35750   2.0  2.0
+  6   Si    1.35750   4.07250   4.07250   2.0  2.0
+  7   Si    4.07250   1.35750   4.07250   2.0  2.0
+  8   Si    4.07250   4.07250   1.35750   2.0  2.0
+  9   H     4.07250   4.07250   4.07250   1.0  0.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  5.43   0.00   0.00
+  0.00   5.43   0.00
+  0.00   0.00   5.43
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        on          # neutral H: 33 electrons, one unpaired
+scf.ElectronicTemperature   300.0       # K
+scf.energycutoff            220.0       # Ry
+scf.EigenvalueSolver        Band
+scf.Kgrid                   4 4 4
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; remove for OpenMX 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       10
+scf.maxIter                 150
+scf.criterion               1.0e-8      # Hartree
+
+MD.Type                     RF
+MD.maxIter                  100
+MD.Opt.criterion            1.0e-4      # Hartree/Bohr
+MD.Opt.StartDIIS            5

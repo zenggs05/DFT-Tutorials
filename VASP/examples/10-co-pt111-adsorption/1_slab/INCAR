@@ -1,0 +1,30 @@
+SYSTEM  = Pt(111) p(2x2) 4-layer slab, clean surface relaxation
+
+# ---- electronic part: keep IDENTICAL in slab, slab+CO and CO-gas runs ----
+PREC    = Accurate
+ENCUT   = 450          # C and O POTCARs have ENMAX ~400 eV; same value in every run
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 1            # Methfessel-Paxton smearing for the metal slab
+SIGMA   = 0.10         # check: entropy T*S in OUTCAR < ~1 meV per atom
+ISPIN   = 1            # Pt and CO are non-magnetic
+LREAL   = .FALSE.      # small cell (16-18 atoms): reciprocal-space projectors
+LASPH   = .TRUE.       # aspherical gradient corrections inside PAW spheres
+# IVDW  = 12           # D3(BJ); if switched on, use it in ALL runs (and for bulk a0)
+
+# ---- dipole correction along the surface normal (asymmetric slab) ----
+LDIPOL  = .TRUE.
+IDIPOL  = 3
+DIPOL   = 0.5 0.5 0.5  # centre of the slab (direct coordinates)
+
+# ---- ionic part ----
+IBRION  = 2            # conjugate gradient
+ISIF    = 2            # cell fixed: in-plane lattice from the bulk a0
+NSW     = 200
+EDIFFG  = -0.02        # stop when all free forces < 0.02 eV/A
+
+# ---- output / parallelisation ----
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4            # adjust to your node (divisor of cores per node)

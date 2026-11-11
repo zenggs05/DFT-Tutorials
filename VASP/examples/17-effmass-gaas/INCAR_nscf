@@ -1,0 +1,13 @@
+SYSTEM  = GaAs non-SCF on k-points around Gamma (effective masses)
+PREC    = Accurate
+ENCUT   = 400          # identical to the SCF run
+EDIFF   = 1E-8         # tight: masses come from meV-scale energy differences
+ISMEAR  = 0
+SIGMA   = 0.01
+ICHARG  = 11           # read CHGCAR, keep the density fixed
+NBANDS  = 16           # 9 occupied bands (Ga_d + As) + conduction bands
+NSW     = 0
+IBRION  = -1
+LORBIT  = 11           # optional: orbital character of the band edges (PROCAR)
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.

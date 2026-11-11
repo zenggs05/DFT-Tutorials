@@ -1,0 +1,46 @@
+! geo_opt_endpoint.inp - relax the NEB end points (H in fcc / hcp hollow of Cu(111))
+! Chapter 13, step 1.  Target versions: CP2K 2023.1 ... 2026.2
+!
+!   mpirun -np 32 cp2k.psmp -i geo_opt_endpoint.inp -o opt_initial.out
+!   mpirun -np 32 cp2k.psmp -E COORD=final.xyz -E PROJ=opt_final -i geo_opt_endpoint.inp -o opt_final.out
+!
+! Both end points MUST be relaxed with exactly the same FORCE_EVAL and the same
+! fixed atoms as the later NEB, otherwise the band energies are inconsistent.
+! Afterwards take the last frame of <PROJ>-pos-1.xyz (see README.md):
+!   bash last_frame.sh opt_initial-pos-1.xyz initial_opt.xyz
+!   bash last_frame.sh opt_final-pos-1.xyz   final_opt.xyz
+
+@SET COORD ${COORD-initial.xyz}
+@SET PROJ ${PROJ-opt_initial}
+
+&GLOBAL
+  PROJECT ${PROJ}
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+@INCLUDE 'cu111_h_force_eval.inc'
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 300
+    ! tighter than the default 4.5E-4: these structures are reused for NEB and frequencies
+    MAX_FORCE 2.0E-4
+    RMS_FORCE 1.0E-4
+  &END GEO_OPT
+  &CONSTRAINT
+    &FIXED_ATOMS
+      ! bottom Cu layer (atoms 1-9) mimics the bulk
+      LIST 1..9
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+    &END RESTART
+  &END PRINT
+&END MOTION

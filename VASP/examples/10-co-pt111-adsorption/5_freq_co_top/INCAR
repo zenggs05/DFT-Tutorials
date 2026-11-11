@@ -1,0 +1,26 @@
+SYSTEM  = CO on Pt(111) top - vibrational frequencies of the adsorbate (IBRION=5)
+
+# ---- electronic part: identical to the relaxation, but tighter EDIFF ----
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-7         # accurate forces are needed for finite differences
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 1
+SIGMA   = 0.10
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+LDIPOL  = .TRUE.
+IDIPOL  = 3
+DIPOL   = 0.5 0.5 0.5
+
+# ---- finite-difference Hessian ----
+IBRION  = 5            # all free Cartesian directions; honours selective dynamics
+POTIM   = 0.015        # displacement step in A
+NFREE   = 2            # central differences: +POTIM and -POTIM
+NSW     = 1
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

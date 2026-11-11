@@ -1,0 +1,33 @@
+SYSTEM  = Pt adatom on Pt(100) - dimer saddle-point refinement (VTST, ICHAIN = 2)
+# Start from saddle_dimer/ produced by neb2dim.pl (POSCAR + MODECAR).
+# Do NOT set IMAGES here: the dimer works on a single configuration.
+
+# ---- electronic part: same as the NEB, but tighter SCF (curvature needs accurate forces) ----
+PREC    = Normal
+ENCUT   = 350
+EDIFF   = 1E-7
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 1
+SIGMA   = 0.20
+ISPIN   = 1
+LREAL   = Auto
+
+# ---- dimer method ----
+ICHAIN  = 2            # 2 = dimer
+DdR     = 0.005        # dimer separation (A), default; up to 0.01 if the torque is noisy
+DRotMax = 4            # max rotations per translation step (default 1)
+DFNMin  = 0.01         # rotational force below which the dimer is not rotated (default)
+DFNMax  = 1.0          # rotational force below which rotation stops (default)
+
+# ---- VTST optimiser (required) ----
+IBRION  = 3
+POTIM   = 0
+IOPT    = 2            # 2 = CG, recommended for the dimer by the VTST documentation
+ISIF    = 2
+NSW     = 300
+EDIFFG  = -0.01        # converged when max force < 0.01 eV/A AND curvature < 0
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

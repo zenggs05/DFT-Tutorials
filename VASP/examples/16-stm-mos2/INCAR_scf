@@ -1,0 +1,17 @@
+SYSTEM  = MoS2 monolayer SCF (input for partial charges / STM)
+
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-7
+ISMEAR  = 0
+SIGMA   = 0.05
+NBANDS  = 24          # default is ~16 with Mo_pv + 2 S; extra empty bands for empty-state images
+NSW     = 0
+IBRION  = -1
+LORBIT  = 11          # orbital projections to identify the states you want to image
+
+LWAVE   = .TRUE.      # WAVECAR is the input of the LPARD step
+LCHARG  = .TRUE.
+
+# VASP >= 6.4.3 reports VBM, CBM and gap in OUTCAR by default (BANDGAP = COMPACT);
+# BANDGAP = WEIGHT prints a more detailed table. Use it to choose EINT for empty states.

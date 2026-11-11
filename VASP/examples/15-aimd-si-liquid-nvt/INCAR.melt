@@ -1,0 +1,30 @@
+# Stage 1: melt the 64-atom crystal at 3000 K (NVT, Nose-Hoover)
+SYSTEM  = Si64 AIMD stage 1 melt 3000 K
+
+# electronic (fixed volume: ENCUT ~ ENMAX is acceptable)
+PREC    = Normal
+ENCUT   = 250
+EDIFF   = 1E-5
+ALGO    = Fast
+LREAL   = Auto
+ISMEAR  = 0
+SIGMA   = 0.10         # liquid Si is metallic
+NELMIN  = 4            # at least 4 SCF steps per MD step
+MAXMIX  = 40           # reuse mixer history between MD steps (plain AIMD only)
+ISYM    = 0            # no symmetry in MD
+
+# molecular dynamics
+IBRION  = 0
+MDALGO  = 2            # Nose-Hoover thermostat
+SMASS   = 1.0          # Nose mass parameter (see VASP wiki SMASS / NVT ensemble)
+ISIF    = 2            # compute stress (pressure) but keep the cell fixed
+TEBEG   = 3000
+TEEND   = 3000
+POTIM   = 2.0          # fs; Si is heavy (no H)
+NSW     = 1500         # 3 ps
+NBLOCK  = 1            # write every step to XDATCAR
+RANDOM_SEED = 248489752 0 0
+
+# output
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

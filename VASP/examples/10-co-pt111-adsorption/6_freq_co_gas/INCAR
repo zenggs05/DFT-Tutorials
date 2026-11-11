@@ -1,0 +1,20 @@
+SYSTEM  = CO gas - vibrational frequencies (IBRION=5, all atoms free)
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-7
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 0
+SIGMA   = 0.01
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+
+IBRION  = 5
+POTIM   = 0.015
+NFREE   = 2
+NSW     = 1
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

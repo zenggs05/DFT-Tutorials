@@ -1,0 +1,15 @@
+%chk=ethylene_m062x_gd3_def2tzvp_sp.chk
+%mem=4GB
+%nprocshared=8
+#p M062X/def2TZVP EmpiricalDispersion=GD3 SP
+
+ethylene single point, M062X with zero damping D3, def2TZVP
+
+0 1
+C     0.000000    0.000000    0.667480
+C     0.000000    0.000000   -0.667480
+H     0.000000    0.922832    1.237695
+H     0.000000   -0.922832    1.237695
+H     0.000000    0.922832   -1.237695
+H     0.000000   -0.922832   -1.237695
+

@@ -1,0 +1,9 @@
+#p M062X EmpiricalDispersion=GD3BJ def2SVP SP
+
+Water: M06-2X has no D3(BJ) parameters in Gaussian, expect R6DS8 in Link 301
+
+0 1
+O     0.000000    0.000000    0.117300
+H     0.000000    0.757200   -0.469200
+H     0.000000   -0.757200   -0.469200
+

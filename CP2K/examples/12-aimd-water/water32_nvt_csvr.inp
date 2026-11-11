@@ -1,0 +1,124 @@
+# Step 1: NVT equilibration of 32 H2O with PBE-D3(BJ), CSVR thermostat
+#   starting structure: water32.xyz (fcc oxygens + random orientations, NOT equilibrated)
+#   2 ps with a short thermostat time constant (50 fs) to reach 300 K quickly.
+# Continue with md_restart.inp (production NVT, TIMECON 200 fs).
+
+&GLOBAL
+  PROJECT     water32_nvt
+  RUN_TYPE    MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+&MOTION
+  &MD
+    ENSEMBLE    NVT
+    STEPS       4000              ! 4000 x 0.5 fs = 2 ps
+    TIMESTEP    0.5               ! fs, light H atoms
+    TEMPERATURE 300.0             ! K, target and initial velocities
+    &THERMOSTAT
+      TYPE   CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON 50.0              ! fs, strong coupling for equilibration
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &PRINT
+    &TRAJECTORY
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &VELOCITIES ON
+      &EACH
+        MD 10
+      &END EACH
+    &END VELOCITIES
+    &FORCES ON
+      &EACH
+        MD 10
+      &END EACH
+    &END FORCES
+    &RESTART
+      BACKUP_COPIES 2
+      &EACH
+        MD 20
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY
+      &EACH
+        MD 1000
+      &END EACH
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     400
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT         1.0E-12
+      EXTRAPOLATION       ASPC    ! default in recent versions, written explicitly
+      EXTRAPOLATION_ORDER 3
+    &END QS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-6
+      MAX_SCF   30
+      &OT
+        MINIMIZER      DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-6
+        MAX_SCF 10
+      &END OUTER_SCF
+      &PRINT
+        &RESTART
+          BACKUP_COPIES 0
+          &EACH
+            MD 10
+          &END EACH
+        &END RESTART
+        &RESTART_HISTORY OFF
+        &END RESTART_HISTORY
+      &END PRINT
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      &VDW_POTENTIAL
+        POTENTIAL_TYPE PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          PARAMETER_FILE_NAME dftd3.dat
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 9.8654 9.8654 9.8654
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   water32.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q1
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

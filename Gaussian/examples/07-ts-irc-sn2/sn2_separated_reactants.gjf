@@ -1,0 +1,25 @@
+%chk=ch3br.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Opt Freq
+
+Separated reactant 1: CH3Br, Opt Freq at the same level as the TS
+
+0 1
+C     0.000000    0.000000    0.000000
+Br    0.000000    0.000000    1.960000
+H     1.030000    0.000000   -0.340000
+H    -0.515000    0.892006   -0.340000
+H    -0.515000   -0.892006   -0.340000
+
+--Link1--
+%chk=cl_anion.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Freq
+
+Separated reactant 2: Cl- (single atom, Freq only gives the thermal corrections)
+
+-1 1
+Cl    0.000000    0.000000    0.000000
+

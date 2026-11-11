@@ -1,0 +1,33 @@
+# ~/.ssh/config example  (chmod 600 ~/.ssh/config)
+# After this, "ssh hpc", "scp file hpc:~/", "rsync -avP dir/ hpc:~/dir/"
+# and VS Code Remote-SSH all use the short name "hpc".
+
+# Note: put comments on their own lines; trailing "# ..." after a value
+# is not accepted by every OpenSSH version.
+Host *
+    # send a keep-alive every 60 s so idle sessions are not dropped
+    ServerAliveInterval 60
+    ServerAliveCountMax 5
+    AddKeysToAgent yes
+
+# A cluster reachable directly
+Host hpc
+    HostName login.hpc.example.edu
+    User your_name
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519
+    # Re-use one TCP connection for many ssh/scp/rsync calls (Linux/macOS/WSL
+    # OpenSSH; the native Windows OpenSSH client does not support it):
+    ControlMaster auto
+    ControlPath ~/.ssh/cm-%r@%h:%p
+    ControlPersist 10m
+
+# A cluster behind a gateway (jump host); OpenSSH >= 7.3
+Host hpc-inner
+    HostName inner-login.hpc.example.edu
+    User your_name
+    IdentityFile ~/.ssh/id_ed25519
+    ProxyJump your_name@gateway.hpc.example.edu
+
+# Port forwarding for a Jupyter server started on the cluster:
+#   ssh -N -L 8888:localhost:8888 hpc     then open http://localhost:8888

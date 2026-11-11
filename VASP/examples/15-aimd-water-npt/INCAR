@@ -1,0 +1,35 @@
+# Liquid water, NpT ensemble with the Langevin thermostat + Parrinello-Rahman
+# barostat (MDALGO=3, ISIF=3). Cell shape kept cubic via the ICONST file.
+SYSTEM  = (H2O)32 NpT Langevin 300 K PBE-D3(BJ)
+
+# electronic
+PREC    = Normal
+ENCUT   = 550          # >= 1.3 x ENMAX(O)=400 eV: the basis is fixed while the cell changes
+EDIFF   = 1E-5
+ALGO    = Fast
+LREAL   = Auto
+ISMEAR  = 0
+SIGMA   = 0.05
+NELMIN  = 4
+MAXMIX  = 40
+ISYM    = 0
+IVDW    = 12           # DFT-D3 with Becke-Johnson damping
+
+# molecular dynamics, NpT
+IBRION  = 0
+MDALGO  = 3            # Langevin thermostat
+ISIF    = 3            # variable cell -> NpT (Parrinello-Rahman)
+TEBEG   = 300
+TEEND   = 300
+POTIM   = 0.5          # fs; O-H stretching period is ~9 fs
+NSW     = 6000         # 3 ps; extend for production
+LANGEVIN_GAMMA   = 10.0 10.0   # ps^-1, one value per species (O H), POSCAR order
+LANGEVIN_GAMMA_L = 10.0        # ps^-1, lattice degrees of freedom
+PMASS   = 1000         # fictitious lattice mass (amu); test 100-1000
+PSTRESS = 0.0          # target pressure in kB (1 bar = 0.001 kB)
+NBLOCK  = 1
+RANDOM_SEED = 486686595 0 0
+
+# output
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

@@ -1,0 +1,14 @@
+# Stage 2: refit the collected data (ML_AB) for the fast prediction mode.
+# Needs: cp ML_ABN ML_AB.  Produces a new ML_FFN.
+SYSTEM  = Si64 MLFF refit for fast mode
+
+PREC    = Normal
+ENCUT   = 350
+ISMEAR  = 0
+SIGMA   = 0.05
+ISYM    = 0
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+
+ML_LMLFF = .TRUE.
+ML_MODE  = refit       # sets ML_LFAST = .TRUE., NSW = 1 and an SVD-based fit

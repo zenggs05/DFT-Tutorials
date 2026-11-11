@@ -1,0 +1,17 @@
+SYSTEM  = Si band structure, non-self-consistent (ICHARG=11)
+
+PREC    = Accurate
+ENCUT   = 400        # MUST be identical to the SCF run
+EDIFF   = 1E-7
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+
+ICHARG  = 11         # read CHGCAR and keep the density fixed
+NBANDS  = 16         # 4 occupied bands for Si; add empty bands to see the conduction band
+LORBIT  = 11         # lm-decomposed PROCAR (fat bands)
+
+NSW     = 0
+IBRION  = -1
+LCHARG  = .FALSE.    # do not overwrite the SCF CHGCAR
+LWAVE   = .FALSE.

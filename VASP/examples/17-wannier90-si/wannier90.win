@@ -1,0 +1,32 @@
+! Wannier90 input for Si: 8 sp3 Wannier functions from valence + low conduction bands.
+! VASP (LWANNIER90 = .TRUE.) appends unit_cell_cart, atoms_cart, mp_grid and kpoints
+! (and num_bands) if they are missing. Keep num_wann equal to NUM_WANN in the INCAR.
+
+num_wann        = 8
+num_iter        = 200
+
+! Energy windows are ABSOLUTE energies in eV (same zero as VASP eigenvalues).
+! The values below assume E-fermi ~ 6 eV; job.slurm rewrites them from scf/OUTCAR:
+!   dis_froz_max ~ E_F + 2 eV  (at most 8 states may lie inside the frozen window)
+!   dis_win_max  ~ E_F + 11 eV
+dis_win_max     = 17.0
+dis_froz_max    = 8.0
+dis_num_iter    = 500
+
+begin projections
+Si:sp3
+end projections
+
+guiding_centres = true
+write_hr        = true
+write_xyz       = true
+
+! interpolated band structure along L-G-X-U|K-G (fractional coordinates of the fcc primitive cell)
+bands_plot       = true
+bands_num_points = 100
+begin kpoint_path
+L 0.500 0.500 0.500  G 0.000 0.000 0.000
+G 0.000 0.000 0.000  X 0.500 0.000 0.500
+X 0.500 0.000 0.500  U 0.625 0.250 0.625
+K 0.375 0.375 0.750  G 0.000 0.000 0.000
+end kpoint_path

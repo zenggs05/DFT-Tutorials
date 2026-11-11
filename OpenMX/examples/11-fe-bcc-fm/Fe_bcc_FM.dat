@@ -1,0 +1,49 @@
+#
+# bcc Fe, ferromagnetic, collinear spin-polarized GGA-PBE
+# Target: OpenMX 4.0 + patch 4.0.1, database DFT_DATA19
+#
+System.CurrrentDirectory    ./
+System.Name                 fe_fm
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1          # writes fe_fm.sden.cube (spin density)
+
+# Standard basis for the hard Fe pseudopotential (3s3p semicore, 16 valence electrons)
+Species.Number              1
+<Definition.of.Atomic.Species
+  Fe   Fe5.5H-s3p2d1   Fe_PBE19H
+Definition.of.Atomic.Species>
+
+# 10.0 up + 6.0 down = 16 electrons, initial moment 4 muB
+Atoms.Number                1
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Fe   0.0  0.0  0.0   10.0  6.0
+Atoms.SpeciesAndCoordinates>
+
+# bcc primitive cell, a = 2.866 Ang (experimental lattice constant)
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  -1.4330   1.4330   1.4330
+   1.4330  -1.4330   1.4330
+   1.4330   1.4330  -1.4330
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        on         # on: collinear; off: non-magnetic reference
+scf.EigenvalueSolver        Band
+scf.Kgrid                   16 16 16   # check convergence of moment and energy
+scf.energycutoff            250.0
+scf.ElectronicTemperature   300.0
+scf.maxIter                 200
+scf.criterion               1.0e-8
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.02
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.20
+scf.Mixing.History          30
+scf.Mixing.StartPulay       15
+
+MD.Type                     Nomd
+
+Voronoi.charge              on         # Voronoi spin moment for comparison with Mulliken

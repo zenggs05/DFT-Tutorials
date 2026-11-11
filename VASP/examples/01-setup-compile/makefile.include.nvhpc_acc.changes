@@ -1,0 +1,78 @@
+# makefile.include.nvhpc_acc.changes
+# =============================================================================
+# This is NOT a makefile and NOT a copy of the official template.
+# It lists the edits applied on top of the OpenACC GPU templates shipped with
+# VASP 6.6.x:
+#   arch/makefile.include.nvhpc_acc                 (NVHPC libs + FFTW)
+#   arch/makefile.include.nvhpc_omp_acc             (+ OpenMP)
+#   arch/makefile.include.nvhpc_ompi_mkl_omp_acc    (+ OpenMP, MKL on the CPU
+#                                                    side; recommended on
+#                                                    Intel host CPUs)
+#
+# Workflow:
+#   module load nvhpc/25.1            # site specific; NVHPC >= 21.2,
+#                                     # avoid 22.1 and 22.2 (OpenMP bug)
+#   cp arch/makefile.include.nvhpc_acc makefile.include
+#   # apply items A-F, then
+#   make veryclean && make DEPS=1 -j 16 all
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# A. GPU architecture and CUDA version
+# -----------------------------------------------------------------------------
+# Wherever the template passes "-gpu=..." to the compilers (CC/FC/FCL lines
+# or a helper variable, depending on the release), adapt:
+#   compute capability : V100 -> cc70, A100/A30 -> cc80, L4/L40 -> cc89,
+#                         H100/H200 -> cc90, or ccnative when compiling on
+#                         the GPU node itself. Several values (cc80,cc90)
+#                         give a portable but slower-to-build binary.
+#   CUDA version        : must match a CUDA shipped with your NVHPC
+#                         (check: ls $NVHPC_ROOT/cuda/ or nvcc --version)
+
+# -----------------------------------------------------------------------------
+# B. NVROOT and the QD library (quadruple precision emulation)
+# -----------------------------------------------------------------------------
+# The template derives NVROOT from the location of nvfortran. If that fails,
+# set it by hand, e.g.
+#   NVROOT = /opt/nvidia/hpc_sdk/Linux_x86_64/25.1
+# At run time the QD library must be found:
+#   export LD_LIBRARY_PATH=$NVROOT/compilers/extras/qd/lib:$LD_LIBRARY_PATH
+
+# -----------------------------------------------------------------------------
+# C. CPU-side FFT / BLAS
+# -----------------------------------------------------------------------------
+# nvhpc_acc / nvhpc_omp_acc : BLAS, LAPACK, ScaLAPACK come with NVHPC,
+#                             FFTW must be installed by you:
+#   FFTW_ROOT ?= $(HOME)/opt/fftw-3.3.10-nvhpc
+# nvhpc_ompi_mkl_omp_acc   : FFTW/BLAS/LAPACK/ScaLAPACK from MKL; make sure
+#                             MKLROOT is set and export at run time
+#                             MKL_THREADING_LAYER=INTEL
+
+# -----------------------------------------------------------------------------
+# D. Precompiler options
+# -----------------------------------------------------------------------------
+# Keep the defaults of the 6.6.x template (OpenACC code paths, NCCL, QD
+# emulation, ...). Since VASP 6.5.0 OpenACC is activated by -DACC_OFFLOAD
+# together with -DNVCUDA; the old -D_OPENACC belongs to <= 6.4 templates.
+# Never reuse a makefile.include from an older VASP release.
+# Do NOT add -Dlibbeef or -DUSELIBXC: not supported by the GPU ports.
+
+# -----------------------------------------------------------------------------
+# E. HDF5 (append to the end of makefile.include)
+# -----------------------------------------------------------------------------
+# HDF5 must be compiled with nvfortran/nvc (Fortran .mod files are
+# compiler specific):
+#   CC=nvc FC=nvfortran ./configure --prefix=$HOME/opt/hdf5-1.14.5-nvhpc --enable-fortran
+CPP_OPTIONS += -DVASP_HDF5
+HDF5_ROOT   ?= $(HOME)/opt/hdf5-1.14.5-nvhpc
+LLIBS       += -L$(HDF5_ROOT)/lib -lhdf5_fortran -Wl,-rpath,$(HDF5_ROOT)/lib
+INCS        += -I$(HDF5_ROOT)/include
+
+# -----------------------------------------------------------------------------
+# F. Run-time rules for the GPU binary (put them into the job script)
+# -----------------------------------------------------------------------------
+#   * exactly one MPI rank per GPU
+#   * OMP_NUM_THREADS = free CPU cores per rank (needs an *_omp_* build)
+#   * INCAR: KPAR = number of GPUs (if the irreducible k points divide
+#     evenly), NSIM = 16-32; NCORE is reset to 1 automatically
+#   * a CUDA-aware MPI is required (the OpenMPI bundled with NVHPC is)

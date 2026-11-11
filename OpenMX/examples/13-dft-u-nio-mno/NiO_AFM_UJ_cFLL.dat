@@ -1,0 +1,79 @@
+#
+# NiO, AFM-II order along [111], rhombohedral 4-atom cell
+# GGA-PBE + U + J, general form (scf.DFTU.Type 2) with cFLL double counting
+# U = 6.0 eV, J = 1.0 eV on Ni 1d  (U - J = 5.0 eV, same as NiO_AFM_U_Dudarev.dat)
+# Target: OpenMX >= 3.9 (general DFT+U); 4.0 recommended
+#
+
+System.CurrrentDirectory    ./
+System.Name                 nio_cfll_u6_j1
+level.of.stdout             1
+level.of.fileout            1
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+
+Species.Number      2
+<Definition.of.Atomic.Species
+  Ni   Ni6.0S-s3p2d2   Ni_PBE19S
+  O    O6.0-s2p2d1     O_PBE19
+Definition.of.Atomic.Species>
+
+#
+# DFT+U part (general form)
+#
+scf.Hubbard.U               on
+scf.DFTU.Type               2            # 2: general form, U and J are read
+scf.dc.Type                 cFLL         # sFLL|sAMF|cFLL|cAMF, default=sFLL
+scf.Slater.Ratio            0.625        # F4/F2, default=0.625
+scf.Yukawa                  off          # on: J and F4/F2 estimated from U (J block ignored)
+scf.Hubbard.Occupation      dual
+
+<Hubbard.U.values           # eV
+  Ni  1s 0.0 2s 0.0 3s 0.0 1p 0.0 2p 0.0 1d 6.0 2d 0.0
+  O   1s 0.0 2s 0.0 1p 0.0 2p 0.0 1d 0.0
+Hubbard.U.values>
+
+<Hund.J.values              # eV, same item list as Hubbard.U.values
+  Ni  1s 0.0 2s 0.0 3s 0.0 1p 0.0 2p 0.0 1d 1.0 2d 0.0
+  O   1s 0.0 2s 0.0 1p 0.0 2p 0.0 1d 0.0
+Hund.J.values>
+
+#
+# Orbital-polarization flag kept off: the manual does not recommend it with cFLL/cAMF
+#
+Atoms.Number        4
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1  Ni   0.00000   0.00000   0.00000   10.0   6.0  off
+  2  Ni   2.08850   2.08850   0.00000    6.0  10.0  off
+  3  O    2.08850   0.00000   0.00000    3.0   3.0  off
+  4  O    2.08850   2.08850   2.08850    3.0   3.0  off
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit   Ang
+<Atoms.UnitVectors
+  4.17700   2.08850   2.08850
+  2.08850   4.17700   2.08850
+  2.08850   2.08850   4.17700
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        on
+scf.ElectronicTemperature   300.0
+scf.energycutoff            250.0
+scf.EigenvalueSolver        Band
+scf.Kgrid                   7 7 7
+scf.Generation.Kpoint       GCenter      # 4.0 keyword; delete for 3.9
+scf.maxIter                 300
+scf.Mixing.Type             RMM-DIISH
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.20
+scf.Mixing.History          30
+scf.Mixing.StartPulay       15
+scf.criterion               1.0e-8
+
+MD.Type                     nomd
+
+Dos.fileout                 on
+Dos.Erange                 -10.0  10.0
+Dos.Kgrid                   11 11 11

@@ -1,0 +1,81 @@
+! si_bulk8_energy.inp - single point of bulk Si, 8-atom conventional cubic cell
+! Tutorial: CP2K chapter 2, section 10.  Works with CP2K 2023.x - 2026.2.
+!
+! Gamma point only (default):
+!   rm -f si8_k0.out; cp2k.ssmp -i si_bulk8_energy.inp -o si8_k0.out
+! Monkhorst-Pack NK x NK x NK mesh, selected from the command line:
+!   rm -f si8_k4.out; cp2k.ssmp -E NK=4 -i si_bulk8_energy.inp -o si8_k4.out
+!
+! Diagonalization + smearing is used (and not OT) because OT does not support
+! k-points in CP2K <= 2026.2.
+
+&GLOBAL
+  PROJECT si8_k${NK-0}
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QS
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    &MGRID
+      CUTOFF 300
+      REL_CUTOFF 50
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-10
+    &END QS
+    ! The KPOINTS section is only read when NK is set to a non-zero value.
+    @IF ${NK-0} /= 0
+    &KPOINTS
+      SCHEME MONKHORST-PACK ${NK-0} ${NK-0} ${NK-0}
+    &END KPOINTS
+    @ENDIF
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF 1.0E-7
+      MAX_SCF 100
+      ADDED_MOS 20            ! empty bands needed by the smearing
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.4
+        NBUFFER 8
+      &END MIXING
+      &SMEAR ON
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 300
+      &END SMEAR
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ! experimental lattice constant of Si at room temperature: 5.431 A
+      ABC [angstrom] 5.431 5.431 5.431
+      PERIODIC XYZ            ! default
+    &END CELL
+    &COORD
+      SCALED T                ! fractional coordinates
+      Si  0.00  0.00  0.00
+      Si  0.00  0.50  0.50
+      Si  0.50  0.00  0.50
+      Si  0.50  0.50  0.00
+      Si  0.25  0.25  0.25
+      Si  0.25  0.75  0.75
+      Si  0.75  0.25  0.75
+      Si  0.75  0.75  0.25
+    &END COORD
+    &KIND Si
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q4
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

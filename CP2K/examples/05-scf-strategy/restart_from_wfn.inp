@@ -1,0 +1,68 @@
+# Restart a TZV2P calculation of H2O from the DZVP wavefunction of h2o_ot.inp
+# Run h2o_ot.inp first: it writes h2o_ot-RESTART.wfn
+&GLOBAL
+  PROJECT     h2o_tzv2p            ! new project name: the source .wfn is not overwritten
+  RUN_TYPE    ENERGY_FORCE
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME   BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME   POTENTIAL_UZH
+    WFN_RESTART_FILE_NAME h2o_ot-RESTART.wfn   ! keyword of &DFT, not of &SCF
+    &MGRID
+      CUTOFF     600
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &POISSON
+      PERIODIC       NONE
+      POISSON_SOLVER MT
+    &END POISSON
+    &SCF
+      SCF_GUESS RESTART            ! falls back to ATOMIC (with a warning) if the file is missing
+      EPS_SCF   1.0E-7
+      MAX_SCF   30
+      &OT ON
+        MINIMIZER      DIIS
+        PRECONDITIONER FULL_ALL
+      &END OT
+      &OUTER_SCF ON
+        EPS_SCF 1.0E-7
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 12.0 12.0 12.0
+      PERIODIC NONE
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   h2o.xyz
+      COORD_FILE_FORMAT XYZ
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    &KIND H
+      BASIS_SET TZV2P-MOLOPT-PBE-GTH-q1   ! same pseudopotential as in h2o_ot.inp
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+    &KIND O
+      BASIS_SET TZV2P-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+  &PRINT
+    &FORCES ON
+    &END FORCES
+  &END PRINT
+&END FORCE_EVAL

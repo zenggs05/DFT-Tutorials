@@ -1,0 +1,66 @@
+%nprocshared=8
+%mem=8GB
+%chk=pbz_rks.chk
+#p RB3LYP/6-31G(d) Stable=Opt NoSymm
+
+p-benzyne step 1: start from RKS; Stable=Opt may switch to UKS if unstable
+
+0 1
+C                   1.390000    0.000000    0.000000
+C                   0.695000    1.203775    0.000000
+C                  -0.695000    1.203775    0.000000
+C                  -1.390000    0.000000    0.000000
+C                  -0.695000   -1.203775    0.000000
+C                   0.695000   -1.203775    0.000000
+H                   1.235000    2.139083    0.000000
+H                  -1.235000    2.139083    0.000000
+H                  -1.235000   -2.139083    0.000000
+H                   1.235000   -2.139083    0.000000
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=pbz_rks.chk
+%chk=pbz_mix.chk
+#p UB3LYP/6-31G(d) Guess=Mix Stable=Opt NoSymm Geom=Check
+
+p-benzyne step 2: same geometry, broken-symmetry guess from Guess=Mix
+
+0 1
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=pbz_rks.chk
+%chk=pbz_bs_opt.chk
+#p UB3LYP/6-31G(d) Opt Freq NoSymm Geom=Check Guess=Read
+
+p-benzyne step 3: optimize the broken-symmetry singlet (stable UKS guess)
+
+0 1
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=pbz_bs_opt.chk
+%chk=pbz_bs_stab.chk
+#p UB3LYP/6-31G(d) Stable NoSymm Geom=AllCheck Guess=Read Pop=NaturalOrbitals
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=pbz_bs_opt.chk
+%chk=pbz_uno.chk
+#p Guess=(Save,Only,NaturalOrbitals) Geom=AllCheck ChkBasis
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=pbz_rks.chk
+%chk=pbz_triplet.chk
+#p UB3LYP/6-31G(d) Opt Freq NoSymm Geom=Check
+
+p-benzyne step 6: triplet state for the singlet-triplet gap
+
+0 3
+

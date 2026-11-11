@@ -1,0 +1,20 @@
+SYSTEM  = Si SCF + band path in one run (KPOINTS_OPT, VASP >= 6.3)
+
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-7
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+
+NBANDS  = 16
+LORBIT  = 11         # PROCAR_OPT + projections in vaspout.h5
+
+NSW     = 0
+IBRION  = -1
+LCHARG  = .TRUE.
+LWAVE   = .FALSE.
+
+# KPOINTS_OPT in this directory is read automatically.
+# LKPOINTS_OPT = .FALSE.   # uncomment to ignore it without deleting the file
+# KPOINTS_OPT_NKBATCH = 20 # smaller batches if memory is tight

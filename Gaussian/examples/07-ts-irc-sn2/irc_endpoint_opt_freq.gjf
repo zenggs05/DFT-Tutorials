@@ -1,0 +1,31 @@
+%chk=sn2_rc.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Opt Freq
+
+Reactant-side IRC endpoint (Cl- ... CH3Br ion-dipole complex): Opt Freq
+
+-1 1
+C     0.000000    0.000000    0.000000
+Cl    0.000000    0.000000   -3.200000
+Br    0.000000    0.000000    1.990000
+H     1.030000    0.000000   -0.325000
+H    -0.515000    0.892006   -0.325000
+H    -0.515000   -0.892006   -0.325000
+
+--Link1--
+%chk=sn2_pc.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Opt Freq
+
+Product-side IRC endpoint (ClCH3 ... Br- ion-dipole complex): Opt Freq
+
+-1 1
+C     0.000000    0.000000    0.000000
+Cl    0.000000    0.000000   -1.820000
+Br    0.000000    0.000000    3.400000
+H     1.024000    0.000000    0.343000
+H    -0.512000    0.886810    0.343000
+H    -0.512000   -0.886810    0.343000
+

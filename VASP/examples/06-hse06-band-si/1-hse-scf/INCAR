@@ -1,0 +1,27 @@
+SYSTEM   = Si HSE06 SCF (starts from the PBE WAVECAR)
+
+ISTART   = 1         # read WAVECAR copied from 0-pbe-scf
+PREC     = Accurate
+ENCUT    = 400
+EDIFF    = 1E-6
+ISMEAR   = 0
+SIGMA    = 0.01
+LREAL    = .FALSE.
+NBANDS   = 16
+
+# HSE06
+LHFCALC  = .TRUE.
+GGA      = PE
+HFSCREEN = 0.2       # 0.2 1/A -> HSE06 (0.3 -> HSE03, unset -> PBE0)
+AEXX     = 0.25      # default for LHFCALC=.TRUE., written for clarity
+ALGO     = Damped    # robust; ALGO = Normal is a fast alternative; never ALGO = Fast
+TIME     = 0.4       # damping time step; reduce to 0.2-0.3 if the SCF oscillates
+PRECFOCK = Normal    # FFT grid for the exchange; Fast for pre-convergence, Accurate for phonons
+HFRCUT   = -1        # truncated Coulomb kernel: recommended for gapped systems and band structures
+# NKRED  = 2         # optional: Fock operator on a 3x3x3 q-mesh; test the effect on the gap first
+# KPAR   = 2         # k-point parallelization, adapt to your number of nodes
+
+NSW      = 0
+IBRION   = -1
+LWAVE    = .TRUE.
+LCHARG   = .FALSE.

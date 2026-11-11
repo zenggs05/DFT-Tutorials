@@ -1,0 +1,27 @@
+# Stage 2: production run of liquid Si at 1800 K (start from stage-1 CONTCAR,
+# which also contains the velocities)
+SYSTEM  = Si64 AIMD stage 2 production 1800 K
+
+PREC    = Normal
+ENCUT   = 250
+EDIFF   = 1E-5
+ALGO    = Fast
+LREAL   = Auto
+ISMEAR  = 0
+SIGMA   = 0.10
+NELMIN  = 4
+MAXMIX  = 40
+ISYM    = 0
+
+IBRION  = 0
+MDALGO  = 2
+SMASS   = 1.0
+ISIF    = 2
+TEBEG   = 1800
+TEEND   = 1800
+POTIM   = 2.0
+NSW     = 5000         # 10 ps; discard the first 1-2 ps as equilibration
+NBLOCK  = 1
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

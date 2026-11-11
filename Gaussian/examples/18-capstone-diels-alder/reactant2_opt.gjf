@@ -1,0 +1,13 @@
+%chk=reactant2_opt.chk
+#p B3LYP EmpiricalDispersion=GD3BJ def2SVP SCRF=(SMD,Solvent=Toluene) Opt Freq
+
+Ethylene opt+freq
+
+0 1
+C     -0.666703    -0.039580    -0.004712
+C      0.666703     0.039580     0.004712
+H     -1.281049     0.844090     0.136700
+H     -1.170133    -0.989611    -0.154025
+H      1.281049    -0.844090    -0.136700
+H      1.170133     0.989611     0.154025
+

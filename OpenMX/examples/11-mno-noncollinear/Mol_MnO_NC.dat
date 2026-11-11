@@ -1,0 +1,56 @@
+#
+# MnO molecule: noncollinear DFT + spin-orbit coupling + constrained spin direction
+# Target: OpenMX 4.0 + patch 4.0.1, database DFT_DATA19
+# Bond length 1.65 Ang: approximate, not optimized. High-spin state (~5 muB in total).
+#
+System.CurrrentDirectory    ./
+System.Name                 mno_nc
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1          # mno_nc.nc.xsf / .ncsden.xsf / .nco.xsf for XCrySDen
+
+Species.Number              2
+<Definition.of.Atomic.Species
+  Mn   Mn6.0-s3p2d1   Mn_PBE19
+  O    O6.0-s2p2d1    O_PBE19
+Definition.of.Atomic.Species>
+
+# columns: no species x y z n_up n_dn theta_spin phi_spin theta_orb phi_orb constraint(1/0) +U-orb-pol(on/off)
+# Mn_PBE19 has 15 valence electrons (10.0 + 5.0), O_PBE19 has 6 (3.0 + 3.0)
+# Spin direction: theta = 45 deg from z, phi = 0 (in the xz plane); bond along x.
+# Do not put comment lines inside the block below.
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1  Mn   0.00000  0.00000  0.00000  10.0  5.0  45.0  0.0  45.0  0.0  1  off
+  2  O    1.65000  0.00000  0.00000   3.0  3.0  45.0  0.0  45.0  0.0  1  off
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  14.0   0.0   0.0
+   0.0  14.0   0.0
+   0.0   0.0  14.0
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        nc
+scf.SpinOrbit.Coupling      on
+scf.Constraint.NC.Spin      on         # off | on (direction only) | on2 (direction and magnitude)
+scf.Constraint.NC.Spin.v    0.5        # eV, strength of the penalty functional
+scf.EigenvalueSolver        Cluster
+scf.Kgrid                   1 1 1
+scf.energycutoff            220.0
+scf.ElectronicTemperature   300.0
+scf.maxIter                 300
+scf.criterion               1.0e-9
+scf.Mixing.Type             RMM-DIIS
+scf.Init.Mixing.Weight      0.005
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       10
+
+MD.Type                     Nomd
+
+scf.restart                 off        # scan_theta.sh switches this to on after the first angle

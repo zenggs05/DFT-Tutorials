@@ -1,0 +1,99 @@
+# SCC-DFTB molecular dynamics (NVT, CSVR thermostat) of 125 water molecules
+# in a 15.54 A periodic box. Chapter 16 of the CP2K tutorial.
+#
+# Parameters: the Slater-Koster tables shipped in CP2K's data directory
+#   (CP2K_DATA_DIR)/DFTB/scc/scc_parameter  (element pairs of C H N O P S Zn)
+#   (CP2K_DATA_DIR)/DFTB/uff_table          (UFF dispersion parameters)
+#
+# Version notes
+#   - DO_EWALD T is required for periodic DFTB up to CP2K 2026.1. In 2026.2 the
+#     periodicity is taken from &CELL PERIODIC and DO_EWALD is deprecated (still
+#     accepted as a debug override). Remove it once all your machines run >= 2026.2.
+#   - water125.xyz is an idealised starting box: discard the first ~1 ps.
+#
+# Run:  cp2k.psmp -i dftb_md.inp -o dftb_md.out
+
+&GLOBAL
+  PROJECT     water125_dftb_nvt
+  RUN_TYPE    MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+&MOTION
+  &MD
+    ENSEMBLE    NVT
+    STEPS       2000
+    TIMESTEP    [fs] 0.5
+    TEMPERATURE [K] 300.0
+    &THERMOSTAT
+      TYPE   CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON [fs] 50.0          ! short coupling for equilibration; use ~100-500 fs for production
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &PRINT
+    &TRAJECTORY
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &VELOCITIES OFF
+    &END VELOCITIES
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY OFF
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    &QS
+      METHOD DFTB
+      &DFTB
+        SELF_CONSISTENT T          ! SCC-DFTB (DFTB2)
+        DISPERSION      T          ! UFF pair dispersion; needs UFF_FORCE_FIELD below
+        DO_EWALD        T          ! periodic electrostatics, see version notes above
+        &PARAMETER
+          PARAM_FILE_PATH DFTB/scc
+          PARAM_FILE_NAME scc_parameter
+          UFF_FORCE_FIELD ../uff_table
+        &END PARAMETER
+      &END DFTB
+    &END QS
+    &POISSON
+      &EWALD
+        EWALD_TYPE SPME
+        ALPHA      0.35
+        GMAX       32
+        O_SPLINE   5
+      &END EWALD
+    &END POISSON
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-6
+      MAX_SCF   50
+      &MIXING
+        METHOD DIRECT_P_MIXING
+        ALPHA  0.2
+      &END MIXING
+    &END SCF
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC      15.54 15.54 15.54
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   water125.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+  &END SUBSYS
+&END FORCE_EVAL

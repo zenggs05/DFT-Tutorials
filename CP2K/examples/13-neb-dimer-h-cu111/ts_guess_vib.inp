@@ -1,0 +1,41 @@
+! ts_guess_vib.inp - cheap partial-Hessian frequency run on a TS guess
+! Chapter 13, step 3a.  Target versions: CP2K 2023.1 ... 2026.2
+!
+! Purpose: get the normal mode with the imaginary frequency of the TS guess and
+! write it to ts_guess_vib-VIBRATIONS-1.mol.  dimer_ts.inp (CP2K >= 2026.2) reads
+! this file to build the initial dimer vector (INITIALIZATION_METHOD MOLDEN).
+!
+! Only H is displaced (all 27 Cu atoms fixed): 3 coordinates x 2 = 6 force
+! evaluations.  With NPROC_REP 8 and 48 MPI ranks they run 6 at a time.
+!   mpirun -np 48 cp2k.psmp -i ts_guess_vib.inp -o ts_guess_vib.out
+! Better guess: the climbing image of the CI-NEB run, e.g.
+!   mpirun -np 48 cp2k.psmp -E COORD=ts_from_neb.xyz -i ts_guess_vib.inp -o ts_guess_vib.out
+
+@SET COORD ${COORD-ts_guess.xyz}
+
+&GLOBAL
+  PROJECT ts_guess_vib
+  RUN_TYPE VIBRATIONAL_ANALYSIS
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+@INCLUDE 'cu111_h_force_eval.inc'
+
+&VIBRATIONAL_ANALYSIS
+  ! finite-difference step in bohr (default 0.01)
+  DX 0.01
+  NPROC_REP ${NPROC_REP-8}
+  &PRINT
+    &MOLDEN_VIB ON
+    &END MOLDEN_VIB
+  &END PRINT
+&END VIBRATIONAL_ANALYSIS
+
+&MOTION
+  &CONSTRAINT
+    &FIXED_ATOMS
+      ! all Cu fixed: only the 3 x 3 block of H enters the Hessian
+      LIST 1..27
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+&END MOTION

@@ -1,0 +1,31 @@
+SYSTEM  = CO/Pt(111) p(2x2) Bader single point
+
+# ---- electronic (keep identical to the relaxation of chapter 10) ----
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-6
+ISMEAR  = 1           # Methfessel-Paxton for the metal slab
+SIGMA   = 0.1
+LREAL   = Auto
+ALGO    = Fast
+NELM    = 120
+
+# ---- single point on the (relaxed) geometry ----
+NSW     = 0
+IBRION  = -1
+
+# ---- charge output for Bader ----
+LCHARG  = .TRUE.      # CHGCAR: valence density that is integrated
+LAECHG  = .TRUE.      # AECCAR0 (core) + AECCAR2 (all-electron valence) -> reference density
+LWAVE   = .FALSE.
+
+# ---- finer FFT grid (about 2x the default of THIS cell) ----
+# 1) run once without these lines, 2) grep "NGXF" OUTCAR,
+# 3) uncomment and put roughly twice the default values, 4) rerun and compare ACF.dat
+# NGXF = 160
+# NGYF = 160
+# NGZF = 768
+
+# ---- parallelization (edit for your machine) ----
+NCORE   = 4
+KPAR    = 2

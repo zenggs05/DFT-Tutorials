@@ -1,0 +1,12 @@
+%nprocshared=8
+%mem=12GB
+%chk=d2o_freq_iso_inline.chk
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Opt Freq
+
+D2O opt + freq with inline isotope specification H(Iso=2)
+
+0 1
+O           0.000000     0.000000     0.117300
+H(Iso=2)    0.000000     0.757200    -0.469200
+H(Iso=2)    0.000000    -0.757200    -0.469200
+

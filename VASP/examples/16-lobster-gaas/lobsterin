@@ -1,0 +1,8 @@
+COHPstartEnergy -20.0
+COHPendEnergy 5.0
+gaussianSmearingWidth 0.05
+basisSet pbeVaspFit2015
+basisfunctions Ga 3d 4s 4p
+basisfunctions As 4s 4p
+cohpGenerator from 2.0 to 2.6 type Ga type As orbitalwise
+saveProjectionToFile

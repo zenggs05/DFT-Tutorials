@@ -1,0 +1,5 @@
+Gamma-centred 8x8x8 mesh for fcc Si
+0              ! 0 = automatic mesh
+Gamma          ! Gamma-centred (required for fcc lattices)
+  8  8  8      ! subdivisions along b1 b2 b3
+  0  0  0      ! optional shift

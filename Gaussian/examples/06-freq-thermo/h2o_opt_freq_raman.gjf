@@ -1,0 +1,12 @@
+%nprocshared=8
+%mem=12GB
+%chk=h2o_opt_freq_raman.chk
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Opt Freq=Raman
+
+H2O opt + harmonic frequencies with IR and Raman intensities
+
+0 1
+O     0.000000     0.000000     0.117300
+H     0.000000     0.757200    -0.469200
+H     0.000000    -0.757200    -0.469200
+

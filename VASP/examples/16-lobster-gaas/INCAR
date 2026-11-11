@@ -1,0 +1,21 @@
+SYSTEM  = GaAs single point for LOBSTER (COHP/COOP/COBI)
+
+PREC    = Accurate
+ENCUT   = 400         # >= 1.3 x max(ENMAX) of Ga_d and As
+EDIFF   = 1E-7
+ISMEAR  = 0
+SIGMA   = 0.05        # same width as gaussianSmearingWidth in lobsterin
+NSW     = 0
+IBRION  = -1
+
+ISYM    = 0           # LOBSTER needs the full k-point set (time reversal only)
+# NBANDS >= 13 local basis functions (Ga 3d 4s 4p + As 4s 4p) and divisible
+# by the number of band groups of your run (ranks / KPAR / NCORE)
+NBANDS  = 16
+LWAVE   = .TRUE.      # LOBSTER reads WAVECAR
+LCHARG  = .TRUE.
+NEDOS   = 2001
+LORBIT  = 11          # optional: compare the VASP PDOS with DOSCAR.lobster
+
+# parallelization: do NOT use the gamma-only executable (vasp_gam) for LOBSTER
+NCORE   = 4

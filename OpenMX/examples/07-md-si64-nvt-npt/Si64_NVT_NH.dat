@@ -1,0 +1,120 @@
+# Si64 (2x2x2 diamond supercell): NVT molecular dynamics with a Nose-Hoover thermostat
+# 1000 K production-style run. OpenMX 4.0.
+# Recommended: start from Si64_NVT_VS.dat# (equilibrated coordinates + velocities) instead,
+# see README.md. Remove old Si64_NVT_NH.ene / .md before a fresh run.
+
+System.CurrrentDirectory    ./
+System.Name                 Si64_NVT_NH
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: dir containing PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0          # no cube files during MD
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  Si   Si7.0-s2p1d1   Si_PBE19          # Quick basis; compare with Si7.0-s2p2d1 before production
+Definition.of.Atomic.Species>
+
+Atoms.Number                64
+Atoms.SpeciesAndCoordinates.Unit   Ang
+# 2x2x2 conventional diamond cells (a = 5.43 A) + random displacements (sigma 0.05 A).
+# The displacements give non-zero forces, so the velocity scaling has kinetic energy to scale.
+<Atoms.SpeciesAndCoordinates
+    1  Si   -0.00069   0.01381   0.01109   2.0 2.0
+    2  Si   -0.00623   2.76255   2.58901   2.0 2.0
+    3  Si    2.71293  -0.00140   2.69739   2.0 2.0
+    4  Si    2.73195   2.76176  -0.02923   2.0 2.0
+    5  Si    1.32992   1.37142   1.42898   2.0 2.0
+    6  Si    1.43369   4.09429   4.08557   2.0 2.0
+    7  Si    4.10518   1.33967   4.07023   2.0 2.0
+    8  Si    4.05107   4.14442   1.33076   2.0 2.0
+    9  Si   -0.02583  -0.07335   5.46418   2.0 2.0
+   10  Si   -0.06286   2.55328   8.22259   2.0 2.0
+   11  Si    2.72590  -0.09208   8.08508   2.0 2.0
+   12  Si    2.68962   2.78339   5.46512   2.0 2.0
+   13  Si    1.38259   1.33857   6.78178   2.0 2.0
+   14  Si    1.29374   4.02337   9.54356   2.0 2.0
+   15  Si    4.05814   1.35486   9.55004   2.0 2.0
+   16  Si    4.17347   4.05612   6.78878   2.0 2.0
+   17  Si    0.03498   5.41244  -0.02203   2.0 2.0
+   18  Si   -0.09006   8.14540   2.67309   2.0 2.0
+   19  Si    2.75270   5.41143   2.69678   2.0 2.0
+   20  Si    2.80049   8.09181  -0.05510   2.0 2.0
+   21  Si    1.37443   6.69570   1.36745   2.0 2.0
+   22  Si    1.33997   9.60047   4.11183   2.0 2.0
+   23  Si    4.06726   6.80604   4.10670   2.0 2.0
+   24  Si    4.02028   9.46004   1.41550   2.0 2.0
+   25  Si    0.01839   5.48921   5.46057   2.0 2.0
+   26  Si    0.02301   8.13612   8.23966   2.0 2.0
+   27  Si    2.72241   5.36778   8.12303   2.0 2.0
+   28  Si    2.74689   8.19955   5.47324   2.0 2.0
+   29  Si    1.45073   6.78413   6.76070   2.0 2.0
+   30  Si    1.36119   9.55070   9.55013   2.0 2.0
+   31  Si    4.12886   6.75936   9.45500   2.0 2.0
+   32  Si    4.06652   9.49941   6.67099   2.0 2.0
+   33  Si    5.50426   0.01998   0.00866   2.0 2.0
+   34  Si    5.44648   2.73025   2.57468   2.0 2.0
+   35  Si    8.09219   0.03348   2.71707   2.0 2.0
+   36  Si    8.19276   2.81707  -0.04051   2.0 2.0
+   37  Si    6.80348   1.42149   1.37057   2.0 2.0
+   38  Si    6.78608   4.12400   4.10169   2.0 2.0
+   39  Si    9.45677   1.38628   4.06687   2.0 2.0
+   40  Si    9.45278   4.06119   1.35666   2.0 2.0
+   41  Si    5.56085  -0.01731   5.40487   2.0 2.0
+   42  Si    5.46525   2.70740   8.16155   2.0 2.0
+   43  Si    8.10282  -0.07377   8.14109   2.0 2.0
+   44  Si    8.17959   2.80335   5.46668   2.0 2.0
+   45  Si    6.83900   1.35245   6.69000   2.0 2.0
+   46  Si    6.74607   4.07504   9.58769   2.0 2.0
+   47  Si    9.42312   1.28466   9.45374   2.0 2.0
+   48  Si    9.52986   4.08686   6.74509   2.0 2.0
+   49  Si    5.44522   5.48342  -0.03156   2.0 2.0
+   50  Si    5.42145   8.09630   2.68821   2.0 2.0
+   51  Si    8.10698   5.50022   2.70475   2.0 2.0
+   52  Si    8.15186   8.19138   0.17154   2.0 2.0
+   53  Si    6.81049   6.84970   1.34929   2.0 2.0
+   54  Si    6.69547   9.53390   3.99850   2.0 2.0
+   55  Si    9.52066   6.74873   4.09701   2.0 2.0
+   56  Si    9.42691   9.48341   1.46668   2.0 2.0
+   57  Si    5.47463   5.40960   5.45220   2.0 2.0
+   58  Si    5.48467   8.16919   8.07088   2.0 2.0
+   59  Si    8.18641   5.42491   8.12757   2.0 2.0
+   60  Si    8.10818   8.16371   5.43019   2.0 2.0
+   61  Si    6.80013   6.75819   6.79352   2.0 2.0
+   62  Si    6.76408   9.39117   9.43843   2.0 2.0
+   63  Si    9.48178   6.82767   9.60551   2.0 2.0
+   64  Si    9.51926   9.46991   6.78260   2.0 2.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  10.86   0.00   0.00
+   0.00  10.86   0.00
+   0.00   0.00  10.86
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0      # K
+scf.energycutoff            200.0      # Ry
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   2 2 2      # use 1 1 1 for a quick test
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-7     # Hartree
+scf.ExtCharge.History       2
+
+MD.Type                     NVT_NH
+MD.maxIter                  2000       # absolute last MD step
+MD.TimeStep                 2.0        # fs
+# Nose-Hoover format: step  T(K)   (linear interpolation between lines)
+<MD.TempControl
+  2
+     1    1000.0
+  2000    1000.0
+MD.TempControl>
+NH.Mass.HeatBath            30.0       # Bohr^2 * amu, default 20

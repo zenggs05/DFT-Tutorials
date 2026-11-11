@@ -1,0 +1,16 @@
+SYSTEM  = Si ELF
+
+PREC    = Accurate      # avoids wrap-around errors in ELFCAR
+ENCUT   = 400
+EDIFF   = 1E-6
+ISMEAR  = 0
+SIGMA   = 0.05
+NSW     = 0
+IBRION  = -1
+
+LELF    = .TRUE.        # write ELFCAR
+KPAR    = 1             # ELF is not implemented for KPAR > 1
+NPAR    = 1             # requested explicitly on the LELF page of the VASP wiki
+
+LCHARG  = .TRUE.        # CHGCAR for comparison with the ELF
+LWAVE   = .FALSE.

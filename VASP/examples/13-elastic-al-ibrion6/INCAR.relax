@@ -1,0 +1,22 @@
+# Step 1: full relaxation (cell shape + volume) with the SAME basis/k-mesh
+# that will be used for the elastic run. Repeat (cp CONTCAR POSCAR) until
+# the volume no longer changes (Pulay stress).
+SYSTEM  = Al fcc ISIF=3 relaxation before elastic constants
+
+# electronic
+PREC    = Accurate
+ENCUT   = 400          # ~1.66 x ENMAX(Al)=240 eV; stresses need a large basis
+EDIFF   = 1E-8
+ISMEAR  = 1            # Methfessel-Paxton for a metal
+SIGMA   = 0.10         # check entropy T*S < 1 meV/atom in OUTCAR
+LREAL   = .FALSE.
+
+# ionic
+IBRION  = 2
+ISIF    = 3
+NSW     = 60
+EDIFFG  = -1E-3        # eV/A; for one atom only the stress matters
+
+# output
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

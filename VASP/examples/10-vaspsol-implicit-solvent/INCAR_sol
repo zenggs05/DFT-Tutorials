@@ -1,0 +1,30 @@
+SYSTEM  = CO/Pt(111) top - step 2: VASPsol implicit water, single point
+# Requires a VASP binary compiled with the VASPsol patch (see chapter 1 / 10).
+
+PREC    = Accurate
+ENCUT   = 450          # must equal the vacuum run
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 300          # solvent runs often need more SCF steps
+ISMEAR  = 1
+SIGMA   = 0.10
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+
+ISTART  = 1            # start from the vacuum WAVECAR
+
+# ---- VASPsol (values below are the VASPsol defaults for water) ----
+LSOL    = .TRUE.       # switch on the implicit solvent
+EB_K    = 78.4         # relative permittivity of the bulk solvent (water)
+TAU     = 0.000525     # effective surface tension of the cavity; TAU = 0 drops cavitation
+# NC_K    = 0.0025     # cut-off charge density that defines the cavity (default, water)
+# SIGMA_K = 0.6        # width of the dielectric transition (default, water)
+# LRHOB   = .TRUE.     # write the bound charge to RHOB (slow, every SCF step)
+
+IBRION  = -1
+NSW     = 0
+
+LWAVE   = .TRUE.
+LCHARG  = .FALSE.
+NCORE   = 4

@@ -1,0 +1,17 @@
+SYSTEM  = MgO 2x2x2 supercell (64 atoms) - DFPT force constants (IBRION = 8)
+
+PREC    = Accurate
+ENCUT   = 520          # same as the relaxation
+EDIFF   = 1E-8
+ALGO    = Normal
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+# ADDGRID = .TRUE.     # used in the phonopy DFPT example; test before use
+
+IBRION  = 8            # DFPT, symmetry-reduced displacements (7 = no symmetry)
+# Do NOT set NCORE/NPAR (DFPT linear response needs NCORE = 1)
+# Do NOT set IVDW (DFPT does not support vdW corrections; use finite differences)
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

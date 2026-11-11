@@ -1,0 +1,69 @@
+! constrained_md_distance.inp - blue-moon (constrained MD) window: d(Na-Cl) fixed
+! at TARGET; the SHAKE Lagrange multiplier gives the mean force.
+! Chapter 15, step 3.  Target versions: CP2K 2023.1 ... 2026.2
+!
+! One window (run it inside its own directory, see run_bluemoon.sh):
+!   mpirun -np 64 cp2k.psmp -E TARGET=3.20 -E COORD=start.xyz -i constrained_md_distance.inp -o bm.out
+! Output: bluemoon.LagrangeMultLog ("Shake  Lagrangian Multipliers:" lines, a.u.)
+! For a single distance constraint: dA/dr = -<lambda>  (hartree/bohr).
+! Integrate the windows with: python3 bluemoon_integrate.py window_*/
+
+@SET LEVEL ${LEVEL-dft}
+@SET COORD ${COORD-nacl_eq.xyz}
+@SET TARGET ${TARGET-2.80}
+
+&GLOBAL
+  PROJECT nacl_bm_${LEVEL}
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+@INCLUDE 'nacl_${LEVEL}_force_eval.inc'
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    ! 10000 x 0.5 fs = 5 ps per window (discard the first 1 ps in the analysis)
+    STEPS ${STEPS-10000}
+    TIMESTEP 0.5
+    TEMPERATURE 300.0
+    &THERMOSTAT
+      TYPE CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON 100.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &CONSTRAINT
+    ! apply the constraint to the starting positions/velocities as well
+    CONSTRAINT_INIT T
+    SHAKE_TOLERANCE 1.0E-8
+    &COLLECTIVE
+      COLVAR 1
+      ! Na and Cl belong to different "molecules"
+      INTERMOLECULAR T
+      TARGET [angstrom] ${TARGET}
+    &END COLLECTIVE
+    &LAGRANGE_MULTIPLIERS ON
+      COMMON_ITERATION_LEVELS 1
+      FILENAME =bluemoon.LagrangeMultLog
+    &END LAGRANGE_MULTIPLIERS
+  &END CONSTRAINT
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY OFF
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

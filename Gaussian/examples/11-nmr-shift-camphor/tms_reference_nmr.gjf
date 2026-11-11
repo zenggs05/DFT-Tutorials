@@ -1,0 +1,40 @@
+! Chapter 11 example: TMS reference shieldings (1H, 13C, 29Si)
+! The NMR step must use EXACTLY the same method/basis/solvent as the sample molecule
+%chk=tms_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-31G(d) EmpiricalDispersion=GD3BJ Opt Freq SCRF=(SMD,Solvent=Chloroform)
+
+TMS opt+freq, B3LYP-D3(BJ)/6-31G(d), SMD(chloroform)
+
+0 1
+ C       1.461021     0.837646    -0.824830
+ Si     -0.000000     0.000000     0.000000
+ C      -0.957190     1.260495     1.005743
+ C       0.617294    -1.363057     1.130311
+ C      -1.121126    -0.735085    -1.311224
+ H       2.034298     0.118915    -1.417873
+ H       2.129200     1.274173    -0.076563
+ H       1.122815     1.637710    -1.489988
+ H      -1.815534     0.792097     1.496426
+ H      -0.320707     1.702564     1.778003
+ H      -1.327093     2.066102     0.364579
+ H       1.274415    -0.955377     1.904204
+ H       1.179510    -2.110635     0.562893
+ H      -0.220412    -1.865843     1.622628
+ H      -0.581696    -1.474432    -1.910642
+ H      -1.981619    -1.229639    -0.850910
+ H      -1.493176     0.044365    -1.982758
+
+--Link1--
+%oldchk=tms_opt.chk
+%chk=tms_nmr.chk
+%mem=8GB
+%nprocshared=8
+#p mPW1PW91/6-311+G(2d,p) NMR=GIAO SCRF=(SMD,Solvent=Chloroform)
+   Geom=Check Guess=Read
+
+TMS GIAO shieldings, mPW1PW91/6-311+G(2d,p), SMD(chloroform)
+
+0 1
+

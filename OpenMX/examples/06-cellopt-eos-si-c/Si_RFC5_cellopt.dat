@@ -1,0 +1,58 @@
+#
+# Diamond Si: variable-cell optimization with RFC5 (lattice vectors + internal coordinates)
+# The start structure is distorted on purpose (cell vectors and atom 2 are off the ideal values).
+# Variable-cell optimization supports collinear calculations only (incl. DFT+U);
+# the OpenMX 4.0 manual states that DFT-D2/D3 are not supported in it.
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 si_rfc5
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  Si   Si7.0-s2p2d1   Si_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1   Si   0.00   0.00   0.00   2.0  2.0
+  2   Si   0.27   0.24   0.26   2.0  2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  0.0000  2.6500  2.7800
+  2.7400  0.0000  2.6900
+  2.7600  2.7000  0.0500
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0       # K
+scf.energycutoff            250.0       # Ry
+scf.EigenvalueSolver        Band
+scf.Kgrid                   8 8 8
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; remove for OpenMX 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.maxIter                 100
+scf.criterion               1.0e-9      # Hartree
+
+#
+# Variable-cell optimization
+#
+MD.Type                     RFC5        # OptC1..OptC7 | RFC5 | RFC6 | RFC7
+MD.maxIter                  100         # default 1
+MD.Opt.criterion            1.0e-4      # Hartree/Bohr, max |gradient| (atoms and cell)
+MD.Opt.StartDIIS            5
+MD.Opt.DIIS.History         3
+MD.Opt.Init.Hessian         Schlegel
+# Enthalpy optimization under pressure (GPa, positive = compression):
+# MD.applied.pressure        10.0

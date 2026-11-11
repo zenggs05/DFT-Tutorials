@@ -1,0 +1,59 @@
+#
+# Pt(111) 4-layer slab, 1x1 surface cell, effective screening medium (ESM)
+# DFT-Tutorials, OpenMX chapter 16
+# on4 = ideal metal | slab | ideal metal with a potential difference between the two metals:
+# a uniform external field (capacitor). ESM.potential.diff is in eV, referenced to the bottom metal.
+# Geometry: experimental fcc lattice constant a0 = 3.92 Ang, bulk-terminated (unrelaxed);
+#           in-plane a = 2.7719 Ang, interlayer distance 2.2632 Ang.
+# ESM convention: a-axis = surface normal along x; ESM (I) at x = 0, ESM (II) at x = 40 Ang.
+# The slab occupies x = 12.00 ... 18.79 Ang: 12 Ang to ESM (I), 21.2 Ang to ESM (II).
+#
+
+System.CurrrentDirectory      ./          # official spelling: three 'r'
+System.Name                   pt111_on4_dv1
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              1           # writes tden/v0/vhart cube files
+
+Species.Number                1
+<Definition.of.Atomic.Species
+  Pt   Pt7.0-s3p2d2f1   Pt_PBE19
+Definition.of.Atomic.Species>
+
+#
+# Pt_PBE19: 16 valence electrons -> 8.0 8.0
+#
+Atoms.Number                  4
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+     1  Pt     12.000000     0.000000     0.000000    8.0  8.0
+     2  Pt     14.263213     0.000000     1.600333    8.0  8.0
+     3  Pt     16.526426     1.385929     0.800167    8.0  8.0
+     4  Pt     18.789639     0.000000     0.000000    8.0  8.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang
+<Atoms.UnitVectors
+     40.000000     0.000000     0.000000
+      0.000000     2.771859     0.000000
+      0.000000    -1.385929     2.400500
+Atoms.UnitVectors>
+
+scf.XcType                    GGA-PBE
+scf.SpinPolarization          off
+scf.ElectronicTemperature     500.0       # K, metal
+scf.energycutoff              250.0       # Ry
+scf.maxIter                   300
+scf.EigenvalueSolver          Band
+scf.Kgrid                     1 15 15
+scf.Mixing.Type               RMM-DIISK
+scf.Init.Mixing.Weight        0.02
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.05
+scf.Mixing.History            30
+scf.Mixing.StartPulay         20
+scf.criterion                 1.0e-8
+scf.system.charge             0.0
+ESM.switch                    on4
+ESM.direction                 x
+ESM.potential.diff            1.0         # eV; only valid with on4
+MD.Type                       Nomd

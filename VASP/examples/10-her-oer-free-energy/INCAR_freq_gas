@@ -1,0 +1,22 @@
+SYSTEM  = Gas-phase molecule vibrations (IBRION=5, all atoms free)
+# Use the CONTCAR of the relaxed molecule as POSCAR. For O2 add ISPIN = 2 and
+# MAGMOM = 2*1.0 exactly as in the relaxation.
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-7
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 0
+SIGMA   = 0.01
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+
+IBRION  = 5
+POTIM   = 0.015
+NFREE   = 2
+NSW     = 1
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

@@ -1,0 +1,62 @@
+! h2o_smoke_test.inp - minimal CP2K smoke test (isolated H2O, PBE single point)
+! Works with CP2K 2023.x - 2026.2. Runs in a few seconds on one core.
+! Run:  cp2k.ssmp -i h2o_smoke_test.inp -o h2o_smoke_test.out
+! Check: grep "SCF run converged" h2o_smoke_test.out
+!        grep "ENERGY| Total FORCE_EVAL" h2o_smoke_test.out
+
+&GLOBAL
+  PROJECT h2o_smoke
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QS
+  &DFT
+    ! Two basis files are listed on purpose: this also checks that the data
+    ! directory contains both the classic and the UZH basis libraries.
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    &MGRID
+      CUTOFF 300          ! Ry, finest grid (enough for a smoke test)
+      REL_CUTOFF 40       ! Ry
+    &END MGRID
+    &POISSON
+      PERIODIC NONE       ! must match &CELL PERIODIC
+      POISSON_SOLVER MT   ! Martyna-Tuckerman solver for isolated systems
+    &END POISSON
+    &SCF
+      EPS_SCF 1.0E-6
+      MAX_SCF 50
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC [angstrom] 8.0 8.0 8.0
+      PERIODIC NONE
+    &END CELL
+    &COORD
+      ! experimental equilibrium geometry: r(OH)=0.9572 A, HOH=104.52 deg
+      O   0.000000   0.000000   0.117300
+      H   0.000000   0.756990  -0.468540
+      H   0.000000  -0.756990  -0.468540
+    &END COORD
+    &TOPOLOGY
+      &CENTER_COORDINATES  ! put the molecule in the middle of the box
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-GTH
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

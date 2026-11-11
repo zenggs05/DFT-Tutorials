@@ -1,0 +1,5 @@
+Gamma-centred mesh (use for fcc, hexagonal, 2D and tetrahedron runs)
+0              ! 0 = generate the mesh automatically
+Gamma          ! first character G/g = Gamma-centred
+  8  8  8      ! N1 N2 N3, roughly proportional to |b1| |b2| |b3|
+  0  0  0      ! optional extra shift (fractions of a mesh step)

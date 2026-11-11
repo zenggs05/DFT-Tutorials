@@ -1,0 +1,12 @@
+Line-mode path L-G-X-U|K-G for the fcc primitive cell (40 points/segment)
+40
+Line-mode
+Reciprocal
+  0.500  0.500  0.500   ! L
+  0.000  0.000  0.000   ! G
+  0.000  0.000  0.000   ! G
+  0.500  0.000  0.500   ! X
+  0.500  0.000  0.500   ! X
+  0.625  0.250  0.625   ! U
+  0.375  0.375  0.750   ! K
+  0.000  0.000  0.000   ! G

@@ -1,0 +1,10 @@
+SYSTEM  = Cu fcc SCF
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-7
+ISMEAR  = 1           # Methfessel-Paxton for a metal
+SIGMA   = 0.1
+NSW     = 0
+IBRION  = -1
+LCHARG  = .TRUE.
+LWAVE   = .FALSE.

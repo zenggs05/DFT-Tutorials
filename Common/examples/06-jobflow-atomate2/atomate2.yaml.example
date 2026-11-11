@@ -1,0 +1,29 @@
+# Copy to ~/.atomate2.yaml (or point ATOMATE2_CONFIG_FILE to this file).
+# Keys are atomate2 settings (atomate2/settings.py); only VASP_CMD is essential.
+
+# Full command used by custodian to start VASP. Environment variables are
+# expanded, then the string is split like a shell command line.
+VASP_CMD: srun vasp_std
+VASP_GAMMA_CMD: srun vasp_gam
+VASP_NCL_CMD: srun vasp_ncl
+
+# Stop correcting after this many custodian corrections per job (default 5)
+VASP_CUSTODIAN_MAX_ERRORS: 5
+
+# What to do if VASP finished but is not converged:
+#   error (default) -> raise; true -> mark COMPLETED but stop children; false -> continue
+VASP_HANDLE_UNSUCCESSFUL: error
+
+# INCAR tags added to every VASP job (cluster-specific parallelisation, etc.)
+VASP_INCAR_UPDATES:
+  NCORE: 4
+
+# Optional scratch directory used by custodian (fast local disk on the node)
+# CUSTODIAN_SCRATCH_DIR: /tmp
+
+# Run the Henkelman bader program when parsing outputs (bader must be on PATH)
+VASP_RUN_BADER: false
+
+# Other codes driven by atomate2
+LOBSTER_CMD: lobster
+CP2K_CMD: srun cp2k.psmp

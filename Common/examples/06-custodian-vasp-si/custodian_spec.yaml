@@ -1,0 +1,34 @@
+# custodian YAML spec: relax -> static, run with
+#     cstdn run custodian_spec.yaml
+# Keys starting with "$" are expanded from environment variables
+# (here $SLURM_NTASKS is set by Slurm inside the job).
+
+jobs:
+- jb: custodian.vasp.jobs.VaspJob
+  params:
+    final: False
+    suffix: .relax
+- jb: custodian.vasp.jobs.VaspJob
+  params:
+    final: True
+    suffix: .static
+    backup: False
+    settings_override:
+    - {"file": "CONTCAR", "action": {"_file_copy": {"dest": "POSCAR"}}}
+    - {"dict": "INCAR", "action": {"_set": {"NSW": 0, "IBRION": -1}}}
+
+jobs_common_params:
+  $vasp_cmd: ["mpirun", "-np", "$SLURM_NTASKS", "vasp_std"]
+
+handlers:
+- hdlr: custodian.vasp.handlers.VaspErrorHandler
+- hdlr: custodian.vasp.handlers.MeshSymmetryErrorHandler
+- hdlr: custodian.vasp.handlers.UnconvergedErrorHandler
+- hdlr: custodian.vasp.handlers.NonConvergingErrorHandler
+- hdlr: custodian.vasp.handlers.PotimErrorHandler
+
+validators:
+- vldr: custodian.vasp.validators.VasprunXMLValidator
+
+custodian_params:
+  max_errors: 10

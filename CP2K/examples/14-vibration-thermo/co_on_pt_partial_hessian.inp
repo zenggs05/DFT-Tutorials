@@ -1,0 +1,40 @@
+! co_on_pt_partial_hessian.inp - adsorbate-only (partial Hessian) frequencies of CO/Pt(111)
+! Chapter 14, step 4.  Target versions: CP2K 2023.1 ... 2026.2
+!
+! Needs co_pt111_opt.xyz from co_pt111_opt.inp.
+! All 27 Pt atoms are FIXED -> VIBRATIONAL_ANALYSIS displaces only C and O:
+! 6 coordinates x 2 = 12 force evaluations, 6 modes (CO stretch, Pt-C stretch,
+! 2 x frustrated rotation, 2 x frustrated translation).
+!   mpirun -np 96 cp2k.psmp -i co_on_pt_partial_hessian.inp -o co_on_pt_partial_hessian.out
+!
+! With fixed atoms CP2K does NOT project out rotations/translations and does
+! NOT print THERMOCHEMISTRY; use harmonic_thermo.py (harmonic limit) instead.
+
+@SET COORD ${COORD-co_pt111_opt.xyz}
+
+&GLOBAL
+  PROJECT co_pt111_vib
+  RUN_TYPE VIBRATIONAL_ANALYSIS
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+@INCLUDE 'co_pt111_force_eval.inc'
+
+&VIBRATIONAL_ANALYSIS
+  DX 0.01
+  ! 96 ranks / 16 = 6 replicas -> the 6 "+DX" (then 6 "-DX") geometries run at once
+  NPROC_REP ${NPROC_REP-16}
+  &PRINT
+    &MOLDEN_VIB ON
+    &END MOLDEN_VIB
+  &END PRINT
+&END VIBRATIONAL_ANALYSIS
+
+&MOTION
+  &CONSTRAINT
+    &FIXED_ATOMS
+      ! all Pt atoms: only the adsorbate enters the Hessian
+      LIST 1..27
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+&END MOTION

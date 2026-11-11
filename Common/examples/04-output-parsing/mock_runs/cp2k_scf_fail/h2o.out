@@ -1,0 +1,5 @@
+ MOCK FILE for job_status_scanner.py - marker lines only, NOT a real CP2K output
+ CP2K| version string:                                          CP2K version 2026.2
+ *** SCF run NOT converged. To continue the calculation regardless, ***
+ *** please set the keyword IGNORE_CONVERGENCE_FAILURE.             ***
+ [ABORT]

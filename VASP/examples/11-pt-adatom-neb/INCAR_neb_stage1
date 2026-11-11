@@ -1,0 +1,30 @@
+SYSTEM  = Pt adatom hop on Pt(100) - NEB stage 1: plain NEB, coarse convergence (VTST)
+
+# ---- electronic part: identical to INCAR_relax ----
+PREC    = Normal
+ENCUT   = 350
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 1
+SIGMA   = 0.20
+ISPIN   = 1
+LREAL   = Auto
+
+# ---- nudged elastic band ----
+IMAGES  = 3            # intermediate images = directories 01 02 03; MPI ranks must be a multiple of 3
+SPRING  = -5           # spring constant (eV/A^2); negative value switches on nudging
+ICHAIN  = 0            # 0 = NEB (VTST)
+LCLIMB  = .FALSE.      # VTST default is .TRUE.; keep the climbing image off in stage 1
+
+# ---- VTST force-based optimiser ----
+IBRION  = 3            # with POTIM = 0 the VASP optimiser is disabled ...
+POTIM   = 0            # ... and IOPT selects the VTST optimiser
+IOPT    = 3            # 3 = quick-min: robust when the band is far from the MEP
+ISIF    = 2
+NSW     = 150
+EDIFFG  = -0.10        # loose: only a rough path is needed before climbing
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

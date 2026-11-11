@@ -1,0 +1,60 @@
+# Ferromagnetic bcc Fe: collinear spin-polarized SCF + band structure.
+# Path G-H-N-G-P-H|P-N in units of the CONVENTIONAL cubic reciprocal vectors.
+# Output: fe.Band -> bandgnu13 -> fe.BANDDAT1 (up) and fe.BANDDAT2 (down). OpenMX 4.0.
+
+System.CurrrentDirectory    ./
+System.Name                 fe
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: dir containing PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  Fe   Fe5.5H-s3p2d1   Fe_PBE19H        # 16 valence electrons (3s3p semicore)
+Definition.of.Atomic.Species>
+
+Atoms.Number                1
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Fe  0.0  0.0  0.0   10.0  6.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  -1.435   1.435   1.435
+   1.435  -1.435   1.435
+   1.435   1.435  -1.435
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        on
+scf.ElectronicTemperature   500.0      # K, a little smearing helps metals
+scf.energycutoff            250.0
+scf.maxIter                 200
+scf.EigenvalueSolver        Band
+scf.Kgrid                   14 14 14
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.20
+scf.Mixing.History          30
+scf.Mixing.StartPulay       15
+scf.criterion               1.0e-8
+
+MD.Type                     Nomd
+
+Band.dispersion             on
+<Band.KPath.UnitCell
+  2.870  0.000  0.000
+  0.000  2.870  0.000
+  0.000  0.000  2.870
+Band.KPath.UnitCell>
+Band.Nkpath                 6
+<Band.kpath
+  30   0.00 0.00 0.00    1.00 0.00 0.00    g  H
+  21   1.00 0.00 0.00    0.50 0.50 0.00    H  N
+  21   0.50 0.50 0.00    0.00 0.00 0.00    N  g
+  26   0.00 0.00 0.00    0.50 0.50 0.50    g  P
+  26   0.50 0.50 0.50    1.00 0.00 0.00    P  H
+  15   0.50 0.50 0.50    0.50 0.50 0.00    P  N
+Band.kpath>

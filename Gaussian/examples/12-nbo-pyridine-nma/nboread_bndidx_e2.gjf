@@ -1,0 +1,36 @@
+! Chapter 12 example: N-methylacetamide (trans), NBO with extra $NBO keywords
+! BNDIDX prints Wiberg bond indices; the E(2) donor-acceptor table is printed by default
+%chk=nma_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt Freq
+
+N-methylacetamide (trans) opt+freq, B3LYP-D3(BJ)/def2-SVP
+
+0 1
+ C      -1.883360     0.045696     0.103455
+ C      -0.469513     0.551075    -0.002799
+ O      -0.202773     1.747909     0.018523
+ N       0.476371    -0.443387    -0.108308
+ C       1.882259    -0.127160    -0.122652
+ H      -2.224595     0.151443     1.136483
+ H      -1.959161    -1.004416    -0.192281
+ H      -2.524152     0.633729    -0.559475
+ H       0.203337    -1.397028     0.088851
+ H       2.428027    -0.987259    -0.517200
+ H       2.204837     0.077985     0.901529
+ H       2.068723     0.751413    -0.746128
+
+--Link1--
+%oldchk=nma_opt.chk
+%chk=nma_nbo.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/def2TZVP Pop=NBORead Geom=Check Guess=Read
+
+N-methylacetamide NBO, Wiberg bond index and second-order perturbation analysis
+
+0 1
+
+$NBO BNDIDX $END
+

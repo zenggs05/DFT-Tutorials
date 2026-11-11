@@ -1,0 +1,4 @@
+%oldchk=ts_opt.chk
+%chk=ts_opt_TZ.chk
+#p wB97XD/def2TZVP SCRF=(SMD,Solvent=Toluene) Geom=AllCheck Guess=Read
+

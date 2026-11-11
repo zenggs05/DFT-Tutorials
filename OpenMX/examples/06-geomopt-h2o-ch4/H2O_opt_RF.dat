@@ -1,0 +1,55 @@
+#
+# H2O molecule: geometry optimization with the rational-function (RF) method
+# Start geometry is distorted on purpose: r(OH) = 1.012 Ang, angle(HOH) = 114.2 deg
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 h2o_rf
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0           # no cube files during optimization
+
+Species.Number              2
+<Definition.of.Atomic.Species
+  O    O6.0-s2p2d1   O_PBE19
+  H    H6.0-s2p1     H_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                3
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1   O    5.00000   5.00000   5.30000   3.0  3.0
+  2   H    5.85000   5.00000   4.75000   0.5  0.5
+  3   H    4.15000   5.00000   4.75000   0.5  0.5
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  10.0   0.0   0.0
+   0.0  10.0   0.0
+   0.0   0.0  10.0
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0       # K
+scf.energycutoff            250.0       # Ry
+scf.EigenvalueSolver        Cluster
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.maxIter                 100
+scf.criterion               1.0e-9      # Hartree; tight SCF gives clean forces
+
+#
+# Geometry optimization
+#
+MD.Type                     RF          # Opt|DIIS|BFGS|RF|EF
+MD.maxIter                  100         # default is 1 (= a single step!)
+MD.Opt.criterion            1.0e-4      # Hartree/Bohr, max |force|; default 3.0e-4
+MD.Opt.StartDIIS            5           # steepest-descent steps before RF starts (default 5)
+MD.Opt.DIIS.History         3           # default 3
+MD.Opt.EveryDIIS            200         # default 200
+MD.Opt.Init.Hessian         Schlegel    # Schlegel|iden (Schlegel only for RF and EF)

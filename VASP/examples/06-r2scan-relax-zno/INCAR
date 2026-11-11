@@ -1,0 +1,28 @@
+SYSTEM  = ZnO wurtzite, r2SCAN full relaxation
+
+PREC    = Accurate
+ENCUT   = 520        # >= 1.3 x ENMAX(O ~400 eV); cell relaxation
+EDIFF   = 1E-6
+ISMEAR  = 0
+SIGMA   = 0.05
+LREAL   = .FALSE.
+
+METAGGA = R2SCAN     # VASP >= 6.2.0; no GGA tag is needed
+LASPH   = .TRUE.     # aspherical one-centre terms: strongly recommended for meta-GGA
+LMIXTAU = .TRUE.     # pass the kinetic-energy density through the mixer (helps convergence)
+ALGO    = Normal     # density mixing; if SCF struggles try ALGO = All
+# ISEARCH = 1        # improved line search for ALGO = All (VASP >= 6.5.1)
+
+IBRION  = 2
+ISIF    = 3
+NSW     = 60
+EDIFFG  = -0.01
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+
+# Optional dispersion corrections (not needed for ZnO, useful for layered/molecular crystals):
+# r2SCAN+rVV10 (VASP >= 6.3.0 for correct stress):
+#   LUSE_VDW = .TRUE. ; BPARAM = 11.95 ; CPARAM = 0.0093
+# r2SCAN+D4 (VASP linked with the DFT-D4 library):
+#   IVDW = 13

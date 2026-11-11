@@ -1,0 +1,17 @@
+%nprocshared=8
+%mem=12GB
+%chk=opt_modredundant_freeze_bond.chk
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Opt=ModRedundant
+
+Water dimer: O1...O4 distance frozen at its input value (3.10 A)
+
+0 1
+O     0.000000     0.000000     0.000000
+H     0.970000     0.000000     0.000000
+H    -0.240400     0.929400     0.000000
+O     3.100000     0.000000     0.000000
+H     3.420100    -0.492900     0.759100
+H     3.420100    -0.492900    -0.759100
+
+B 1 4 F
+

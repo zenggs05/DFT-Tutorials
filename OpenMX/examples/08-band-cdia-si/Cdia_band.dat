@@ -1,0 +1,66 @@
+# Diamond (C, fcc primitive cell): SCF + band structure along the
+# Setyawan-Curtarolo FCC path G-X-W-K-G-L-U-W-L-K|U-X. OpenMX 4.0.
+# The k-path is given in units of the reciprocal vectors of the CONVENTIONAL
+# cubic cell, defined by <Band.KPath.UnitCell.
+
+System.CurrrentDirectory    ./
+System.Name                 cdia
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: dir containing PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  C   C6.0-s2p2d1   C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  C   0.00  0.00  0.00   2.0 2.0
+  2  C   0.25  0.25  0.25   2.0 2.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  1.7835  1.7835  0.0000
+  1.7835  0.0000  1.7835
+  0.0000  1.7835  1.7835
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0
+scf.energycutoff            220.0
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   10 10 10
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-8
+
+MD.Type                     Nomd
+
+Band.dispersion             on
+<Band.KPath.UnitCell
+  3.567  0.000  0.000
+  0.000  3.567  0.000
+  0.000  0.000  3.567
+Band.KPath.UnitCell>
+Band.Nkpath                 10
+<Band.kpath
+  30   0.00 0.00 0.00    1.00 0.00 0.00    g  X
+  15   1.00 0.00 0.00    1.00 0.50 0.00    X  W
+  11   1.00 0.50 0.00    0.75 0.75 0.00    W  K
+  32   0.75 0.75 0.00    0.00 0.00 0.00    K  g
+  26   0.00 0.00 0.00    0.50 0.50 0.50    g  L
+  18   0.50 0.50 0.50    1.00 0.25 0.25    L  U
+  11   1.00 0.25 0.25    1.00 0.50 0.00    U  W
+  21   1.00 0.50 0.00    0.50 0.50 0.50    W  L
+  18   0.50 0.50 0.50    0.75 0.75 0.00    L  K
+  11   1.00 0.25 0.25    1.00 0.00 0.00    U  X
+Band.kpath>

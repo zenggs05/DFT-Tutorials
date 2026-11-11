@@ -1,0 +1,26 @@
+SYSTEM  = Pt(111) relaxed slab - static run for the projected DOS (d-band centre)
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-6
+ALGO    = Normal
+NELM    = 150
+ISMEAR  = -5           # tetrahedron method with Bloechl corrections (Gamma mesh, >= 4 k-points)
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+LDIPOL  = .TRUE.
+IDIPOL  = 3
+DIPOL   = 0.5 0.5 0.5
+
+IBRION  = -1           # no ionic update
+NSW     = 0
+
+LORBIT  = 11           # site- and lm-projected DOS in DOSCAR / PROCAR
+NEDOS   = 3001         # fine energy grid
+EMIN    = -15
+EMAX    = 10
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

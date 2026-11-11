@@ -1,0 +1,19 @@
+SYSTEM  = Si DOS on a dense mesh (ICHARG=11)
+
+PREC    = Accurate
+ENCUT   = 400        # MUST be identical to the SCF run
+EDIFF   = 1E-7
+LREAL   = .FALSE.
+
+ICHARG  = 11
+ISMEAR  = -5         # tetrahedron method with Bloechl corrections (Gamma-centered mesh, >= 4 k-points)
+LORBIT  = 11         # site- and lm-projected DOS in DOSCAR
+NEDOS   = 3001       # energy grid points between EMIN and EMAX
+EMIN    = -15        # absolute energies (not relative to E-fermi)
+EMAX    = 10
+NBANDS  = 16
+
+NSW     = 0
+IBRION  = -1
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.

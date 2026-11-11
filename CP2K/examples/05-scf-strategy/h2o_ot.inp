@@ -1,0 +1,71 @@
+# H2O single point + forces with OT (orbital transformation) and an outer SCF loop
+&GLOBAL
+  PROJECT     h2o_ot
+  RUN_TYPE    ENERGY_FORCE
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     500
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &POISSON                       ! isolated molecule, see chapter 6
+      PERIODIC       NONE
+      POISSON_SOLVER MT
+    &END POISSON
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-6
+      MAX_SCF   30                 ! inner loop: steps per preconditioner rebuild
+      &OT ON
+        MINIMIZER      DIIS        ! CG is the default and more robust
+        PRECONDITIONER FULL_ALL    ! most effective for small/medium systems
+      &END OT
+      &OUTER_SCF ON
+        EPS_SCF 1.0E-6             ! should not be looser than the inner EPS_SCF
+        MAX_SCF 10                 ! up to 10 x 30 = 300 inner steps in total
+      &END OUTER_SCF
+      &PRINT
+        &RESTART ON                ! writes h2o_ot-RESTART.wfn
+          BACKUP_COPIES 0
+        &END RESTART
+      &END PRINT
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 12.0 12.0 12.0
+      PERIODIC NONE
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   h2o.xyz
+      COORD_FILE_FORMAT XYZ
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q1
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+  &PRINT
+    &FORCES ON
+    &END FORCES
+  &END PRINT
+&END FORCE_EVAL

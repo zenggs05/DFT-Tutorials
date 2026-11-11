@@ -1,0 +1,22 @@
+SYSTEM  = Li interstitial in Si (2x2x2 cubic supercell, Si64Li) - endpoint relaxation
+
+# ---- electronic part: IDENTICAL in IS, FS and NEB ----
+PREC    = Normal
+ENCUT   = 500          # Li_sv has ENMAX ~ 500 eV; check your POTCAR
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 0            # Li donates its electron to the Si conduction band
+SIGMA   = 0.05
+ISPIN   = 1
+LREAL   = Auto         # 65 atoms
+
+# ---- ionic part (cell fixed: dilute Li in the PBE lattice of Si) ----
+IBRION  = 2
+ISIF    = 2
+NSW     = 200
+EDIFFG  = -0.02
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

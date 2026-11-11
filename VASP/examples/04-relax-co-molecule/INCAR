@@ -1,0 +1,17 @@
+SYSTEM  = CO molecule in a box
+
+PREC    = Accurate
+ENCUT   = 520
+EDIFF   = 1E-6
+ISMEAR  = 0          # never use ISMEAR=-5 for a molecule (needs >= 4 k-points)
+SIGMA   = 0.01
+ISPIN   = 1          # closed shell; use ISPIN=2 (+MAGMOM) for O2, radicals
+LREAL   = .FALSE.
+
+IBRION  = 2
+ISIF    = 2          # never relax the box of an isolated molecule
+NSW     = 50
+EDIFFG  = -0.01
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

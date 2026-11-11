@@ -1,0 +1,39 @@
+# System AB: CO adsorbed atop on Cu(111) p(2x2), 3 layers
+# Charge density difference: rho(AB) - rho(A: slab) - rho(B: CO)
+@SET NADD 40
+
+&GLOBAL
+  PROJECT     full
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+@INCLUDE dft_common.inc
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 5.1124 5.1124 28.0
+      ALPHA_BETA_GAMMA 90.0 90.0 60.0
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   cu111_co_full.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Cu
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q11
+      POTENTIAL GTH-PBE-q11
+    &END KIND
+    &KIND C
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q4
+      POTENTIAL GTH-PBE-q4
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

@@ -1,0 +1,57 @@
+# CP2K input written in the simplified YAML format of cp2k-input-tools.
+# Chapter 17 of the CP2K tutorial. Convert with:
+#   tocp2k --yaml inp_from_yaml.yaml > h2o_from_yaml.inp
+#   cp2k.psmp -c h2o_from_yaml.inp
+# Rules used here: sections are nested mappings, "_" holds the section parameter
+# (e.g. the functional name of XC_FUNCTIONAL), repeated sections (KIND) are a list.
+global:
+  project_name: h2o_yaml
+  run_type: energy_force
+  print_level: medium
+force_eval:
+  method: quickstep
+  dft:
+    basis_set_file_name: BASIS_MOLOPT_UZH
+    potential_file_name: POTENTIAL_UZH
+    mgrid:
+      cutoff: 500
+      rel_cutoff: 60
+    qs:
+      eps_default: 1.0e-12
+    poisson:
+      periodic: none
+      poisson_solver: mt
+    scf:
+      scf_guess: atomic
+      eps_scf: 1.0e-7
+      max_scf: 30
+      ot:
+        _: true
+        minimizer: diis
+        preconditioner: full_all
+      outer_scf:
+        _: true
+        eps_scf: 1.0e-7
+        max_scf: 10
+    xc:
+      xc_functional:
+        _: PBE
+  subsys:
+    cell:
+      abc: [10.0, 10.0, 10.0]
+      periodic: none
+    coord:
+      "*":
+        - O   5.000000   5.000000   5.119300
+        - H   5.000000   5.763200   4.522700
+        - H   5.000000   4.236800   4.522700
+    kind:
+      - _: H
+        basis_set: DZVP-MOLOPT-PBE-GTH-q1
+        potential: GTH-PBE-q1
+      - _: O
+        basis_set: DZVP-MOLOPT-PBE-GTH-q6
+        potential: GTH-PBE-q6
+  print:
+    forces:
+      _: "ON"           # print-key sections take ON/OFF/LOW/MEDIUM..., not true/false

@@ -1,0 +1,53 @@
+#
+# Water dimer counterpoise (BSSE) set: E_B(AB): ghost atoms of A + real monomer B
+# Rigid monomers (r_OH = 0.9572 Ang, HOH = 104.52 deg), linear H-bond, R(O...O) = 2.91 Ang.
+# Monomer A = atoms 1-3 (donor), monomer B = atoms 4-6 (acceptor).
+# All five inputs share the same box, cutoff, basis and SCF settings.
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 h2o_B_ghostA
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+Species.Number              4
+<Definition.of.Atomic.Species
+  O    O6.0-s2p2d1   O_PBE19
+  H    H6.0-s2p1     H_PBE19
+  EO   O6.0-s2p2d1   E          # ghost O: basis functions only, zero potential
+  EH   H6.0-s2p1     E          # ghost H
+Definition.of.Atomic.Species>
+
+Atoms.Number                6
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1   EO    4.31910   6.00935   6.00000   0.0  0.0
+  2   EH    5.27630   6.00935   6.00000   0.0  0.0
+  3   EH    4.07911   6.93598   6.00000   0.0  0.0
+  4   O     7.22910   6.00935   6.00000   3.0  3.0
+  5   H     7.54819   5.51799   6.75695   0.5  0.5
+  6   H     7.54819   5.51799   5.24305   0.5  0.5
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  12.0   0.0   0.0
+   0.0  12.0   0.0
+   0.0   0.0  12.0
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0       # K
+scf.energycutoff            250.0       # Ry
+scf.EigenvalueSolver        Cluster     # isolated molecule, no k points
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.maxIter                 100
+scf.criterion               1.0e-9      # Hartree; binding energies are only a few kcal/mol
+
+MD.Type                     Nomd

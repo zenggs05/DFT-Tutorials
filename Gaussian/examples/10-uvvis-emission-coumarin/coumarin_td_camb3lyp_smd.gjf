@@ -1,0 +1,40 @@
+! Chapter 10 example: coumarin UV-Vis absorption in ethanol (SMD)
+! Step 1: S0 opt+freq   Step 2: vertical TD-DFT absorption, 20 singlets
+%chk=coumarin_s0.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/def2SVP Opt Freq SCRF=(SMD,Solvent=Ethanol)
+
+Coumarin S0 opt+freq, CAM-B3LYP/def2-SVP, SMD(ethanol)
+
+0 1
+ O       3.432361     1.735762    -0.161262
+ C       2.414341     1.055850    -0.099047
+ C       2.498112    -0.410001     0.028425
+ C       1.413650    -1.187845     0.099364
+ C       0.094269    -0.579979     0.050257
+ C      -1.075754    -1.338826     0.119792
+ C      -2.322908    -0.707303     0.068413
+ C      -2.405880     0.682098    -0.052401
+ C      -1.242447     1.446105    -0.122366
+ C      -0.007031     0.804837    -0.070103
+ O       1.144112     1.613186    -0.143894
+ H       3.499281    -0.821949     0.061392
+ H       1.498663    -2.264641     0.192933
+ H      -1.032587    -2.421035     0.213956
+ H      -3.232915    -1.300530     0.122758
+ H      -3.377925     1.167635    -0.091865
+ H      -1.297342     2.526637    -0.216351
+
+--Link1--
+%oldchk=coumarin_s0.chk
+%chk=coumarin_td.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/def2TZVP TD=(NStates=20,Singlets) SCRF=(SMD,Solvent=Ethanol)
+   Geom=Check Guess=Read IOp(9/40=3)
+
+Coumarin vertical absorption, 20 singlets, CAM-B3LYP/def2-TZVP, SMD(ethanol)
+
+0 1
+

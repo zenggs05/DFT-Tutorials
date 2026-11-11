@@ -1,0 +1,59 @@
+#
+# CO on Cu(111) 2x2, 3 layers, top site -- fragment A: CO only, same cell and same geometry as in AB
+# Charge density difference: rho(AB) - rho(A) - rho(B)
+# Cu lattice constant ~3.61 Ang (expt.), Cu-C 1.90 and C-O 1.15 Ang: approximate, NOT optimized
+# Target: OpenMX 4.0 + patch 4.0.1, database DFT_DATA19
+#
+System.CurrrentDirectory    ./
+System.Name                 co_cu_A
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1          # tden.cube is needed
+
+# same basis sets and pseudopotentials as in the AB run
+Species.Number              2
+<Definition.of.Atomic.Species
+  C   C6.0-s2p2d1     C_PBE19
+  O   O6.0-s2p2d1     O_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1  C     2.55266   1.47378  14.06847   2.0  2.0
+  2  O     2.55266   1.47378  15.21847   3.0  3.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  5.10531   0.00000   0.00000
+  2.55266   4.42133   0.00000
+  0.00000   0.00000  25.00000
+Atoms.UnitVectors>
+
+#
+# SCF: identical in AB, A and B (cell, k-mesh, cutoff, smearing, mixing)
+#
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.EigenvalueSolver        Band
+scf.Kgrid                   6 6 1
+scf.energycutoff            220.0
+scf.ElectronicTemperature   500.0
+scf.maxIter                 200
+scf.criterion               1.0e-7
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.20
+scf.Mixing.History          30
+scf.Mixing.StartPulay       10
+
+MD.Type                     Nomd
+
+#
+# Grid origin of the AB run (Bohr). run_cdd.sh replaces the next line with
+#   scf.fixed.grid  x y z
+# taken from 'Grid_Origin' in co_cu_AB.std
+#
+#scf.fixed.grid   GRID_ORIGIN_FROM_AB_RUN

@@ -1,0 +1,13 @@
+# verdi code create core.code.installed --config cp2k_code.yaml
+# Registers the CP2K executable on the computer "localhost" (created by verdi presto).
+label: cp2k
+description: CP2K 2025.x psmp (example)
+default_calc_job_plugin: cp2k
+computer: localhost
+filepath_executable: /opt/cp2k/exe/local/cp2k.psmp
+with_mpi: true
+prepend_text: |
+  export OMP_NUM_THREADS=1
+  ulimit -s unlimited
+  # module load cp2k/2025.2
+append_text: ''

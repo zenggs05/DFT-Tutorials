@@ -1,0 +1,18 @@
+# verdi computer setup --config computer_slurm.yaml
+# verdi computer configure core.ssh hpc --config computer_ssh.yaml
+# verdi computer test hpc
+# The Slurm partition/account are set per job via metadata.options
+# (queue_name, account), not here.
+label: hpc
+hostname: login.cluster.example.edu
+description: Slurm cluster reached through SSH
+transport: core.ssh
+scheduler: core.slurm
+shebang: '#!/bin/bash'
+work_dir: /scratch/{username}/aiida_run/
+mpirun_command: srun
+mpiprocs_per_machine: 32
+prepend_text: |
+  ulimit -s unlimited
+  export OMP_NUM_THREADS=1
+append_text: ''

@@ -1,0 +1,39 @@
+%nprocshared=8
+%mem=8GB
+%chk=ch2_triplet.chk
+#p UB3LYP/def2TZVP Opt Freq
+
+CH2 step 1: triplet carbene (3B1), UKS opt + freq
+
+0 3
+C                   0.000000    0.000000    0.000000
+H                   0.991000    0.000000   -0.421000
+H                  -0.991000    0.000000   -0.421000
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%chk=ch2_singlet.chk
+#p RB3LYP/def2TZVP Opt Freq
+
+CH2 step 2: closed-shell singlet carbene (1A1), RKS opt + freq
+
+0 1
+C                   0.000000    0.000000    0.000000
+H                   0.862600    0.000000   -0.698500
+H                  -0.862600    0.000000   -0.698500
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=ch2_singlet.chk
+%chk=ch2_singlet_stab.chk
+#p RB3LYP/def2TZVP Stable Geom=AllCheck Guess=Read
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=ch2_triplet.chk
+%chk=ch2_triplet_roks.chk
+#p ROB3LYP/def2TZVP Geom=AllCheck Guess=Read
+

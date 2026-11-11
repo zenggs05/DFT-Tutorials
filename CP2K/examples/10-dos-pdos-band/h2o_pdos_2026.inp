@@ -1,0 +1,97 @@
+# DOS / PDOS of an isolated H2O molecule with the NEW CP2K 2026.2 syntax
+#   &DFT/&PRINT/&DOS  (+ &PDOS, &CURVE, &BROADEN)
+# Requires CP2K >= 2026.2. Older versions: see tio2_pdos_legacy_2025.inp.
+# SCF: OT (no virtual orbitals during SCF); NLUMO asks for 10 virtual
+# orbitals that are computed after the SCF with the OT eigensolver.
+
+&GLOBAL
+  PROJECT     h2o_pdos
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     400
+      REL_CUTOFF 60
+    &END MGRID
+    &POISSON
+      PERIODIC       NONE         ! must match &CELL PERIODIC NONE
+      POISSON_SOLVER MT           ! box >= 2x the size of the charge distribution
+    &END POISSON
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-7
+      MAX_SCF   30
+      EPS_LUMO      1.0E-6        ! accuracy of the post-SCF virtual orbitals
+      MAX_ITER_LUMO 400
+      &OT
+        MINIMIZER      DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-7
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+      &DOS
+        NLUMO   10                ! virtual states included in DOS/PDOS
+        DELTA_E 0.0005            ! grid spacing in HARTREE (no unit allowed), 0.0136 eV
+        &PDOS
+          COMPONENTS T            ! split p into py pz px, d into 5 components
+        &END PDOS
+        &CURVE
+          ENERGY_UNIT EV          ! energy axis in eV, density in states/eV
+          ENERGY_ZERO HOCO        ! HOMO at 0 eV (molecule, no smearing)
+          &BROADEN
+            TYPE  GAUSSIAN
+            WIDTH [eV] 0.2        ! FWHM
+          &END BROADEN
+        &END CURVE
+      &END DOS
+      &MO
+        ENERGIES           T
+        OCCUPATION_NUMBERS T
+        &EACH
+          QS_SCF 0                ! only after the converged SCF
+        &END EACH
+      &END MO
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 12.0 12.0 12.0
+      PERIODIC NONE
+    &END CELL
+    &COORD
+      ! experimental gas-phase geometry, molecule in the yz plane
+      O   0.000000   0.000000   0.117300
+      H   0.000000   0.757000  -0.468600
+      H   0.000000  -0.757000  -0.468600
+    &END COORD
+    &TOPOLOGY
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q1
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

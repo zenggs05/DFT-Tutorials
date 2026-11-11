@@ -1,0 +1,10 @@
+%oldchk=phenol.chk
+%chk=phenol_td.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/def2TZVP TD(NStates=20) Geom=Check Guess=Read IOp(9/40=4)
+
+Phenol TD-CAM-B3LYP/def2-TZVP, 20 singlet states, print all CI coefficients above 1e-4
+
+0 1
+

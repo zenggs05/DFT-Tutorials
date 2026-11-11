@@ -1,0 +1,99 @@
+# Chapter 9, example 2 (step 2 of 2): PBE0-TC-LRC + ADMM for 32 H2O (periodic box)
+# Target versions: CP2K 2023.1 ... 2026.2
+# Requires water32_pbe-RESTART.wfn from water32_pbe_step1.inp (same basis + potentials).
+# Truncated Coulomb operator: CUTOFF_RADIUS must be <= half the smallest cell width
+#   L = 9.8528 A  ->  L/2 = 4.93 A  ->  R_c = 4.5 A
+# Run:  mpirun -np 16 -x OMP_NUM_THREADS=2 cp2k.psmp -i water32_pbe0_admm_truncated.inp \
+#           -o water32_pbe0.out
+@SET RC 4.5
+
+&GLOBAL
+  PROJECT water32_pbe0
+  RUN_TYPE ENERGY_FORCE
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    BASIS_SET_FILE_NAME BASIS_ADMM_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    WFN_RESTART_FILE_NAME water32_pbe-RESTART.wfn
+    &AUXILIARY_DENSITY_MATRIX_METHOD
+      METHOD BASIS_PROJECTION
+      ADMM_PURIFICATION_METHOD MO_DIAG
+      ! DEFAULT = PBE-based correction consistent with the TRUNCATED operator
+      EXCH_CORRECTION_FUNC DEFAULT
+    &END AUXILIARY_DENSITY_MATRIX_METHOD
+    &MGRID
+      CUTOFF 400
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &SCF
+      SCF_GUESS RESTART
+      EPS_SCF 1.0E-6
+      MAX_SCF 20
+      &OT
+        MINIMIZER DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-6
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      ! PBE0-TC-LRC: truncated HF exchange (r < R_c) + long-range PBE exchange-hole correction
+      &XC_FUNCTIONAL
+        &PBE
+          SCALE_X 0.75
+          SCALE_C 1.0
+        &END PBE
+        &PBE_HOLE_T_C_LR
+          CUTOFF_RADIUS ${RC}
+          SCALE_X 0.25
+        &END PBE_HOLE_T_C_LR
+      &END XC_FUNCTIONAL
+      &HF
+        FRACTION 0.25
+        &INTERACTION_POTENTIAL
+          POTENTIAL_TYPE TRUNCATED
+          CUTOFF_RADIUS ${RC}
+          T_C_G_DATA t_c_g.dat
+        &END INTERACTION_POTENTIAL
+        &SCREENING
+          EPS_SCHWARZ 1.0E-6
+          ! needs a density matrix from a restart file (here: the PBE wfn)
+          SCREEN_ON_INITIAL_P T
+        &END SCREENING
+        &MEMORY
+          ! MiB per MPI process; with 16 ranks this is ~40 GB in total
+          MAX_MEMORY 2500
+        &END MEMORY
+      &END HF
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 9.8528 9.8528 9.8528
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME water32.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND O
+      BASIS_SET ORB DZVP-MOLOPT-PBE0-GTH-q6
+      BASIS_SET AUX_FIT admm-dzp-q6
+      POTENTIAL GTH-PBE0-q6
+    &END KIND
+    &KIND H
+      BASIS_SET ORB DZVP-MOLOPT-PBE0-GTH-q1
+      BASIS_SET AUX_FIT admm-dzp-q1
+      POTENTIAL GTH-PBE0-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

@@ -1,0 +1,109 @@
+# Chapter 7, example 4: CELL_OPT of a layered crystal (bulk 2H-MoS2) with KEEP_ANGLES
+# Target versions: CP2K 2023.1 ... 2026.2 (no TYPE line, no 2026.2-only keywords)
+# a and c relax independently, the hexagonal angles (90, 90, 120) stay fixed.
+# Start: a = 3.16 A, c = 13.00 A (exp. c = 12.29 A; c is deliberately too large)
+# Run:  mpirun -np 32 cp2k.psmp -i layered_cell_opt_keep_angles.inp -o mos2_cellopt.out
+@SET PROJ  mos2_cellopt
+@SET A0    3.16
+@SET C0    13.00
+
+&GLOBAL
+  PROJECT ${PROJ}
+  RUN_TYPE CELL_OPT
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  STRESS_TENSOR ANALYTICAL
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF 600
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &KPOINTS
+      SCHEME MONKHORST-PACK 9 9 2
+    &END KPOINTS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF 1.0E-7
+      MAX_SCF 150
+      ADDED_MOS 10
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.2
+        NBROYDEN 8
+      &END MIXING
+      ! small smearing only to stabilise the first SCF cycles of a semiconductor
+      &SMEAR ON
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 100
+      &END SMEAR
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+      ! interlayer binding is pure dispersion: without it c is far too large
+      &VDW_POTENTIAL
+        DISPERSION_FUNCTIONAL PAIR_POTENTIAL
+        &PAIR_POTENTIAL
+          TYPE DFTD3(BJ)
+          PARAMETER_FILE_NAME dftd3.dat
+          REFERENCE_FUNCTIONAL PBE
+        &END PAIR_POTENTIAL
+      &END VDW_POTENTIAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ! ABC + ALPHA_BETA_GAMMA puts A along x and B in the xy plane (required for CELL_OPT)
+      ABC ${A0} ${A0} ${C0}
+      ALPHA_BETA_GAMMA 90.0 90.0 120.0
+    &END CELL
+    &COORD
+      SCALED
+      Mo 0.333333 0.666667 0.250000
+      Mo 0.666667 0.333333 0.750000
+      S  0.333333 0.666667 0.621000
+      S  0.666667 0.333333 0.121000
+      S  0.666667 0.333333 0.379000
+      S  0.333333 0.666667 0.879000
+    &END COORD
+    &KIND Mo
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q14
+      POTENTIAL GTH-PBE-q14
+    &END KIND
+    &KIND S
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &CELL_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 150
+    EXTERNAL_PRESSURE [bar] 1.01325
+    PRESSURE_TOLERANCE [bar] 50.0
+    KEEP_ANGLES T
+  &END CELL_OPT
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+    &END TRAJECTORY
+    &CELL ON
+    &END CELL
+    &RESTART
+      BACKUP_COPIES 1
+    &END RESTART
+  &END PRINT
+&END MOTION

@@ -1,0 +1,89 @@
+# Chapter 8, example 3b: AFM-II NiO with PBE+U, Gamma-only 64-atom supercell
+# Target versions: CP2K 2023.1 ... 2026.2 (works where DFT+U + k-points is unavailable)
+# Cell: 2x2x2 conventional rocksalt cell, a = 4.17 A -> 8.34 A cube, 32 Ni + 32 O.
+# Kinds Ni1 / Ni2 are read from the first column of nio_afm_64.xyz.
+@SET PROJ  nio_afm_gamma
+@SET UEFF  6.0
+
+&GLOBAL
+  PROJECT ${PROJ}
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    UKS
+    MULTIPLICITY 1
+    PLUS_U_METHOD MULLIKEN
+    &MGRID
+      CUTOFF 600
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF 1.0E-6
+      MAX_SCF 40
+      &OT
+        MINIMIZER DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-6
+        MAX_SCF 20
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+      &MULLIKEN ON
+      &END MULLIKEN
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 8.34 8.34 8.34
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME nio_afm_64.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Ni1
+      ELEMENT Ni
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q18
+      POTENTIAL GTH-PBE-q18
+      MAGNETIZATION 2.0
+      &DFT_PLUS_U
+        L 2
+        U_MINUS_J [eV] ${UEFF}
+        ! optional: switch U on gradually (0.5 eV per converged step) for hard cases
+        U_RAMPING [eV] 0.5
+        EPS_U_RAMPING 1.0E-4
+      &END DFT_PLUS_U
+    &END KIND
+    &KIND Ni2
+      ELEMENT Ni
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q18
+      POTENTIAL GTH-PBE-q18
+      MAGNETIZATION -2.0
+      &DFT_PLUS_U
+        L 2
+        U_MINUS_J [eV] ${UEFF}
+        U_RAMPING [eV] 0.5
+        EPS_U_RAMPING 1.0E-4
+      &END DFT_PLUS_U
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

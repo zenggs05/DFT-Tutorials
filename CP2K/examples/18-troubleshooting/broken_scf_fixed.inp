@@ -1,0 +1,106 @@
+# Corrected version of broken_scf.inp (chapter 18 of the CP2K tutorial).
+# fcc Cu, 4-atom conventional cell (a = 3.615 A, room-temperature experimental value),
+# PBE, DZVP-MOLOPT-PBE-GTH-q11 + GTH-PBE-q11, 8x8x8 Monkhorst-Pack mesh.
+#
+# What was fixed (letters refer to broken_scf.inp):
+#   (A) &MOTION/&CELL_OPT/TYPE removed (and the unused &MOTION block with it)
+#   (B) DOS/PDOS output written with the syntax of the CP2K version in use, selected
+#       by the preprocessor variable NEWDOS (1 = CP2K >= 2026.2, 0 = CP2K <= 2026.1)
+#   (C) basis name that really exists in BASIS_MOLOPT_UZH
+#   (D) diagonalisation instead of OT (k-points)
+#   (E) pseudopotential with the same number of valence electrons as the basis (q11)
+#   (F) Fermi-Dirac smearing + ADDED_MOS + Broyden mixing + enough SCF steps
+#
+#   cp2k.psmp -i broken_scf_fixed.inp -o fixed.out                 # CP2K 2026.2
+#   cp2k.psmp -E NEWDOS=0 -i broken_scf_fixed.inp -o fixed.out     # CP2K 2025.x / 2026.1
+
+&GLOBAL
+  PROJECT     cu_fixed
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     500
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &KPOINTS
+      SCHEME MONKHORST-PACK 8 8 8
+    &END KPOINTS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-7
+      MAX_SCF   100
+      ADDED_MOS 12                 ! 22 occupied orbitals (44 electrons); keep the top MO empty
+      &DIAGONALIZATION ON
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD  BROYDEN_MIXING
+        ALPHA   0.2
+        NBUFFER 8
+      &END MIXING
+      &SMEAR ON
+        METHOD                 FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500
+      &END SMEAR
+      &PRINT
+        # k-point runs write cu_fixed-RESTART.kp (not .wfn)
+        &RESTART ON
+          BACKUP_COPIES 0
+        &END RESTART
+      &END PRINT
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+@IF ${NEWDOS-1} == 1
+      # CP2K >= 2026.2: PDOS lives inside &DOS, broadened curves via &CURVE
+      &DOS
+        &PDOS
+        &END PDOS
+        &CURVE
+          ENERGY_UNIT EV
+          ENERGY_ZERO FERMI
+          &BROADEN
+            WIDTH [eV] 0.2
+          &END BROADEN
+        &END CURVE
+      &END DOS
+@ENDIF
+@IF ${NEWDOS-1} == 0
+      # CP2K <= 2026.1: &PDOS directly under &DFT/&PRINT
+      &PDOS
+        NLUMO -1
+      &END PDOS
+@ENDIF
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 3.615 3.615 3.615
+      PERIODIC XYZ
+    &END CELL
+    &COORD
+      SCALED
+      Cu  0.0  0.0  0.0
+      Cu  0.0  0.5  0.5
+      Cu  0.5  0.0  0.5
+      Cu  0.5  0.5  0.0
+    &END COORD
+    &KIND Cu
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q11
+      POTENTIAL GTH-PBE-q11
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

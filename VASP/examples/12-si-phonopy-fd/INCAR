@@ -1,0 +1,21 @@
+SYSTEM  = Si 2x2x2 supercell (64 atoms) - single-point forces for phonopy
+
+# ---- accuracy: forces of ~1E-4 eV/A matter for force constants ----
+PREC    = Accurate
+ENCUT   = 400          # exactly the value used for the relaxation
+EDIFF   = 1E-8
+NELMIN  = 5            # avoid a premature SCF stop
+ALGO    = Normal
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.      # real-space projection adds force noise
+ISYM    = 0            # optional: no symmetrisation of the displaced cell
+# ADDGRID = .TRUE.     # common in phonopy inputs; the VASP wiki advises testing it first
+
+# ---- single point: the displaced atom must NOT relax ----
+IBRION  = -1
+NSW     = 0
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

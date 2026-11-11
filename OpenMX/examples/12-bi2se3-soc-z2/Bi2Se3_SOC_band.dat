@@ -1,0 +1,74 @@
+#
+# Bi2Se3 (rhombohedral primitive cell, 5 atoms) -- band structure with spin-orbit coupling
+# Target: OpenMX 4.0 + patch 4.0.1, database DFT_DATA19 (j-dependent VPS)
+# a(hex) = 4.138 Ang, c(hex) = 28.64 Ang, u(Bi) = 0.4008, v(Se2) = 0.2117:
+# commonly used experimental values (approximate). The topological phase is sensitive
+# to the internal coordinates: use a reliable (experimental or relaxed) structure.
+#
+System.CurrrentDirectory    ./
+System.Name                 bi2se3_soc
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+HS.fileout                  off         # on: also write bi2se3_soc.scfout
+
+# Standard basis; Bi_PBE19: 15, Se_PBE19: 6 valence electrons (48 electrons in total)
+Species.Number              2
+<Definition.of.Atomic.Species
+  Bi   Bi8.0-s3p2d2f1   Bi_PBE19
+  Se   Se7.0-s3p2d2     Se_PBE19
+Definition.of.Atomic.Species>
+
+# Wyckoff positions in the rhombohedral basis: Bi +-(u,u,u), Se1 (0,0,0), Se2 +-(v,v,v)
+Atoms.Number                5
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Bi   0.4008  0.4008  0.4008   7.5  7.5
+  2  Bi   0.5992  0.5992  0.5992   7.5  7.5
+  3  Se   0.0000  0.0000  0.0000   3.0  3.0
+  4  Se   0.2117  0.2117  0.2117   3.0  3.0
+  5  Se   0.7883  0.7883  0.7883   3.0  3.0
+Atoms.SpeciesAndCoordinates>
+
+# rhombohedral primitive vectors (a/2,-a/(2sqrt3),c/3), (0,a/sqrt3,c/3), (-a/2,-a/(2sqrt3),c/3)
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+   2.069000  -1.194538   9.546667
+   0.000000   2.389075   9.546667
+  -2.069000  -1.194538   9.546667
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        nc
+scf.SpinOrbit.Coupling      on
+scf.EigenvalueSolver        Band
+scf.Kgrid                   8 8 8
+scf.energycutoff            200.0
+scf.ElectronicTemperature   300.0
+scf.maxIter                 300
+scf.criterion               1.0e-9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.40
+scf.Mixing.History          30
+scf.Mixing.StartPulay       6
+
+MD.Type                     Nomd
+
+# Optional: scale the SOC strength per species and angular momentum (all species, s to f).
+# Uncomment to study the band inversion as a function of the SOC strength.
+#<scf.SO.factor
+#  Bi  s 1.0 p 1.0 d 1.0 f 1.0
+#  Se  s 1.0 p 1.0 d 1.0 f 1.0
+#scf.SO.factor>
+
+# Band path Z-F-G-L in units of the rhombohedral reciprocal vectors:
+# Z=(1/2,1/2,1/2)  F=(1/2,1/2,0)  L=(1/2,0,0)
+Band.dispersion             on
+Band.Nkpath                 3
+<Band.kpath
+  30  0.5 0.5 0.5   0.5 0.5 0.0   Z  F
+  40  0.5 0.5 0.0   0.0 0.0 0.0   F  G
+  40  0.0 0.0 0.0   0.5 0.0 0.0   G  L
+Band.kpath>

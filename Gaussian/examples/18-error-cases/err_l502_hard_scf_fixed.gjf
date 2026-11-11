@@ -1,0 +1,24 @@
+%chk=fecl4_sextet.chk
+%mem=8GB
+%nprocshared=8
+#p UB3LYP/def2SVP SCF=(XQC,MaxCycle=200) Stable=Opt
+
+[FeCl4]- high spin (S=5/2), step 1/2: converge in a small basis and make the wavefunction stable
+
+-1 6
+Fe    0.000000    0.000000    0.000000
+Cl    1.264400    1.264400    1.264400
+Cl    1.264400   -1.264400   -1.264400
+Cl   -1.264400    1.264400   -1.264400
+Cl   -1.264400   -1.264400    1.264400
+
+--Link1--
+%chk=fecl4_sextet.chk
+%mem=8GB
+%nprocshared=8
+#p UB3LYP/def2TZVP Geom=Check Guess=Read SCF=XQC
+
+[FeCl4]- step 2/2: large basis, starting from the stable def2-SVP orbitals
+
+-1 6
+

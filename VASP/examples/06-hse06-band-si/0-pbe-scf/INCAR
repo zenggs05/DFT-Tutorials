@@ -1,0 +1,14 @@
+SYSTEM  = Si PBE SCF (WAVECAR for the HSE06 runs)
+
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-6
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+NBANDS  = 16         # keep NBANDS identical in all following runs
+
+NSW     = 0
+IBRION  = -1
+LWAVE   = .TRUE.     # WAVECAR is the starting point of the hybrid runs
+LCHARG  = .FALSE.

@@ -1,0 +1,38 @@
+! h2o_vib_ir.inp - harmonic frequencies, IR intensities and gas-phase
+! thermochemistry of H2O.  Chapter 14, step 2.
+! Target versions: CP2K 2023.1 ... 2026.2 (the un-mass-weighted Hessian
+! printout "VIB| Hessian (before multiplying by ...)" appears from 2026.2 on).
+!
+! Needs h2o_opt.xyz from h2o_opt_tight.inp.
+! 3 atoms -> 9 coordinates x 2 (central differences) = 18 displaced force
+! evaluations.  NPROC_REP 2 with 18 MPI ranks runs 9 of them in parallel:
+!   mpirun -np 18 cp2k.psmp -i h2o_vib_ir.inp -o h2o_vib_ir.out
+! Outputs: h2o_vib_ir.out (VIB| lines), h2o_vib-VIBRATIONS-1.mol (Molden).
+
+@SET COORD ${COORD-h2o_opt.xyz}
+
+&GLOBAL
+  PROJECT h2o_vib
+  RUN_TYPE VIBRATIONAL_ANALYSIS
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+@INCLUDE 'h2o_force_eval.inc'
+
+&VIBRATIONAL_ANALYSIS
+  ! finite-difference step in bohr (default 0.01)
+  DX 0.01
+  ! MPI ranks per displaced-geometry replica
+  NPROC_REP ${NPROC_REP-2}
+  ! IR intensities from dipole derivatives (needs &DFT/&PRINT/&MOMENTS)
+  INTENSITIES T
+  ! RRHO thermochemistry for an isolated molecule (symmetry number is always 1!)
+  THERMOCHEMISTRY T
+  ! default TC_TEMPERATURE is 273.15 K -> set room temperature explicitly
+  TC_TEMPERATURE [K] 298.15
+  TC_PRESSURE [Pa] 101325.0
+  &PRINT
+    &MOLDEN_VIB ON
+    &END MOLDEN_VIB
+  &END PRINT
+&END VIBRATIONAL_ANALYSIS

@@ -1,0 +1,26 @@
+SYSTEM  = Adsorbate vibrations on Pt(111) (IBRION=5, slab atoms frozen)
+# Use the CONTCAR of the relaxed adsorbate run as POSCAR, freeing only the
+# adsorbate atoms, e.g.  python ../10-co-pt111-adsorption/set_freq_selective.py H_fcc/CONTCAR -e H -o POSCAR
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-7
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 1
+SIGMA   = 0.10
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+LDIPOL  = .TRUE.
+IDIPOL  = 3
+DIPOL   = 0.5 0.5 0.5
+
+IBRION  = 5
+POTIM   = 0.015
+NFREE   = 2
+NSW     = 1
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

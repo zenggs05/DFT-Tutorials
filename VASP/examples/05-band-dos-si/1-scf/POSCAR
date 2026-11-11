@@ -1,0 +1,10 @@
+Si diamond primitive cell (replace 5.47 by your relaxed lattice constant)
+5.47
+  0.0  0.5  0.5
+  0.5  0.0  0.5
+  0.5  0.5  0.0
+Si
+2
+Direct
+  0.00  0.00  0.00
+  0.25  0.25  0.25
