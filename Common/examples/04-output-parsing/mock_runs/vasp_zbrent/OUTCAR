@@ -1,0 +1,4 @@
+MOCK FILE for job_status_scanner.py - contains only marker lines, NOT a real VASP OUTCAR
+   NSW    =    100    number of steps for IOM
+   NELM   =     60;   NELMIN=  2; NELMDL= -5     # of ELM steps
+  free  energy   TOTEN  =       -50.10000000 eV

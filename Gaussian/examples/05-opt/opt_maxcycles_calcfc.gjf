@@ -1,0 +1,19 @@
+%nprocshared=8
+%mem=12GB
+%chk=opt_maxcycles_calcfc.chk
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt=(CalcFC,MaxCycles=200) Freq
+
+Glycine: optimization with an exact initial Hessian (CalcFC) and more steps
+
+0 1
+N    -1.634151     0.328147     0.190861
+C    -0.512051    -0.572745    -0.133908
+C     0.822684     0.147488    -0.006423
+O     0.996235     1.312429     0.317342
+O     1.870662    -0.648107    -0.296614
+H    -1.476858     0.704566     1.128418
+H    -1.568371     1.147693    -0.416974
+H    -0.625980    -0.929357    -1.161529
+H    -0.524307    -1.421701     0.555496
+H     2.652137    -0.068413    -0.176668
+

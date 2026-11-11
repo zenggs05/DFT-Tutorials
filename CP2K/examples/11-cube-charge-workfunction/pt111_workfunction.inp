@@ -1,0 +1,79 @@
+# Work function of a Pt(111) slab: p(2x2), 4 layers, ~23 Angstrom vacuum
+#   Phi = V_vac - E_F
+#   V_vac : plateau of the xy-averaged Hartree potential (V_HARTREE_CUBE) in vacuum
+#   E_F   : "Fermi energy:" line of the output (hartree)
+# Surface dipole correction along z is switched on (needed for asymmetric slabs;
+# for this symmetric clean slab it should change almost nothing).
+# k-points -> diagonalization + Fermi-Dirac smearing (CP2K <= 2026.2: no OT with k-points).
+
+&GLOBAL
+  PROJECT     pt111_wf
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    SURFACE_DIPOLE_CORRECTION T
+    SURF_DIP_DIR Z
+    &MGRID
+      CUTOFF     500
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &KPOINTS
+      SCHEME MONKHORST-PACK 6 6 1
+    &END KPOINTS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-7
+      MAX_SCF   300
+      ADDED_MOS 50                ! 144 occupied MOs (16 Pt x 18 e / 2)
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD  BROYDEN_MIXING
+        ALPHA   0.1               ! small mixing against charge sloshing in slabs
+        NBUFFER 8
+      &END MIXING
+      &SMEAR ON
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 500
+      &END SMEAR
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+      ! full grid along z gives the smoothest planar average
+      &V_HARTREE_CUBE
+        STRIDE 1 1 1
+      &END V_HARTREE_CUBE
+      &E_DENSITY_CUBE
+        STRIDE 2 2 2
+      &END E_DENSITY_CUBE
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 5.5494 5.5494 30.0
+      ALPHA_BETA_GAMMA 90.0 90.0 60.0
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   pt111_2x2_4L.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Pt
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q18
+      POTENTIAL GTH-PBE-q18
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

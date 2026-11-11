@@ -1,0 +1,22 @@
+SYSTEM = Si ENCUT convergence test
+
+ISTART = 0
+ICHARG = 2
+
+PREC   = Accurate
+ENCUT  = __ENCUT__     # replaced by run_encut.sh
+LREAL  = .FALSE.
+
+ALGO   = Normal
+EDIFF  = 1E-7          # tighter than production: SCF noise << 1 meV/atom
+NELM   = 120
+
+ISMEAR = 0
+SIGMA  = 0.05
+
+IBRION = -1            # single point
+NSW    = 0
+ISIF   = 2             # forces and stress tensor are computed
+
+LWAVE  = .FALSE.
+LCHARG = .FALSE.

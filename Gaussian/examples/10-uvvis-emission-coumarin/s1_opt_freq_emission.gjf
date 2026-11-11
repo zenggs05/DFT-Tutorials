@@ -1,0 +1,13 @@
+! Chapter 10 example: optimize S1 of coumarin (TD-DFT gradient) + analytic TD frequencies
+! Needs coumarin_s0.chk from coumarin_td_camb3lyp_smd.gjf (same functional/basis/solvent as the S0 opt)
+%oldchk=coumarin_s0.chk
+%chk=coumarin_s1.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/def2SVP TD=(NStates=6,Root=1) Opt Freq SCRF=(SMD,Solvent=Ethanol)
+   Geom=Check Guess=Read NoSymm
+
+Coumarin S1 opt+freq, CAM-B3LYP/def2-SVP, SMD(ethanol), equilibrium LR solvation
+
+0 1
+

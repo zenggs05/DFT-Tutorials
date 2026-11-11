@@ -1,0 +1,5 @@
+%rwf=benzene_freq.rwf
+%nosave
+%chk=benzene_freq.chk
+#p Restart
+

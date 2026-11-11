@@ -1,0 +1,56 @@
+%chk=ttf_neutral.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Acetonitrile) Opt Freq
+
+Step 1: TTF neutral in acetonitrile (SMD), Opt Freq
+
+0 1
+C     -3.147055    0.547396    0.284879
+C     -3.099365   -0.784950    0.262567
+S     -1.567334   -1.547604    0.048231
+C     -0.673041   -0.025595   -0.053367
+C      0.673038    0.025596   -0.233060
+S      1.673713   -1.424346   -0.384426
+C      3.147056   -0.547396   -0.571302
+C      3.099365    0.784950   -0.548993
+S      1.567332    1.547603   -0.334662
+S     -1.673714    1.424346    0.097998
+H     -4.077902    1.086532    0.416015
+H     -3.989136   -1.393327    0.374484
+H      4.077904   -1.086532   -0.702433
+H      3.989138    1.393327   -0.660910
+
+--Link1--
+%oldchk=ttf_neutral.chk
+%chk=ttf_cation.chk
+%nprocshared=8
+%mem=8GB
+#p UB3LYP/def2SVP EmpiricalDispersion=GD3BJ SCRF=(SMD,Solvent=Acetonitrile) Opt Freq Geom=Check
+
+Step 2: TTF radical cation in acetonitrile (SMD), Opt Freq starting from the neutral geometry
+
+1 2
+
+--Link1--
+%oldchk=ttf_neutral.chk
+%chk=ttf_neutral_sp.chk
+%nprocshared=8
+%mem=8GB
+#p M062X/def2TZVP SCRF=(SMD,Solvent=Acetonitrile) Geom=Check Guess=Read
+
+Step 3: TTF neutral, M06-2X/def2-TZVP SMD(acetonitrile) single point
+
+0 1
+
+--Link1--
+%oldchk=ttf_cation.chk
+%chk=ttf_cation_sp.chk
+%nprocshared=8
+%mem=8GB
+#p UM062X/def2TZVP SCRF=(SMD,Solvent=Acetonitrile) Geom=Check Guess=Read
+
+Step 4: TTF radical cation, UM06-2X/def2-TZVP SMD(acetonitrile) single point
+
+1 2
+

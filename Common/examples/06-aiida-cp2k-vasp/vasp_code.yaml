@@ -1,0 +1,11 @@
+# verdi code create core.code.installed --config vasp_code.yaml
+label: vasp_std
+description: VASP 6.5.x standard executable (example)
+default_calc_job_plugin: vasp.vasp
+computer: localhost
+filepath_executable: /opt/vasp/6.5.1/bin/vasp_std
+with_mpi: true
+prepend_text: |
+  ulimit -s unlimited
+  export OMP_NUM_THREADS=1
+append_text: ''

@@ -1,0 +1,11 @@
+%chk=ch3_wrong.chk
+#p B3LYP/6-31G(d) SP
+
+CH3 radical with a WRONG charge/multiplicity line (9 electrons cannot be a singlet)
+
+0 1
+C     0.000000    0.000000    0.000000
+H     1.080000    0.000000    0.000000
+H    -0.540000    0.935307    0.000000
+H    -0.540000   -0.935307    0.000000
+

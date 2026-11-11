@@ -1,0 +1,27 @@
+# Step 2: HSE06 + finite electric field -> eps_inf, Born charges, piezo tensor
+# (DFPT/LEPSILON is not available for hybrid functionals)
+SYSTEM   = ZnO HSE06 LCALCEPS
+ISTART   = 1           # start from the PBE WAVECAR
+PREC     = Accurate
+ENCUT    = 520
+EDIFF    = 1E-7        # the field-polarised states are converged to ~EDIFF/100
+ISMEAR   = 0
+SIGMA    = 0.01
+LREAL    = .FALSE.
+NBANDS   = 24          # a few empty bands so that VASP can check the field strength vs. gap
+
+# HSE06
+LHFCALC  = .TRUE.
+HFSCREEN = 0.2
+AEXX     = 0.25
+ALGO     = Normal      # if the SCF struggles: ALGO = All
+PRECFOCK = Normal
+
+# finite electric field
+LCALCEPS = .TRUE.
+# EFIELD_PEAD = 0.01 0.01 0.01   # default field strength (eV/A); reduce if VASP warns
+
+IBRION   = -1
+NSW      = 0
+LWAVE    = .FALSE.
+LCHARG   = .FALSE.

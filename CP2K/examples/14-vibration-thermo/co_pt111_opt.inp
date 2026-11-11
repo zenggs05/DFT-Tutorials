@@ -1,0 +1,40 @@
+! co_pt111_opt.inp - tight GEO_OPT of CO atop on Pt(111) before the partial Hessian
+! Chapter 14, step 3.  Target versions: CP2K 2023.1 ... 2026.2
+!
+!   mpirun -np 64 cp2k.psmp -i co_pt111_opt.inp -o co_pt111_opt.out
+!   bash last_frame.sh co_pt111_opt-pos-1.xyz co_pt111_opt.xyz
+!
+! Atoms 1-18 (two bottom Pt layers) fixed; top Pt layer (19-27), C (28), O (29) relax.
+
+@SET COORD ${COORD-co_pt111.xyz}
+
+&GLOBAL
+  PROJECT co_pt111_opt
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+@INCLUDE 'co_pt111_force_eval.inc'
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 300
+    ! 1.0E-4 hartree/bohr ~ 0.005 eV/A: required before a frequency calculation
+    MAX_FORCE 1.0E-4
+    RMS_FORCE 5.0E-5
+  &END GEO_OPT
+  &CONSTRAINT
+    &FIXED_ATOMS
+      LIST 1..18
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+    &END RESTART
+  &END PRINT
+&END MOTION

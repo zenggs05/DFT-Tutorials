@@ -1,0 +1,68 @@
+# Si8 (conventional diamond cell): NPT MD, velocity scaling + Parrinello-Rahman (OpenMX >= 4.0)
+# 600 K; external pressure 0 GPa up to step 300, then linear ramp to 5 GPa at step 1000.
+# NPT is not compatible with non-collinear spin, MD.Fixed.XYZ constraints, and DFT+U 'full' occupation.
+
+System.CurrrentDirectory    ./
+System.Name                 Si8_NPT_VS_PR
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: dir containing PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0          # no cube files during MD
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  Si   Si7.0-s2p1d1   Si_PBE19          # Quick basis; compare with Si7.0-s2p2d1 before production
+Definition.of.Atomic.Species>
+
+Atoms.Number                8
+Atoms.SpeciesAndCoordinates.Unit   Ang
+# ideal diamond positions (a = 5.43 A) + random displacements (sigma 0.04 A)
+<Atoms.SpeciesAndCoordinates
+    1  Si    0.00005   0.01195  -0.01097   2.0 2.0
+    2  Si   -0.03562   2.69681   2.67533   2.0 2.0
+    3  Si    2.71741   0.05361   2.69531   2.0 2.0
+    4  Si    2.69018   2.73459   0.01428   2.0 2.0
+    5  Si    1.36172   1.32028   1.35633   2.0 2.0
+    6  Si    1.38531   4.01873   4.05420   2.0 2.0
+    7  Si    3.99645   1.30592   3.99883   2.0 2.0
+    8  Si    4.06310   4.02180   1.36835   2.0 2.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  5.43   0.00   0.00
+  0.00   5.43   0.00
+  0.00   0.00   5.43
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0      # K
+scf.energycutoff            250.0      # Ry, stress needs a finer grid than forces
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   4 4 4
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-8     # Hartree
+scf.ExtCharge.History       2
+
+MD.Type                     NPT_VS_PR  # or NPT_VS_WV (Wentzcovitch); do not reuse the PR barostat mass for WV
+MD.maxIter                  1000
+MD.TimeStep                 1.0        # fs
+#NPT.Mass.Barostat          17.0       # amu; if omitted a default is printed in the standard output
+NPT.LatticeRestriction      none       # none | cubic | ortho
+MD.TempTolerance            100        # K, no scaling if |T - T_given| < 100 K
+<MD.TempControl
+  1
+  1000   10   600.0   0.5
+MD.TempControl>
+# step  pressure(GPa); positive = compression; linear interpolation between lines
+<MD.CellPressureControl
+  2
+   300    0.0
+  1000    5.0
+MD.CellPressureControl>

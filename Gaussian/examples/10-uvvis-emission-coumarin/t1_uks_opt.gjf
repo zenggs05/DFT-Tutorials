@@ -1,0 +1,24 @@
+! Chapter 10 example: lowest triplet T1 of coumarin by unrestricted ground-state DFT (Delta-SCF)
+! Step 1: UKS triplet opt+freq   Step 2: closed-shell S0 single point at the T1 geometry
+! Vertical phosphorescence energy ~ E(T1, step 1 final) - E(S0, step 2)
+%oldchk=coumarin_s0.chk
+%chk=coumarin_t1.chk
+%mem=8GB
+%nprocshared=8
+#p UCAM-B3LYP/def2SVP Opt Freq SCRF=(SMD,Solvent=Ethanol) Geom=Check
+
+Coumarin T1 (UKS, multiplicity 3) opt+freq, CAM-B3LYP/def2-SVP, SMD(ethanol)
+
+0 3
+
+--Link1--
+%oldchk=coumarin_t1.chk
+%chk=coumarin_s0_at_t1.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/def2SVP SCRF=(SMD,Solvent=Ethanol) Geom=Check
+
+Coumarin S0 single point at the T1 geometry
+
+0 1
+

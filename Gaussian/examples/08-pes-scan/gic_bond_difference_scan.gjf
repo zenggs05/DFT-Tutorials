@@ -1,0 +1,17 @@
+%chk=sn2_gic_scan.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Opt=AddGIC NoSymm
+
+Cl- + CH3Br relaxed scan along the GIC RC = r(C-Br) - r(C-Cl), in Angstrom
+
+-1 1
+C     0.000000    0.000000    0.000000
+Cl    0.000000    0.000000   -3.200000
+Br    0.000000    0.000000    1.990000
+H     1.030000    0.000000   -0.325000
+H    -0.515000    0.892006   -0.325000
+H    -0.515000   -0.892006   -0.325000
+
+RC(NSteps=12,StepSize=0.2)=(R(1,3)-R(1,2))*0.529177
+

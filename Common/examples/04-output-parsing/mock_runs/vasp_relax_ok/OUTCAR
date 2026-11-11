@@ -1,0 +1,7 @@
+MOCK FILE for job_status_scanner.py - contains only marker lines, NOT a real VASP OUTCAR
+   NSW    =     50    number of steps for IOM
+   NELM   =     60;   NELMIN=  2; NELMDL= -5     # of ELM steps
+  free  energy   TOTEN  =       -10.80000000 eV
+  free  energy   TOTEN  =       -10.85000000 eV
+ reached required accuracy - stopping structural energy minimisation
+ General timing and accounting informations for this job:

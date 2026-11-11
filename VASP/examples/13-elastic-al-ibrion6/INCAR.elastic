@@ -1,0 +1,25 @@
+# Step 2: elastic tensor by finite differences (stress-strain method)
+# Run in the relaxed structure: cp CONTCAR(step 1) POSCAR
+SYSTEM  = Al fcc elastic constants IBRION=6 ISIF=3
+
+# electronic: identical to INCAR.relax
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-8
+ISMEAR  = 1
+SIGMA   = 0.10
+LREAL   = .FALSE.
+
+# finite differences
+IBRION  = 6            # finite differences WITH symmetry
+ISIF    = 3            # >= 3: also strain the lattice -> elastic tensor
+NFREE   = 2            # central differences (+/-); 4 is more accurate and 2x cost
+POTIM   = 0.015        # ionic displacement in A (internal-strain part)
+NSW     = 1            # only needed by very old versions; harmless
+
+# output
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+
+# parallelisation (optional): KPAR = number of k-point groups
+# KPAR  = 4

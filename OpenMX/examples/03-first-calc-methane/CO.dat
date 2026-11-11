@@ -1,0 +1,61 @@
+#
+# Carbon monoxide (CO) single-point SCF with molecular-orbital output
+# DFT-Tutorials, OpenMX chapter 3
+# Experimental bond length: C-O = 1.128 Ang, molecular axis parallel to z.
+#
+
+System.CurrrentDirectory      ./          # official spelling: three 'r'
+System.Name                   co
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              1
+
+Species.Number                2
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2d1    C_PBE19
+  O    O6.0-s2p2d1    O_PBE19
+Definition.of.Atomic.Species>
+
+#
+# C_PBE19: 4 valence electrons -> 2.0 2.0 ; O_PBE19: 6 -> 3.0 3.0
+# 10 electrons in total -> HOMO = 5 (5 sigma)
+#
+Atoms.Number                  2
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1   C    6.000000   6.000000   5.436000    2.0  2.0
+  2   O    6.000000   6.000000   6.564000    3.0  3.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang
+<Atoms.UnitVectors
+  12.0   0.0   0.0
+   0.0  12.0   0.0
+   0.0   0.0  12.0
+Atoms.UnitVectors>
+
+scf.XcType                    GGA-PBE
+scf.SpinPolarization          off
+scf.ElectronicTemperature     300.0       # K
+scf.energycutoff              200.0       # Ry
+scf.maxIter                   100
+scf.EigenvalueSolver          Cluster
+scf.Kgrid                     1 1 1
+scf.Mixing.Type               RMM-DIIS
+scf.Init.Mixing.Weight        0.30
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.40
+scf.Mixing.History            7
+scf.Mixing.StartPulay         5
+scf.criterion                 1.0e-8      # Hartree
+
+#
+# Molecular orbitals as Gaussian cube files (Cluster calculation):
+#   co.homo0_0.cube = HOMO, co.homo0_1.cube = HOMO-1,
+#   co.lumo0_0.cube = LUMO, co.lumo0_1.cube = LUMO+1
+#
+MO.fileout                    on
+num.HOMOs                     2
+num.LUMOs                     2
+
+MD.Type                       Nomd
+MD.maxIter                    1

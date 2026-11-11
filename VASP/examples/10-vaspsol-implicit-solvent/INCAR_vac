@@ -1,0 +1,19 @@
+SYSTEM  = CO/Pt(111) top - step 1: vacuum single point (writes WAVECAR for VASPsol)
+
+PREC    = Accurate     # the solvation cavity needs a fine FFT grid
+ENCUT   = 450          # test 500 eV: cavitation energy converges slowly with ENCUT
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 200
+ISMEAR  = 1
+SIGMA   = 0.10
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+
+IBRION  = -1
+NSW     = 0
+
+LWAVE   = .TRUE.       # needed as starting point of the solvation run
+LCHARG  = .FALSE.
+NCORE   = 4

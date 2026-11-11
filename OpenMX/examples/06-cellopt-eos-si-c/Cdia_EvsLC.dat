@@ -1,0 +1,55 @@
+#
+# Diamond C: energy versus lattice constant with MD.Type EvsLC
+# Start at a = 3.45 Ang (about -3.3 % of the experimental 3.567 Ang) and expand
+# by MD.EvsLC.Step percent per step. The real-space grid is FIXED with scf.Ngrid
+# so that the number of grid points does not jump between steps.
+# Results: cdia_evslc.EvsLC (ax ay az bx by bz cx cy cz in Ang, Etot in Hartree)
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 cdia_evslc
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2d1   C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1   C    0.00   0.00   0.00   2.0  2.0
+  2   C    0.25   0.25   0.25   2.0  2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  0.0000  1.7250  1.7250
+  1.7250  0.0000  1.7250
+  1.7250  1.7250  0.0000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0       # K
+scf.Ngrid                   24 24 24    # fixed grid (about 375 Ry at a = 3.567 Ang)
+scf.EigenvalueSolver        Band
+scf.Kgrid                   12 12 12
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; remove for OpenMX 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.maxIter                 100
+scf.criterion               1.0e-9      # Hartree
+
+#
+# Lattice constant scan
+#
+MD.Type                     EvsLC
+MD.EvsLC.Step               0.5         # percent per step (default 0.4)
+MD.EvsLC.flag               1 1 1       # 1: scale this axis, 0: keep fixed, -1: contract
+MD.maxIter                  15          # number of lattice constants

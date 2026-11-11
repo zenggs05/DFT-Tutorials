@@ -1,0 +1,29 @@
+SYSTEM  = bcc Fe ferromagnetic (FM), static run
+
+# ---- basis / accuracy ----
+PREC    = Accurate
+ENCUT   = 400          # ~1.35 x ENMAX of Fe_pv (293 eV)
+EDIFF   = 1E-6
+NELM    = 100
+LASPH   = .TRUE.       # non-spherical PAW gradient terms (recommended for 3d)
+LREAL   = .FALSE.
+
+# ---- smearing for a metal ----
+ISMEAR  = 1            # Methfessel-Paxton order 1
+SIGMA   = 0.10         # check T*S per atom < 1 meV in OUTCAR
+
+# ---- spin polarisation ----
+ISPIN   = 2
+MAGMOM  = 2*3.0        # initial moments (muB); slightly above the expected ~2.2
+LORBIT  = 11           # site/orbital projected moments -> "magnetization (x)"
+
+# ---- variants (see README) ----
+# AFM test : MAGMOM = 3.0 -3.0
+# NM test  : ISPIN = 1   (and remove MAGMOM)
+
+# ---- static calculation ----
+IBRION  = -1
+NSW     = 0
+
+LWAVE   = .FALSE.
+LCHARG  = .TRUE.

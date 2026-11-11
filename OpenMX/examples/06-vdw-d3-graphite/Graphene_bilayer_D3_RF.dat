@@ -1,0 +1,61 @@
+#
+# AB-stacked bilayer graphene in a slab cell (20 Ang along c) with DFT-D3(BJ):
+# atomic optimization (RF) of the interlayer distance at fixed cell.
+# Start: interlayer distance 3.70 Ang (deliberately too large).
+# DFTD.IntDirection 1 1 0 switches off vdW interactions with images along the vacuum (c) axis.
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 blg_d3
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2d1   C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                4
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1   C   0.000000   0.000000    8.150000   2.0  2.0
+  2   C   0.000000   1.422591    8.150000   2.0  2.0
+  3   C   0.000000   0.000000   11.850000   2.0  2.0
+  4   C   1.232000   0.711295   11.850000   2.0  2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+   2.464000   0.000000   0.000000
+  -1.232000   2.133886   0.000000
+   0.000000   0.000000  20.000000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0       # K
+scf.energycutoff            250.0       # Ry
+scf.EigenvalueSolver        Band
+scf.Kgrid                   15 15 1
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; remove for OpenMX 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       10
+scf.maxIter                 150
+scf.criterion               1.0e-9      # Hartree
+
+scf.dftD                    on
+version.dftD                3
+DFTD3.damp                  bj
+DFTD.Unit                   AU
+DFTD.rcut_dftD              100.0
+DFTD.cncut_dftD             40
+DFTD.IntDirection           1 1 0       # no vdW images along the vacuum direction
+
+MD.Type                     RF
+MD.maxIter                  100
+MD.Opt.criterion            1.0e-4      # Hartree/Bohr; weak interactions need tight forces
+MD.Opt.StartDIIS            5

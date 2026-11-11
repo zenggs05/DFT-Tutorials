@@ -1,0 +1,33 @@
+%nprocshared=8
+%mem=8GB
+%chk=o2_triplet.chk
+#p UB3LYP/def2TZVP Opt Freq
+
+O2 step 1: triplet ground state (X 3Sigma_g-), UKS opt + freq
+
+0 3
+O                   0.000000    0.000000    0.604000
+O                   0.000000    0.000000   -0.604000
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=o2_triplet.chk
+%chk=o2_singlet_rks.chk
+#p RB3LYP/def2TZVP Stable Geom=Check
+
+O2 step 2: closed-shell singlet (RKS) at the triplet geometry, stability test
+
+0 1
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%oldchk=o2_triplet.chk
+%chk=o2_singlet_bs.chk
+#p UB3LYP/def2TZVP Guess=Mix SCF=NoSymm Stable=Opt Geom=Check
+
+O2 step 3: open-shell broken-symmetry singlet (Ms=0) from Guess=Mix
+
+0 1
+

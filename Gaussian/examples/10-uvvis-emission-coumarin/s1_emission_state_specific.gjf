@@ -1,0 +1,27 @@
+! Chapter 10 example: state-specific (corrected linear-response, cLR) vertical emission
+! Follows the 2-step scheme of the official Gaussian SCRF page; uses IEFPCM, not SMD.
+! Needs coumarin_s1.chk from s1_opt_freq_emission.gjf
+! Emission energy = E(step 1, 'Total energy after correction') - E(step 2, SCF Done)
+%oldchk=coumarin_s1.chk
+%chk=coumarin_s1_clr.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/def2SVP TD=(NStates=6,Root=1) Geom=Check Guess=Read NoSymm
+   SCRF=(IEFPCM,Solvent=Ethanol,CorrectedLR,NonEquilibrium=Save)
+
+Coumarin S1 at S1 minimum, cLR equilibrium solvation, save slow solvent charges
+
+0 1
+
+--Link1--
+%oldchk=coumarin_s1_clr.chk
+%chk=coumarin_s0_at_s1.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/def2SVP Geom=Check Guess=Read NoSymm
+   SCRF=(IEFPCM,Solvent=Ethanol,NonEquilibrium=Read)
+
+Coumarin S0 at S1 geometry, non-equilibrium solvation read from the S1 step
+
+0 1
+

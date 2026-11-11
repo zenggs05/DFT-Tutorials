@@ -1,0 +1,64 @@
+! nacl_equil.inp - NVT equilibration of Na+ Cl- in water with the ion pair
+! held near contact by a harmonic RESTRAINT on the Na-Cl distance.
+! Chapter 15, step 1.  Target versions: CP2K 2023.1 ... 2026.2
+!
+! Default level is GFN1-xTB (cheap, minutes to hours); -E LEVEL=dft for PBE-D3.
+!   mpirun -np 16 cp2k.psmp -i nacl_equil.inp -o nacl_equil_xtb.out
+!   bash last_frame.sh nacl_equil_xtb-pos-1.xyz nacl_eq.xyz
+! The grid-built start structure is NOT equilibrated: run at least 5 ps here.
+
+@SET LEVEL ${LEVEL-xtb}
+@SET COORD ${COORD-nacl_water.xyz}
+
+&GLOBAL
+  PROJECT nacl_equil_${LEVEL}
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+@INCLUDE 'nacl_${LEVEL}_force_eval.inc'
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    ! 10000 x 0.5 fs = 5 ps
+    STEPS ${STEPS-10000}
+    TIMESTEP 0.5
+    TEMPERATURE 300.0
+    &THERMOSTAT
+      TYPE CSVR
+      REGION GLOBAL
+      &CSVR
+        ! short time constant for equilibration (fs)
+        TIMECON 50.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &CONSTRAINT
+    ! harmonic restraint K*(d - TARGET)^2 on COLVAR 1 (K in hartree/bohr^2)
+    &COLLECTIVE
+      COLVAR 1
+      INTERMOLECULAR T
+      TARGET [angstrom] 2.80
+      &RESTRAINT
+        K 0.05
+      &END RESTRAINT
+    &END COLLECTIVE
+  &END CONSTRAINT
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY OFF
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

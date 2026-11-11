@@ -1,0 +1,18 @@
+SYSTEM  = graphene 5x5x1 supercell (50 atoms) - single-point forces for phonopy
+
+PREC    = Accurate
+ENCUT   = 520
+EDIFF   = 1E-8
+NELMIN  = 5
+ALGO    = Normal
+ISMEAR  = 0            # semimetal: a small Gaussian width
+SIGMA   = 0.05
+LREAL   = .FALSE.
+ISYM    = 0
+
+IBRION  = -1
+NSW     = 0
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

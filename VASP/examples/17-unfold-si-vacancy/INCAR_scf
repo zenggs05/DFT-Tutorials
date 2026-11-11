@@ -1,0 +1,13 @@
+SYSTEM  = Si 3x3x3 supercell with one vacancy - SCF
+PREC    = Accurate
+ENCUT   = 320
+EDIFF   = 1E-6
+ISMEAR  = 0
+SIGMA   = 0.05
+ALGO    = Fast
+LREAL   = Auto
+NSW     = 0
+IBRION  = -1
+LCHARG  = .TRUE.
+LWAVE   = .FALSE.
+NCORE   = 4

@@ -1,0 +1,102 @@
+! nacl_dissociation_wtmetad.inp - well-tempered metadynamics of NaCl dissociation
+! in water, biasing the Na-Cl distance (COLVAR 1).  Chapter 15, step 2.
+! Target versions: CP2K 2023.1 ... 2026.2 (native CP2K metadynamics, no PLUMED)
+!
+! Needs nacl_eq.xyz from nacl_equil.inp.  Default level: PBE-D3(BJ).
+!   mpirun -np 64 cp2k.psmp -i nacl_dissociation_wtmetad.inp -o wtmetad_dft.out
+! Cheap pre-sampling with GFN1-xTB (100 ps):
+!   mpirun -np 16 cp2k.psmp -E LEVEL=xtb -E STEPS=200000 -i nacl_dissociation_wtmetad.inp -o wtmetad_xtb.out
+! Output: nacl_wtmetad_<LEVEL>-COLVAR.metadynLog, nacl_wtmetad_<LEVEL>-HILLS.metadynLog
+! Free-energy profile: python3 fes_from_hills.py nacl_wtmetad_dft-HILLS.metadynLog --bohr2ang
+! Continue a run: uncomment &EXT_RESTART (hills are stored in the restart file).
+
+@SET LEVEL ${LEVEL-dft}
+@SET COORD ${COORD-nacl_eq.xyz}
+
+&GLOBAL
+  PROJECT nacl_wtmetad_${LEVEL}
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+! &EXT_RESTART
+!   RESTART_FILE_NAME nacl_wtmetad_dft-1.restart
+! &END EXT_RESTART
+
+@INCLUDE 'nacl_${LEVEL}_force_eval.inc'
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    ! 40000 x 0.5 fs = 20 ps (DFT); use far more for converged profiles
+    STEPS ${STEPS-40000}
+    TIMESTEP 0.5
+    TEMPERATURE 300.0
+    &THERMOSTAT
+      TYPE CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON 100.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &FREE_ENERGY
+    METHOD METADYN
+    &METADYN
+      DO_HILLS T
+      ! one Gaussian every 40 MD steps (20 fs)
+      NT_HILLS 40
+      ! initial Gaussian height in hartree (4.0E-4 Ha = 1.05 kJ/mol)
+      WW 4.0E-4
+      ! well-tempered: bias factor gamma = (T + DELTA_T)/T = (300 + 1500)/300 = 6
+      WELL_TEMPERED T
+      DELTA_T 1500.0
+      &METAVAR
+        COLVAR 1
+        ! Gaussian width in INTERNAL units: bohr for a distance (0.35 bohr = 0.185 A)
+        SCALE 0.35
+        ! keep d(Na-Cl) below ~5.6 A (< L/2 = 6.21 A of the 12.42 A box)
+        &WALL
+          TYPE QUADRATIC
+          ! wall position in bohr (10.6 bohr = 5.61 A)
+          POSITION 10.6
+          &QUADRATIC
+            DIRECTION WALL_PLUS
+            ! K*(CV - POSITION)^2, K in hartree/bohr^2
+            K 0.05
+          &END QUADRATIC
+        &END WALL
+      &END METAVAR
+      &PRINT
+        &COLVAR
+          COMMON_ITERATION_LEVELS 3
+          &EACH
+            MD 1
+          &END EACH
+        &END COLVAR
+        &HILLS
+          COMMON_ITERATION_LEVELS 3
+          &EACH
+            MD 1
+          &END EACH
+        &END HILLS
+      &END PRINT
+    &END METADYN
+  &END FREE_ENERGY
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY OFF
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

@@ -1,0 +1,69 @@
+! ch3oh_kind_templates.inp - methanol single point using kind_templates.inc
+! Tutorial: CP2K chapter 3, section 10.  Works with CP2K 2023.x - 2026.2.
+!
+!   cp2k.ssmp -i ch3oh_kind_templates.inp -o ch3oh_dzvp.out
+!   cp2k.ssmp -E Q=TZV2P -i ch3oh_kind_templates.inp -o ch3oh_tzv2p.out
+!   cp2k.ssmp -e ch3oh_kind_templates.inp | grep -A3 "&KIND"     # see the expanded KINDs
+!
+! Geometry: approximate (not optimised), Angstrom.
+
+&GLOBAL
+  PROJECT ch3oh_${Q-DZVP}
+  RUN_TYPE ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QS
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    BASIS_SET_FILE_NAME BASIS_ADMM_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF 500
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &POISSON
+      PERIODIC NONE
+      POISSON_SOLVER MT
+    &END POISSON
+    &SCF
+      EPS_SCF 1.0E-6
+      MAX_SCF 30
+      &OT ON
+        MINIMIZER DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF ON
+        EPS_SCF 1.0E-6
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC [angstrom] 12.0 12.0 12.0
+      PERIODIC NONE
+    &END CELL
+    &COORD
+      C  -0.046520   0.663084   0.000000
+      O  -0.046520  -0.755748   0.000000
+      H  -1.086272   0.975538   0.000000
+      H   0.437547   1.071054   0.889097
+      H   0.437547   1.071054  -0.889097
+      H   0.861634  -1.034925   0.000000
+    &END COORD
+    &TOPOLOGY
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    @INCLUDE 'kind_templates.inc'
+  &END SUBSYS
+&END FORCE_EVAL

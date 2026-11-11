@@ -1,0 +1,33 @@
+! Chapter 11 example: indirect spin-spin coupling constants of ethanol (anti conformer)
+! NMR=(SpinSpin,Mixed): Fermi-contact term with a modified (uncontracted + tight) basis,
+! the other three terms with the route basis. Default isotopes: use the H-H couplings;
+! see README for couplings involving 13C.
+%chk=etoh_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-311+G(d,p) EmpiricalDispersion=GD3BJ Opt Freq
+
+Ethanol (anti) opt+freq, B3LYP-D3(BJ)/6-311+G(d,p)
+
+0 1
+ C      -1.012894     0.103762     0.116897
+ C       0.426069    -0.316378    -0.093435
+ O       1.261496     0.826907     0.009591
+ H      -1.309983     0.849384    -0.628010
+ H      -1.139273     0.568910     1.100139
+ H      -1.685279    -0.755560     0.043851
+ H       0.728655    -1.043556     0.665981
+ H       0.555645    -0.759303    -1.085447
+ H       2.175565     0.525833    -0.129567
+
+--Link1--
+%oldchk=etoh_opt.chk
+%chk=etoh_nmr_jj.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-311+G(d,p) NMR=(SpinSpin,Mixed) Geom=Check Guess=Read
+
+Ethanol shieldings + spin-spin couplings, B3LYP/6-311+G(d,p), Mixed FC scheme
+
+0 1
+

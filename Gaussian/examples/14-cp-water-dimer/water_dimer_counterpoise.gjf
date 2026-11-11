@@ -1,0 +1,57 @@
+%nprocshared=8
+%mem=8GB
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Counterpoise=2
+
+Water dimer step 1: CP-corrected interaction energy, B3LYP-D3(BJ)/def2-SVP
+
+0 1 0 1 0 1
+O(Fragment=1)       0.000000    0.000000    0.000000
+H(Fragment=1)       0.960000    0.000000    0.000000
+H(Fragment=1)      -0.240365    0.929422    0.000000
+O(Fragment=2)       2.910000    0.000000    0.000000
+H(Fragment=2)       3.230100   -0.492911    0.759062
+H(Fragment=2)       3.230100   -0.492911   -0.759062
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Counterpoise=2
+
+Water dimer step 2: CP-corrected interaction energy, B3LYP-D3(BJ)/def2-TZVP
+
+0 1 0 1 0 1
+O(Fragment=1)       0.000000    0.000000    0.000000
+H(Fragment=1)       0.960000    0.000000    0.000000
+H(Fragment=1)      -0.240365    0.929422    0.000000
+O(Fragment=2)       2.910000    0.000000    0.000000
+H(Fragment=2)       3.230100   -0.492911    0.759062
+H(Fragment=2)       3.230100   -0.492911   -0.759062
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+#p B3LYP/aug-cc-pVTZ EmpiricalDispersion=GD3BJ Counterpoise=2
+
+Water dimer step 3: CP-corrected interaction energy, B3LYP-D3(BJ)/aug-cc-pVTZ
+
+0 1 0 1 0 1
+O(Fragment=1)       0.000000    0.000000    0.000000
+H(Fragment=1)       0.960000    0.000000    0.000000
+H(Fragment=1)      -0.240365    0.929422    0.000000
+O(Fragment=2)       2.910000    0.000000    0.000000
+H(Fragment=2)       3.230100   -0.492911    0.759062
+H(Fragment=2)       3.230100   -0.492911   -0.759062
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%chk=h2o_monomer.chk
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Opt Freq
+
+Water monomer step 4: relaxed monomer for the deformation energy
+
+0 1
+O                   0.000000    0.000000    0.000000
+H                   0.960000    0.000000    0.000000
+H                  -0.240365    0.929422    0.000000
+

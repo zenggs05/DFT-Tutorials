@@ -1,0 +1,54 @@
+# Graphene (2D hexagonal, 120-degree convention a2 = (-a/2, a*sqrt(3)/2, 0)):
+# SCF + band structure G-M-K-G. Vacuum of 20 A along c. OpenMX 4.0.
+# scf.Kgrid 18 18 1 is divisible by 3, so the Gamma-centred grid (GCenter,
+# default in 4.0) contains the K point where the Dirac cone sits.
+
+System.CurrrentDirectory    ./
+System.Name                 graphene
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: dir containing PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  C   C6.0-s2p2d1   C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  C   0.000000000  0.000000000  0.5   2.0 2.0
+  2  C   0.666666667  0.333333333  0.5   2.0 2.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+   2.46000   0.00000   0.00000
+  -1.23000   2.13042   0.00000
+   0.00000   0.00000  20.00000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0
+scf.energycutoff            220.0
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   18 18 1
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-8
+
+MD.Type                     Nomd
+
+Band.dispersion             on
+Band.Nkpath                 3
+<Band.kpath
+  30   0.000000 0.000000 0.0    0.500000 0.000000 0.0    g  M
+  18   0.500000 0.000000 0.0    0.333333 0.333333 0.0    M  K
+  35   0.333333 0.333333 0.0    0.000000 0.000000 0.0    K  g
+Band.kpath>

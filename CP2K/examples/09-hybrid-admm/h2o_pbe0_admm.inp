@@ -1,0 +1,107 @@
+# Chapter 9, example 1: isolated H2O, PBE0 + ADMM geometry optimization
+# Target versions: CP2K 2023.1 ... 2026.2
+# Non-periodic molecule -> plain Coulomb operator for exact exchange, no truncation needed.
+# Basis/pseudopotentials: hybrid-optimised UZH sets (-PBE0- / GTH-PBE0-, aliases -HYB-).
+@SET PROJ h2o_pbe0_admm
+
+&GLOBAL
+  PROJECT ${PROJ}
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    BASIS_SET_FILE_NAME BASIS_ADMM_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &AUXILIARY_DENSITY_MATRIX_METHOD
+      ! explicit form (equivalent to ADMM1 with MO_DIAG purification)
+      METHOD BASIS_PROJECTION
+      ADMM_PURIFICATION_METHOD MO_DIAG
+      ! DEFAULT picks the PBE exchange correction that matches INTERACTION_POTENTIAL
+      EXCH_CORRECTION_FUNC DEFAULT
+    &END AUXILIARY_DENSITY_MATRIX_METHOD
+    &MGRID
+      CUTOFF 400
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+      EXTRAPOLATION ASPC
+    &END QS
+    &POISSON
+      PERIODIC NONE
+      POISSON_SOLVER MT
+    &END POISSON
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF 1.0E-7
+      MAX_SCF 30
+      &OT
+        MINIMIZER DIIS
+        PRECONDITIONER FULL_ALL
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-7
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      ! PBE0 = 0.75 PBE exchange + 0.25 HF exchange + 1.0 PBE correlation
+      &XC_FUNCTIONAL
+        &PBE
+          SCALE_X 0.75
+          SCALE_C 1.0
+        &END PBE
+      &END XC_FUNCTIONAL
+      &HF
+        FRACTION 0.25
+        &INTERACTION_POTENTIAL
+          POTENTIAL_TYPE COULOMB
+        &END INTERACTION_POTENTIAL
+        &SCREENING
+          EPS_SCHWARZ 1.0E-8
+          SCREEN_ON_INITIAL_P F
+        &END SCREENING
+        &MEMORY
+          ! MiB per MPI process
+          MAX_MEMORY 1000
+        &END MEMORY
+      &END HF
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 10.0 10.0 10.0
+      PERIODIC NONE
+    &END CELL
+    &COORD
+      O  0.000000  0.000000  0.119000
+      H  0.000000  0.763000 -0.477000
+      H  0.000000 -0.763000 -0.477000
+    &END COORD
+    &TOPOLOGY
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    &KIND O
+      BASIS_SET ORB TZVP-MOLOPT-PBE0-GTH-q6
+      BASIS_SET AUX_FIT admm-dzp-q6
+      POTENTIAL GTH-PBE0-q6
+    &END KIND
+    &KIND H
+      BASIS_SET ORB TZVP-MOLOPT-PBE0-GTH-q1
+      BASIS_SET AUX_FIT admm-dzp-q1
+      POTENTIAL GTH-PBE0-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 100
+  &END GEO_OPT
+&END MOTION

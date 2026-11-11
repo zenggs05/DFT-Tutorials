@@ -1,0 +1,63 @@
+SYSTEM  = annotated_template     # free text, echoed in OUTCAR
+#
+# INCAR_annotated_template - annotated starting point for VASP 6.x
+# ---------------------------------------------------------------------------
+# Syntax : TAG = value          one statement per line (or separate with ;)
+# Comment: everything after # or ! is ignored
+# Repeat : N*value              e.g. MAGMOM = 2*3.0 4*0
+# Logical: .TRUE. / .FALSE.     (T / F also accepted)
+# Rules  : no TAB characters, Unix (LF) line endings (run dos2unix INCAR),
+#          misspelled tags are silently ignored -> check the echo in OUTCAR
+# Values below are typical STARTING points, not converged settings
+# (see chapter 3). Lines starting with "# TAG" are inactive suggestions.
+# ---------------------------------------------------------------------------
+
+#==================== start / restart ====================
+ISTART  = 0          # 0 new start; 1 read WAVECAR (default 1 if WAVECAR exists)
+ICHARG  = 2          # 2 atomic densities; 1 read CHGCAR; 11 non-SCF with fixed CHGCAR
+# NWRITE = 2         # OUTCAR verbosity 0..3 (default 2)
+
+#==================== basis set and grids ====================
+PREC    = Accurate   # Normal (default) or Accurate (denser FFT grids)
+ENCUT   = 520        # eV; ALWAYS set explicitly; >= 1.3 x max(ENMAX) for cell relaxations
+LREAL   = .FALSE.    # .FALSE. for small cells / accurate energies; Auto for > ~30 atoms
+# LASPH  = .TRUE.    # non-spherical PAW terms: d/f elements, DFT+U, meta-GGA, vdW-DF, hybrids
+# ADDGRID = .TRUE.   # support grid for augmentation charges, less noisy forces
+
+#==================== electronic minimisation ====================
+ALGO    = Normal     # Normal (Davidson, default) | Fast (Davidson + RMM-DIIS) | All | Damped
+NELM    = 100        # max. SCF steps (default 60)
+# NELMIN = 4         # min. SCF steps per ionic step (default 2)
+EDIFF   = 1E-6       # SCF stopping criterion in eV (default 1E-4)
+
+#==================== occupations / smearing ====================
+ISMEAR  = 0          # 0 Gaussian | 1,2 Methfessel-Paxton (metals) | -5 tetrahedron (DOS)
+SIGMA   = 0.05       # eV; keep entropy T*S below ~1 meV/atom
+# EFERMI = MIDGAP    # VASP >= 6.4: Fermi level in the middle of the gap
+
+#==================== spin ====================
+# ISPIN  = 2         # spin polarised (default 1)
+# MAGMOM = 2*3.0 4*0 # initial moments: NIONS values (3*NIONS for vasp_ncl)
+
+#==================== ionic degrees of freedom ====================
+# IBRION = 2         # -1 none | 0 MD | 1 RMM-DIIS | 2 CG | 3 damped MD | 5,6 finite diff. | 7,8 DFPT
+# NSW    = 100       # max. ionic steps (default 0 = single point)
+# ISIF   = 2         # 2 ions | 3 ions + cell shape + volume | 4 ions + shape | 7 volume only
+# EDIFFG = -0.02     # negative: stop when all forces < |EDIFFG| eV/Angstrom
+# POTIM  = 0.5       # step scaling (relaxation) or time step in fs (MD)
+
+#==================== k points without a KPOINTS file ====================
+# KSPACING = 0.25    # 1/Angstrom; only used if NO KPOINTS file exists (default 0.5)
+# KGAMMA   = .TRUE.  # Gamma-centred automatic mesh (default)
+
+#==================== output ====================
+LWAVE   = .FALSE.    # WAVECAR (default .TRUE.); large file
+LCHARG  = .TRUE.     # CHGCAR and CHG (default .TRUE.)
+# LORBIT = 11        # PROCAR + lm-decomposed DOSCAR
+# NEDOS  = 3001      # number of DOS grid points (default 301)
+# LVHAR  = .TRUE.    # ionic + Hartree potential to LOCPOT (work functions)
+
+#==================== parallelisation (CPU builds) ====================
+# NCORE = 4          # cores working on one orbital; factor of cores per node
+# KPAR  = 2          # k-point groups; must divide the number of MPI ranks
+# NSIM  = 4          # bands optimised together (default 4; 16-32 on GPUs)

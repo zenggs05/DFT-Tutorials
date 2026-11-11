@@ -1,0 +1,17 @@
+# Si full relaxation (ions + cell) run under custodian
+# ASCII only. custodian may edit this file; originals are kept as INCAR.orig
+SYSTEM  = Si-custodian-demo
+PREC    = Accurate
+ENCUT   = 400        # > 1.3 x ENMAX(Si, about 245 eV): required for ISIF = 3 (Pulay stress)
+EDIFF   = 1E-6
+NELM    = 100
+ALGO    = Fast       # custodian falls back to Normal / All if the SCF does not converge
+ISMEAR  = 0
+SIGMA   = 0.05
+IBRION  = 2
+ISIF    = 3
+NSW     = 40
+EDIFFG  = -0.01
+LREAL   = .FALSE.
+LWAVE   = .FALSE.
+LCHARG  = .TRUE.

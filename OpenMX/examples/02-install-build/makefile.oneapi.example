@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------------------
+# OpenMX 4.0 makefile fragment: Intel oneAPI (icx/ifx via mpiicx/mpiifx)
+# + MKL (ScaLAPACK, BLACS for Intel MPI, FFTW3 interface) + Intel MPI
+# (see chapter 2, section 4)
+#
+# How to use:
+#   1. source /opt/intel/oneapi/setvars.sh ; echo $MKLROOT
+#   2. cd openmx4.0/source && cp makefile makefile.orig
+#   3. In makefile, comment out (#) the ACTIVE definitions of MKLROOT, CC, FC
+#      and LIB, including continuation lines that follow a trailing backslash.
+#      Do NOT touch the lines "CC += -I$(LIBELPADIR)" and "FC += -I$(LIBELPADIR)".
+#   4. Paste the lines below; set MKLROOT to the output of "echo $MKLROOT"
+#      if oneAPI is not installed under /opt/intel/oneapi.
+#   5. make clean && make install && make all
+#
+# Notes:
+#   -xHOST       optimizes for the CPU of the build machine. On AMD CPUs use
+#                -march=x86-64-v3 instead (recommended by the OpenMX manual).
+#   -lmkl_blacs_intelmpi_lp64 is for Intel MPI; with Open MPI use
+#                -lmkl_blacs_openmpi_lp64 (and the Open MPI wrappers).
+#   The official default additionally uses -ipo (longer link time) and
+#   -DLEAK_DETECT (developer memory-leak report); both are optional.
+#   If MKL lives in $(MKLROOT)/lib instead of $(MKLROOT)/lib/intel64,
+#   change the -L path accordingly.
+# ---------------------------------------------------------------------------
+MKLROOT = /opt/intel/oneapi/mkl/latest
+CC  = mpiicx -O3 -xHOST -fcommon -Wno-implicit-function-declaration -qopenmp -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw
+FC  = mpiifx -O3 -xHOST -qopenmp
+LIB = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lifcore -lmkl_blacs_intelmpi_lp64 -liomp5 -lpthread -lm -ldl

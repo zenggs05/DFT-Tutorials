@@ -1,0 +1,11 @@
+%nprocshared=8
+%mem=12GB
+%chk=h2_stretched_guess_fragment.chk
+#p UB3LYP/def2SVP Guess=Fragment=2
+
+Stretched H2 (2.0 A), broken-symmetry singlet from fragment guess
+
+0 1 0 2 0 -2
+H(Fragment=1)    0.000000    0.000000    0.000000
+H(Fragment=2)    0.000000    0.000000    2.000000
+

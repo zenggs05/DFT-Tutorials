@@ -1,0 +1,36 @@
+%nprocshared=8
+%mem=12GB
+%chk=cu_nh3_4_guess_read.chk
+#p UB3LYP/def2SVP EmpiricalDispersion=GD3BJ
+
+[Cu(NH3)4]2+ step 1: small basis (def2-SVP) to generate a guess
+
+2 2
+Cu    0.000000    0.000000    0.000000
+N     2.030000    0.000000    0.000000
+H     2.395535    0.000000    0.952252
+H     2.395535   -0.824674   -0.476126
+H     2.395535    0.824674   -0.476126
+N     0.000000    2.030000    0.000000
+H     0.000000    2.395535    0.952252
+H     0.824674    2.395535   -0.476126
+H    -0.824674    2.395535   -0.476126
+N    -2.030000    0.000000    0.000000
+H    -2.395535    0.000000    0.952252
+H    -2.395535    0.824674   -0.476126
+H    -2.395535   -0.824674   -0.476126
+N     0.000000   -2.030000    0.000000
+H     0.000000   -2.395535    0.952252
+H    -0.824674   -2.395535   -0.476126
+H     0.824674   -2.395535   -0.476126
+
+--Link1--
+%nprocshared=8
+%mem=12GB
+%chk=cu_nh3_4_guess_read.chk
+#p UB3LYP/def2TZVP EmpiricalDispersion=GD3BJ Geom=Check Guess=Read
+
+[Cu(NH3)4]2+ step 2: large basis (def2-TZVP), geometry and guess from chk
+
+2 2
+

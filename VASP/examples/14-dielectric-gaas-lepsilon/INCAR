@@ -1,0 +1,20 @@
+# Part A: electronic (ion-clamped) static dielectric tensor eps_inf,
+#         Born effective charges and clamped-ion piezoelectric tensor (DFPT)
+SYSTEM   = GaAs LEPSILON (DFPT, electronic part)
+PREC     = Accurate
+ENCUT    = 400         # Ga_d/As: ~1.4 x max(ENMAX)
+EDIFF    = 1E-8
+ISMEAR   = 0
+SIGMA    = 0.01
+LREAL    = .FALSE.
+
+LEPSILON = .TRUE.      # linear response to an electric field (Sternheimer equations)
+LRPA     = .FALSE.     # default: local fields at Hartree + xc level; Born charges printed
+
+IBRION   = -1
+NSW      = 0
+LWAVE    = .FALSE.
+LCHARG   = .FALSE.
+
+# Parallelisation: do NOT set NCORE or NPAR for LEPSILON runs (keep NCORE = 1).
+# KPAR may be used.

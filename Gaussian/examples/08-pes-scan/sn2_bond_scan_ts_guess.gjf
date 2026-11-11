@@ -1,0 +1,17 @@
+%chk=sn2_scan.chk
+%nprocshared=8
+%mem=8GB
+#p B3LYP/6-31+G(d) EmpiricalDispersion=GD3BJ Opt=ModRedundant NoSymm
+
+Cl- + CH3Br relaxed scan of the C...Cl distance, 3.2 -> 1.8 A, to obtain a TS guess
+
+-1 1
+C     0.000000    0.000000    0.000000
+Cl    0.000000    0.000000   -3.200000
+Br    0.000000    0.000000    1.990000
+H     1.030000    0.000000   -0.325000
+H    -0.515000    0.892006   -0.325000
+H    -0.515000   -0.892006   -0.325000
+
+B 1 2 S 14 -0.1
+

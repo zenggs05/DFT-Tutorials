@@ -1,0 +1,5 @@
+Gamma point only (96-atom liquid cell) -> use vasp_gam
+0
+Gamma
+  1 1 1
+  0 0 0

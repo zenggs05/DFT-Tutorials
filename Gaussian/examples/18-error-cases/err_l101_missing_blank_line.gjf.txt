@@ -1,0 +1,8 @@
+#p HF/6-31G(d) SP
+
+Water: this file deliberately ends right after the last atom (no blank line)
+
+0 1
+O     0.000000    0.000000    0.117300
+H     0.000000    0.757200   -0.469200
+H     0.000000   -0.757200   -0.469200

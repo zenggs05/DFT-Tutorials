@@ -1,0 +1,18 @@
+SYSTEM     = bcc Fe, collinear spin-polarised reference for MAE (run with vasp_std)
+
+PREC       = Accurate
+ENCUT      = 450
+EDIFF      = 1E-8            # MAE is a micro-eV quantity: converge tightly
+LREAL      = .FALSE.
+LASPH      = .TRUE.
+GGA_COMPAT = .FALSE.         # restores full lattice symmetry of the GGA gradient field
+ISMEAR     = -5              # tetrahedron (Bloechl); Gamma-centred mesh required
+ISPIN      = 2
+MAGMOM     = 3.0
+LORBIT     = 11
+LMAXMIX    = 4               # store d one-centre densities in CHGCAR (needed by ICHARG=11)
+NBANDS     = 16              # the SOC runs use twice this number (run_mae.sh checks it)
+
+NSW        = 0
+LCHARG     = .TRUE.
+LWAVE      = .FALSE.

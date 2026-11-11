@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------
+# .gitignore template for repositories that contain VASP calculations.
+# Copy (or append) to the .gitignore at the root of your repository.
+# ---------------------------------------------------------------------
+
+# Licensed material - never publish
+POTCAR
+POTCAR*
+!POTCAR.md
+potpaw*/
+makefile.include*
+!makefile.include*.changes
+
+# Large binary / restart files
+WAVECAR
+WAVEDER
+WFULL*
+W*.tmp
+CHGCAR
+CHGCAR_*
+CHG
+AECCAR*
+ELFCAR
+PARCHG*
+LOCPOT
+vaspout.h5
+vaspwave.h5
+*.h5
+ML_AB
+ML_ABN
+ML_FF
+ML_FFN
+
+# Verbose text output (keep a summary instead, or compress selected files)
+OUTCAR
+OUTCAR.*
+vasprun.xml
+vasprun.xml.*
+PROCAR*
+DOSCAR*
+EIGENVAL*
+XDATCAR
+PCDAT
+REPORT
+IBZKPT
+OSZICAR.*
+vasp.out
+std_err.txt
+slurm-*.out
+*.o[0-9]*
+*.e[0-9]*
+
+# Third-party outputs that grow quickly
+*.lobster
+lobsterout
+wannier90.amn
+wannier90.mmn
+wannier90.eig
+wannier90.chk
+UNK*
+CHGCAR_sum
+BvAt*.dat
+Bvol*.dat
+
+# Python / editor
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/

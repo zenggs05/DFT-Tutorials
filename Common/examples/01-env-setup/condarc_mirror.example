@@ -1,0 +1,9 @@
+# ~/.condarc example: conda-forge only, optional mirror for users in China.
+# Miniforge already defaults to conda-forge; the mirror lines are optional.
+channels:
+  - conda-forge
+channel_priority: strict
+show_channel_urls: true
+# --- optional: TUNA (Tsinghua University) mirror of conda-forge ---
+# custom_channels:
+#   conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud

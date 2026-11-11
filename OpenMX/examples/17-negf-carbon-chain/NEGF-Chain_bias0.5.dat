@@ -1,0 +1,96 @@
+#
+# NEGF Step 2 (+ Step 3, automatic): carbon chain L0|C0|R0, DFT-Tutorials OpenMX chapter 17
+# Finite bias 0.5 V. Lead chemical potentials differ by 0.5 eV; current in negf-chain-0.5.current.
+# L0 = 4 atoms (x = 0.0 ... 4.5), C0 = 8 atoms (x = 6.0 ... 16.5), R0 = 4 atoms (x = 18.0 ... 22.5).
+# L0 and R0 are exact copies of the Step 1 cell; their y, z coordinates equal those of Step 1.
+# Atoms.UnitVectors is NOT given: the bc-plane cell is taken from lead-chain.hks.
+# Only Ang or AU coordinates are allowed (no FRAC) in NEGF calculations.
+#
+
+System.CurrrentDirectory      ./
+System.Name                   negf-chain-0.5
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              1           # cube files (tden, eigenchannels, current density)
+
+Species.Number                1
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2d1    C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                  8
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+     1  C       6.000000     5.000000     5.000000    2.0 2.0
+     2  C       7.500000     5.000000     5.000000    2.0 2.0
+     3  C       9.000000     5.000000     5.000000    2.0 2.0
+     4  C      10.500000     5.000000     5.000000    2.0 2.0
+     5  C      12.000000     5.000000     5.000000    2.0 2.0
+     6  C      13.500000     5.000000     5.000000    2.0 2.0
+     7  C      15.000000     5.000000     5.000000    2.0 2.0
+     8  C      16.500000     5.000000     5.000000    2.0 2.0
+Atoms.SpeciesAndCoordinates>
+
+LeftLeadAtoms.Number          4
+<LeftLeadAtoms.SpeciesAndCoordinates
+     1  C       0.000000     5.000000     5.000000    2.0 2.0
+     2  C       1.500000     5.000000     5.000000    2.0 2.0
+     3  C       3.000000     5.000000     5.000000    2.0 2.0
+     4  C       4.500000     5.000000     5.000000    2.0 2.0
+LeftLeadAtoms.SpeciesAndCoordinates>
+
+RightLeadAtoms.Number         4
+<RightLeadAtoms.SpeciesAndCoordinates
+     1  C      18.000000     5.000000     5.000000    2.0 2.0
+     2  C      19.500000     5.000000     5.000000    2.0 2.0
+     3  C      21.000000     5.000000     5.000000    2.0 2.0
+     4  C      22.500000     5.000000     5.000000    2.0 2.0
+RightLeadAtoms.SpeciesAndCoordinates>
+
+scf.XcType                    GGA-PBE     # identical in Step 1 and Step 2
+scf.SpinPolarization          off
+scf.ElectronicTemperature     300.0       # K, identical in Step 1 and Step 2
+scf.energycutoff              220.0       # Ry, identical in Step 1 and Step 2 (same bc-plane grid)
+scf.maxIter                   300
+scf.EigenvalueSolver          NEGF
+scf.Mixing.Type               RMM-DIISK
+scf.Init.Mixing.Weight        0.02
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.05
+scf.Mixing.History            30
+scf.Mixing.StartPulay         20
+scf.criterion                 1.0e-7      # NEGF: applied to NormRD (not dUele)
+
+#
+# Step 2: NEGF SCF
+#
+NEGF.filename.hks.l           lead-chain.hks
+NEGF.filename.hks.r           lead-chain.hks
+NEGF.Num.Poles                150         # contour-integration poles (equilibrium part)
+NEGF.scf.Kgrid                1 1         # k points along b and c (isolated chain)
+NEGF.SCF.Iter.Band            10          # first SCF steps with periodic band diagonalisation
+NEGF.Poisson.Solver           FD          # FD (default, exact lead boundary) | FFT (often easier SCF)
+NEGF.bias.voltage             0.5         # source-drain bias (eV = V)
+NEGF.bias.neq.im.energy       0.01        # eV
+NEGF.bias.neq.energy.step     0.02        # eV
+
+#
+# Step 3: transmission, current, eigenchannels (runs right after Step 2)
+#
+NEGF.tran.Analysis            on
+NEGF.tran.energyrange         -5.0 5.0 1.0e-3   # eV relative to mu(left lead); 3rd value = imaginary part
+NEGF.tran.energydiv           1001
+NEGF.tran.Kgrid               1 1
+NEGF.tran.CurrentDensity      on
+NEGF.tran.Channel             on
+NEGF.Channel.Nkpoint          1
+<NEGF.Channel.kpoint
+  0.0  0.0
+NEGF.Channel.kpoint>
+NEGF.Channel.Nenergy          1
+<NEGF.Channel.energy
+  0.0
+NEGF.Channel.energy>
+NEGF.Channel.Num              4
+
+MD.Type                       Nomd

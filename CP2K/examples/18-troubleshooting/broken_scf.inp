@@ -1,0 +1,74 @@
+# DELIBERATELY BROKEN INPUT - debugging exercise of chapter 18. Do not use for production.
+#
+# fcc Cu, 4-atom conventional cell (a = 3.615 A). The file contains six typical
+# mistakes (A-F, marked below). Run it, read the error, fix ONE problem, run again:
+#   cp2k.psmp -c broken_scf.inp           # parser errors first (A, B on CP2K 2026.2)
+#   cp2k.psmp -i broken_scf.inp -o broken_scf.out
+# The corrected version is broken_scf_fixed.inp; README.md explains every step.
+
+&GLOBAL
+  PROJECT  cu_broken
+  RUN_TYPE ENERGY
+&END GLOBAL
+
+# leftover from an old cell optimisation input
+&MOTION
+  &CELL_OPT
+    # (A) removed in CP2K 2026.2: "found an unknown keyword TYPE in section CELL_OPT"
+    TYPE DIRECT_CELL_OPT
+    KEEP_ANGLES T
+  &END CELL_OPT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     500
+      REL_CUTOFF 60
+    &END MGRID
+    &KPOINTS
+      SCHEME MONKHORST-PACK 8 8 8
+    &END KPOINTS
+    &SCF
+      EPS_SCF 1.0E-7
+      MAX_SCF 30
+      # (D) OT cannot be combined with k-points (CP2K <= 2026.2)
+      &OT ON
+        MINIMIZER DIIS
+      &END OT
+      # (F) a metal without smearing, without unoccupied states, without a good mixer
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+      # (B) pre-2026.2 PDOS syntax: "unknown subsection PDOS of section PRINT" in 2026.2
+      &PDOS
+        NLUMO -1
+      &END PDOS
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 3.615 3.615 3.615
+      PERIODIC XYZ
+    &END CELL
+    &COORD
+      SCALED
+      Cu  0.0  0.0  0.0
+      Cu  0.0  0.5  0.5
+      Cu  0.5  0.0  0.5
+      Cu  0.5  0.5  0.0
+    &END COORD
+    &KIND Cu
+      # (C) this basis name exists in BASIS_MOLOPT, not in BASIS_MOLOPT_UZH
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      # (E) q1 pseudopotential, but every Cu basis in BASIS_MOLOPT_UZH is a q11 basis
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

@@ -1,0 +1,24 @@
+SYSTEM  = MoS2 monolayer, static run: band edges vs vacuum level
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-7
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+ISMEAR  = 0
+SIGMA   = 0.05
+IVDW    = 12
+
+LVHAR   = .TRUE.         # LOCPOT = ionic + Hartree potential (no xc) -> flat vacuum level
+LORBIT  = 11
+NEDOS   = 2001
+
+# Optional, VASP >= 6.4.3: let VASP average the vacuum potential itself.
+# The monolayer is symmetric, so no dipole correction (LDIPOL) is needed.
+#IDIPOL    = 3
+#LVACPOTAV = .TRUE.
+
+IBRION  = -1
+NSW     = 0
+LWAVE   = .FALSE.
+LCHARG  = .TRUE.

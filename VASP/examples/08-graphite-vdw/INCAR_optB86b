@@ -1,0 +1,26 @@
+SYSTEM   = graphite, optB86b-vdW (non-local vdW-DF)
+
+PREC     = Accurate
+ENCUT    = 520
+EDIFF    = 1E-6
+LREAL    = .FALSE.
+ISMEAR   = 0
+SIGMA    = 0.05
+
+# ---- optB86b-vdW: optimised B86b exchange + vdW-DF non-local correlation ----
+GGA      = MK
+PARAM1   = 0.1234
+PARAM2   = 1.0
+AGGAC    = 0.0           # remove PBE gradient correction to correlation
+LUSE_VDW = .TRUE.        # non-local correlation (Dion kernel)
+LASPH    = .TRUE.        # recommended for all vdW-DF functionals
+# VASP <= 6.4.2: copy vdw_kernel.bindat into this directory (from the VASP portal);
+# VASP >= 6.4.3: the kernel is generated quickly on the fly if missing.
+
+IBRION   = 2
+ISIF     = 3
+NSW      = 80
+EDIFFG   = -0.005
+
+LWAVE    = .FALSE.
+LCHARG   = .FALSE.

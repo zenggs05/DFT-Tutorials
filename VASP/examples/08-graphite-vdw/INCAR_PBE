@@ -1,0 +1,16 @@
+SYSTEM  = graphite, plain PBE (no dispersion) - reference that FAILS for interlayer binding
+
+PREC    = Accurate
+ENCUT   = 520            # 1.3 x ENMAX(C = 400 eV): needed for ISIF = 3 (Pulay stress)
+EDIFF   = 1E-6
+LREAL   = .FALSE.
+ISMEAR  = 0              # graphite is a semimetal; small Gaussian smearing is safe
+SIGMA   = 0.05
+
+IBRION  = 2
+ISIF    = 3              # relax a and c
+NSW     = 80
+EDIFFG  = -0.005
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

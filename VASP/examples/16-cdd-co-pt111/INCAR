@@ -1,0 +1,29 @@
+SYSTEM  = CDD single point (identical file for AB, slab and CO)
+
+# ---- electronic: must be identical in all three runs ----
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-6
+ISMEAR  = 1
+SIGMA   = 0.1
+LREAL   = Auto
+ALGO    = Fast
+NELM    = 120
+ISPIN   = 1
+
+# ---- single point, no relaxation of the fragments ----
+NSW     = 0
+IBRION  = -1
+
+# ---- output ----
+LCHARG  = .TRUE.
+LWAVE   = .FALSE.
+
+# ---- fine FFT grid: run_cdd.sh copies the values of AB/OUTCAR into slab/ and co/ ----
+# NGXF = ...
+# NGYF = ...
+# NGZF = ...
+
+# ---- parallelization (edit for your machine) ----
+NCORE   = 4
+KPAR    = 2

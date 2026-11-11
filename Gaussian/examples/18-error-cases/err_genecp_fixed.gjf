@@ -1,0 +1,22 @@
+%chk=pdcl4.chk
+#p B3LYP/GenECP SP
+
+[PdCl4]2- fixed: Cl 6-31+G(d); Pd LANL2DZ basis plus LANL2DZ ECP
+
+-2 1
+Pd    0.000000    0.000000    0.000000
+Cl    2.330000    0.000000    0.000000
+Cl   -2.330000    0.000000    0.000000
+Cl    0.000000    2.330000    0.000000
+Cl    0.000000   -2.330000    0.000000
+
+Cl 0
+6-31+G(d)
+****
+Pd 0
+LANL2DZ
+****
+
+Pd 0
+LANL2DZ
+

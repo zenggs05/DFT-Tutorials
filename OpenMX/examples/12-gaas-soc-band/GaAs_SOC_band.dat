@@ -1,0 +1,61 @@
+#
+# GaAs (zinc blende), band structure with spin-orbit coupling (fully relativistic)
+# Target: OpenMX 4.0 + patch 4.0.1, database DFT_DATA19 (j-dependent VPS)
+# a = 5.653 Ang (experimental lattice constant)
+#
+System.CurrrentDirectory    ./
+System.Name                 gaas_soc
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+# Standard basis of the DFT_DATA19 table; Ga_PBE19: 13, As_PBE19: 15 valence electrons
+Species.Number              2
+<Definition.of.Atomic.Species
+  Ga   Ga7.0-s3p2d2   Ga_PBE19
+  As   As7.0-s3p2d2   As_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Ga   0.00  0.00  0.00   6.5  6.5
+  2  As   0.25  0.25  0.25   7.5  7.5
+Atoms.SpeciesAndCoordinates>
+
+# fcc primitive vectors a/2(1,1,0), a/2(1,0,1), a/2(0,1,1)
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  2.8265   2.8265   0.0000
+  2.8265   0.0000   2.8265
+  0.0000   2.8265   2.8265
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        nc         # SOC requires the noncollinear framework
+scf.SpinOrbit.Coupling      on         # on: fully relativistic
+scf.EigenvalueSolver        Band
+scf.Kgrid                   8 8 8
+scf.energycutoff            200.0
+scf.ElectronicTemperature   300.0
+scf.maxIter                 200
+scf.criterion               1.0e-9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.40
+scf.Mixing.History          30
+scf.Mixing.StartPulay       6
+
+MD.Type                     Nomd
+
+# Band path L-G-X-U|K-G; k points in units of the reciprocal vectors of the primitive cell:
+# L=(1/2,1/2,1/2)  X=(1/2,1/2,0)  U=(5/8,5/8,1/4)  K=(3/4,3/8,3/8)
+Band.dispersion             on
+Band.Nkpath                 4
+<Band.kpath
+  30  0.500 0.500 0.500   0.000 0.000 0.000   L  G
+  35  0.000 0.000 0.000   0.500 0.500 0.000   G  X
+  12  0.500 0.500 0.000   0.625 0.625 0.250   X  U
+  37  0.750 0.375 0.375   0.000 0.000 0.000   K  G
+Band.kpath>

@@ -1,0 +1,33 @@
+! Chapter 12 example: pyridine, full Mulliken population and built-in NBO 3.1 analysis
+! Step 1: opt+freq   Step 2: single point with Pop=(Full,NBO)
+%chk=pyridine_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt Freq
+
+Pyridine opt+freq, B3LYP-D3(BJ)/def2-SVP
+
+0 1
+ C      -0.260785     1.152220     0.077153
+ C       1.064933     0.732616     0.042780
+ C       1.320285    -0.626437    -0.047956
+ N       0.355378    -1.570155    -0.105138
+ C      -0.922176    -1.132515    -0.069824
+ C      -1.276943     0.204101     0.019943
+ H      -0.500038     2.209301     0.147935
+ H       1.879687     1.446327     0.085592
+ H       2.338357    -1.003716    -0.077975
+ H      -1.678817    -1.910312    -0.117148
+ H      -2.319881     0.498569     0.044638
+
+--Link1--
+%oldchk=pyridine_opt.chk
+%chk=pyridine_nbo.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/def2TZVP Pop=(Full,NBO) Geom=Check Guess=Read
+
+Pyridine NBO analysis, B3LYP/def2-TZVP
+
+0 1
+

@@ -1,0 +1,19 @@
+SYSTEM  = graphene primitive cell - in-plane relaxation before phonons
+
+PREC    = Accurate
+ENCUT   = 520          # ~1.3 x ENMAX(C ~400 eV)
+EDIFF   = 1E-8
+ALGO    = Normal
+ISMEAR  = 0
+SIGMA   = 0.05
+LREAL   = .FALSE.
+
+IBRION  = 2
+ISIF    = 3
+LATTICE_CONSTRAINTS = .TRUE. .TRUE. .FALSE.   # VASP >= 6.4: relax a1, a2 only, keep the vacuum
+# Older VASP: delete the line above, use ISIF = 2 and scan a (E-a curve) instead.
+NSW     = 60
+EDIFFG  = -1E-3
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

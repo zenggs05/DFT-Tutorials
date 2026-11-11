@@ -1,0 +1,16 @@
+%chk=h2o_nh3_cp.chk
+%mem=2GB
+%nprocshared=4
+#p B3LYP/6-31+G(d,p) EmpiricalDispersion=GD3BJ Counterpoise=2
+
+water ammonia complex, counterpoise corrected single point
+
+0 1 0 1 0 1
+O(Fragment=1)     0.000000    0.000000   -2.980000
+H(Fragment=1)     0.000000    0.000000   -2.010000
+H(Fragment=1)     0.929422    0.000000   -3.220365
+N(Fragment=2)     0.000000    0.000000    0.000000
+H(Fragment=2)     0.940000    0.000000    0.380000
+H(Fragment=2)    -0.470000    0.814064    0.380000
+H(Fragment=2)    -0.470000   -0.814064    0.380000
+

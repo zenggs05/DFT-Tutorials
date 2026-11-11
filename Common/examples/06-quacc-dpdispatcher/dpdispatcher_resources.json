@@ -1,0 +1,21 @@
+{
+    "number_node": 1,
+    "cpu_per_node": 32,
+    "gpu_per_node": 0,
+    "queue_name": "cpu",
+    "group_size": 1,
+    "custom_flags": [
+        "#SBATCH --time=02:00:00",
+        "#SBATCH --cpus-per-task=1"
+    ],
+    "module_list": [
+        "intel-oneapi",
+        "vasp/6.5.1"
+    ],
+    "envs": {
+        "OMP_NUM_THREADS": "1"
+    },
+    "prepend_script": [
+        "ulimit -s unlimited"
+    ]
+}

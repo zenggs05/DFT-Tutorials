@@ -1,0 +1,62 @@
+! plumed_metad.inp - the same well-tempered metadynamics as
+! nacl_dissociation_wtmetad.inp, but with PLUMED as the bias engine.
+! Chapter 15, step 2b.  Needs a CP2K built with PLUMED: "cp2k.psmp -v" must
+! list "plumed2" among the cp2kflags (toolchain: --with-plumed=install;
+! CMake: -DCP2K_USE_PLUMED=ON).
+!
+!   mpirun -np 64 cp2k.psmp -i plumed_metad.inp -o plumed_metad.out
+!   mpirun -np 16 cp2k.psmp -E LEVEL=xtb -E STEPS=200000 -i plumed_metad.inp -o plumed_metad_xtb.out
+! PLUMED writes HILLS, COLVAR (as named in plumed.dat) and its log PLUMED.OUT.
+! Free energy: plumed sum_hills --hills HILLS --mintozero --outfile fes.dat
+
+@SET LEVEL ${LEVEL-dft}
+@SET COORD ${COORD-nacl_eq.xyz}
+
+&GLOBAL
+  PROJECT nacl_plumed_${LEVEL}
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+@INCLUDE 'nacl_${LEVEL}_force_eval.inc'
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    STEPS ${STEPS-40000}
+    TIMESTEP 0.5
+    TEMPERATURE 300.0
+    &THERMOSTAT
+      TYPE CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON 100.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &FREE_ENERGY
+    METHOD METADYN
+    &METADYN
+      ! everything else (CVs, hills, walls, output) is defined in plumed.dat;
+      ! the CP2K &COLVAR sections in the include file are simply not used here
+      USE_PLUMED T
+      PLUMED_INPUT_FILE plumed.dat
+    &END METADYN
+  &END FREE_ENERGY
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY OFF
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

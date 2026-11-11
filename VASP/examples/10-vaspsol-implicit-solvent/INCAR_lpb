@@ -1,0 +1,29 @@
+SYSTEM  = CO/Pt(111) top - step 3 (optional): linearised Poisson-Boltzmann electrolyte
+# Requires VASPsol. Start from the WAVECAR of step 2.
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 300
+ISMEAR  = 1
+SIGMA   = 0.10
+ISPIN   = 1
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+
+ISTART  = 1
+
+LSOL       = .TRUE.
+EB_K       = 78.4
+TAU        = 0.000525
+LAMBDA_D_K = 3.0       # Debye screening length in A (about 1 M of a 1:1 electrolyte)
+# The constant FERMI_SHIFT printed to stdout must be added to E_fermi to put the
+# potential deep in the electrolyte at zero (see the VASPsol documentation).
+
+IBRION  = -1
+NSW     = 0
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

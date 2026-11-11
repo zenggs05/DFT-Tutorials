@@ -1,0 +1,6 @@
+%nprocshared=8
+%mem=12GB
+%oldchk=h2o_opt_freq_raman.chk
+%chk=h2o_readfc_rethermo.chk
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Freq=ReadFC Geom=AllCheck Guess=Read Temperature=298.15 Pressure=24.4654
+

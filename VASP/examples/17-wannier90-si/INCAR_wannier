@@ -1,0 +1,17 @@
+SYSTEM  = Si non-SCF + VASP2WANNIER90 interface
+# needs a VASP executable compiled with -DVASP2WANNIER90 (linked to Wannier90 2.x/3.x)
+PREC    = Accurate
+ENCUT   = 400            # identical to the SCF run
+ISMEAR  = 0
+SIGMA   = 0.05
+ICHARG  = 11             # density fixed from the SCF CHGCAR
+ISYM    = -1             # Wannier90 needs the full uniform k mesh (no symmetry reduction)
+NBANDS  = 16             # 4 valence + 12 conduction bands for the disentanglement
+NUM_WANN = 8             # 8 sp3 Wannier functions (VASP >= 6.2 writes num_wann from this tag)
+LWANNIER90 = .TRUE.      # write wannier90.win/.amn/.mmn/.eig for a standalone Wannier90 run
+# LWRITE_UNK = .TRUE.    # needed only for plotting the Wannier functions (wannier_plot)
+# LWANNIER90_RUN = .TRUE.  # alternative: run Wannier90 in library mode inside VASP
+NSW     = 0
+IBRION  = -1
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.

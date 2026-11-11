@@ -1,0 +1,56 @@
+! Chapter 12 example: basis-set dependence of Mulliken charges (Hirshfeld/CM5 for comparison)
+! Needs pyridine_opt.chk from pyridine_pop_nbo.gjf; same geometry, five basis sets
+%oldchk=pyridine_opt.chk
+%chk=pyridine_sto3g.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/STO-3G Pop=Hirshfeld Geom=Check
+
+Pyridine Mulliken vs Hirshfeld/CM5 charges, B3LYP/STO-3G
+
+0 1
+
+--Link1--
+%oldchk=pyridine_opt.chk
+%chk=pyridine_631gd.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-31G(d) Pop=Hirshfeld Geom=Check
+
+Pyridine Mulliken vs Hirshfeld/CM5 charges, B3LYP/6-31G(d)
+
+0 1
+
+--Link1--
+%oldchk=pyridine_opt.chk
+%chk=pyridine_6311ppgdp.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-311++G(d,p) Pop=Hirshfeld Geom=Check
+
+Pyridine Mulliken vs Hirshfeld/CM5 charges, B3LYP/6-311++G(d,p)
+
+0 1
+
+--Link1--
+%oldchk=pyridine_opt.chk
+%chk=pyridine_def2tzvp.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/def2TZVP Pop=Hirshfeld Geom=Check
+
+Pyridine Mulliken vs Hirshfeld/CM5 charges, B3LYP/def2TZVP
+
+0 1
+
+--Link1--
+%oldchk=pyridine_opt.chk
+%chk=pyridine_augccpvtz.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/Aug-cc-pVTZ Pop=Hirshfeld Geom=Check
+
+Pyridine Mulliken vs Hirshfeld/CM5 charges, B3LYP/Aug-cc-pVTZ
+
+0 1
+

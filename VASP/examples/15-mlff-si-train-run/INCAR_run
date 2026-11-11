@@ -1,0 +1,27 @@
+# Stage 3: production MD with the refitted force field only (no DFT).
+# Needs: cp ML_FFN ML_FF   (the ML_FFN from stage 2)
+SYSTEM  = Si64 MLFF production NpT 800 K
+
+PREC    = Normal
+ENCUT   = 350          # orbitals are still initialised but not used
+ISMEAR  = 0
+SIGMA   = 0.05
+ISYM    = 0
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+
+IBRION  = 0
+MDALGO  = 3
+ISIF    = 3
+TEBEG   = 800
+TEEND   = 800
+POTIM   = 2.0
+NSW     = 100000       # 200 ps
+LANGEVIN_GAMMA   = 1.0 # weaker friction for production
+LANGEVIN_GAMMA_L = 10.0
+PMASS   = 1000
+
+ML_LMLFF    = .TRUE.
+ML_MODE     = run
+ML_OUTBLOCK = 10       # write output every 10 steps (default 10 since VASP 6.6)
+ML_ESTBLOCK = 50       # spilling factor every 50 steps (VASP <= 6.5.0: ML_IERR)

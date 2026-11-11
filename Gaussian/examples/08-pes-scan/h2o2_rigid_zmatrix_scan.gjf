@@ -1,0 +1,18 @@
+%chk=h2o2_rigid_scan.chk
+%nprocshared=4
+%mem=4GB
+#p B3LYP/6-311+G(d,p) Scan NoSymm
+
+H2O2 rigid scan of the H-O-O-H dihedral, 0 to 360 deg in 10 deg steps
+
+0 1
+H
+O 1 ROH
+O 2 ROO 1 AOOH
+H 3 ROH 2 AOOH 1 DHOOH
+
+ROH 0.968
+ROO 1.452
+AOOH 100.5
+DHOOH 0.0 36 10.0
+

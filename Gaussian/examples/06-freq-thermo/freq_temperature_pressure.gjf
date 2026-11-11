@@ -1,0 +1,15 @@
+%nprocshared=8
+%mem=12GB
+%chk=freq_temperature_pressure.chk
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt Freq Temperature=373.15 Pressure=2.0
+
+Methanol opt + freq, thermochemistry at 373.15 K and 2.0 atm
+
+0 1
+C    -0.370577     0.019773    -0.009266
+O     0.900681    -0.531378    -0.299847
+H    -0.521270     0.039918     1.072865
+H    -0.431098     1.032498    -0.415279
+H    -1.141363    -0.602000    -0.470688
+H     1.563626     0.041188     0.122216
+

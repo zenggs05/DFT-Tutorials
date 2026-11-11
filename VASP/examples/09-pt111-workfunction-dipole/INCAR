@@ -1,0 +1,29 @@
+SYSTEM    = Pt(111) slab: work function with dipole correction (static)
+
+# ---- electronic ----
+PREC      = Accurate
+ENCUT     = 400
+EDIFF     = 1E-6          # an unconverged dipole correction gives wrong potentials
+NELM      = 200
+LREAL     = .FALSE.
+ISMEAR    = 1
+SIGMA     = 0.10
+ISPIN     = 1
+AMIN      = 0.01          # damps charge sloshing between the two slab sides
+
+# ---- static ----
+IBRION    = -1
+NSW       = 0
+
+# ---- dipole correction along a3 ----
+LDIPOL    = .TRUE.        # correct potential AND forces (IDIPOL alone: energy only)
+IDIPOL    = 3
+DIPOL     = 0.5 0.5 0.5   # centre of mass of the slab (direct coordinates)
+
+# ---- potential output ----
+LVHAR     = .TRUE.        # LOCPOT = ionic + Hartree (no xc): flattest vacuum level
+LVACPOTAV = .TRUE.        # VASP >= 6.4.3: vacuum levels of both sides in OUTCAR
+#WRT_POTENTIAL = hartree ionic   # VASP >= 6.4.3: also store potentials in vaspout.h5
+
+LWAVE     = .FALSE.
+LCHARG    = .FALSE.

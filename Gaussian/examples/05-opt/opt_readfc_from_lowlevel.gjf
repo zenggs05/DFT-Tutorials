@@ -1,0 +1,29 @@
+%nprocshared=8
+%mem=12GB
+%chk=glycine_readfc.chk
+#p B3LYP/def2SVP EmpiricalDispersion=GD3BJ Opt Freq
+
+Glycine step 1: low-level opt + freq (provides an exact Hessian in the chk)
+
+0 1
+N    -1.634151     0.328147     0.190861
+C    -0.512051    -0.572745    -0.133908
+C     0.822684     0.147488    -0.006423
+O     0.996235     1.312429     0.317342
+O     1.870662    -0.648107    -0.296614
+H    -1.476858     0.704566     1.128418
+H    -1.568371     1.147693    -0.416974
+H    -0.625980    -0.929357    -1.161529
+H    -0.524307    -1.421701     0.555496
+H     2.652137    -0.068413    -0.176668
+
+--Link1--
+%nprocshared=8
+%mem=12GB
+%chk=glycine_readfc.chk
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ Opt=ReadFC Freq Geom=Check Guess=Read
+
+Glycine step 2: def2-TZVP optimization starting from the def2-SVP Hessian
+
+0 1
+

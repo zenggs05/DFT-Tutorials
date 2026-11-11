@@ -1,0 +1,65 @@
+#
+# Graphene 1x1, charge doping, DFT-Tutorials OpenMX chapter 16
+# Electron doping of 0.02 e per cell compensated by a uniform background charge (no ESM).
+# Geometry: a(C-C) = 1.4243 Ang (lattice constant 2.467 Ang), sheet in the xy plane at z = 10 Ang.
+# Cell: the FIRST vector (a-axis) is the sheet normal along z, b and c are the in-plane vectors.
+# This is the layout required by ESM with ESM.direction z; it is kept for all three inputs so that
+# the band paths (k1 k2 k3 in units of the reciprocal vectors of a, b, c) are identical.
+#
+
+System.CurrrentDirectory      ./          # official spelling: three 'r'
+System.Name                   graphene_qm002_bg
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              1
+
+Species.Number                1
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2d1    C_PBE19
+Definition.of.Atomic.Species>
+
+#
+# fractional coordinates along (a, b, c); C_PBE19: 4 electrons -> 2.0 2.0
+#
+Atoms.Number                  2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+     1  C     0.500000   0.333333   0.666667    2.0  2.0
+     2  C     0.500000   0.666667   0.333333    2.0  2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang
+<Atoms.UnitVectors
+      0.000000     0.000000    20.000000
+      2.467000     0.000000     0.000000
+     -1.233500     2.136485     0.000000
+Atoms.UnitVectors>
+
+scf.XcType                    GGA-PBE
+scf.SpinPolarization          off
+scf.ElectronicTemperature     300.0
+scf.energycutoff              220.0
+scf.maxIter                   200
+scf.EigenvalueSolver          Band
+scf.Kgrid                     1 24 24     # first index = a-axis = sheet normal
+scf.Mixing.Type               RMM-DIISK
+scf.Init.Mixing.Weight        0.05
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.10
+scf.Mixing.History            30
+scf.Mixing.StartPulay         15
+scf.criterion                 1.0e-8
+scf.system.charge             -0.02       # negative = electron doping
+ESM.switch                    off
+
+#
+# band structure G-M-K-G (reciprocal units of a, b, c; K = (0, 1/3, 1/3) for b, c at 120 deg)
+#
+Band.dispersion               on
+Band.Nkpath                   3
+<Band.kpath
+  40   0.0 0.0 0.0         0.0 0.5 0.0          G M
+  25   0.0 0.5 0.0         0.0 0.333333 0.333333  M K
+  45   0.0 0.333333 0.333333  0.0 0.0 0.0       K G
+Band.kpath>
+
+MD.Type                       Nomd

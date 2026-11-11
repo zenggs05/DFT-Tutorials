@@ -1,0 +1,94 @@
+# Hexagonal ice (proton-ordered model, 4 H2O per cell) with GFN2-xTB
+# from the tblite library and a 4x4x2 Monkhorst-Pack k-point mesh.
+# Chapter 16 of the CP2K tutorial.
+#
+# Version notes (CP2K must be compiled with tblite: cp2k.psmp -v | grep -o tblite)
+#   - CP2K 2026.2: tblite is selected with GFN_TYPE TBLITE and needs the &TBLITE
+#     section; ACCURACY is new in 2026.2. A &TBLITE section without GFN_TYPE TBLITE
+#     aborts ("The XTB/TBLITE section requires XTB/GFN_TYPE TBLITE").
+#   - CP2K 2025.2 / 2026.1: GFN_TYPE is an integer and the &TBLITE section alone
+#     switches tblite on; ACCURACY does not exist. Run with  -E NEWTB=0
+#   - fixes for periodic tblite gradients / stress went into CP2K 2026.1;
+#     use 2026.1 or newer for GEO_OPT / CELL_OPT runs
+#   - k-points always use diagonalisation (no OT with k-points up to 2026.2)
+#
+# Structure: idealised O sublattice of ice Ih (a = 4.50 A, c = 7.33 A, approximate
+# lattice constants), hydrogens placed 0.98 A along the O-O bonds following the
+# ice rules (one ordered arrangement). It is a starting model, not a refined structure.
+#
+# Run a single point (default) or a relaxation via the preprocessor variable RUN:
+#   cp2k.psmp -i ice_gfn2_tblite_kpoints.inp -o ice_sp.out                 (2026.2)
+#   cp2k.psmp -E NEWTB=0 -i ice_gfn2_tblite_kpoints.inp -o ice_sp.out      (2025.2, 2026.1)
+#   cp2k.psmp -E RUN=GEO_OPT -i ice_gfn2_tblite_kpoints.inp -o ice_opt.out
+
+&GLOBAL
+  PROJECT     ice_gfn2_k442
+  RUN_TYPE    ${RUN-ENERGY_FORCE}
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER LBFGS
+    MAX_ITER  200
+  &END GEO_OPT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    &QS
+      METHOD      XTB
+      EPS_DEFAULT 1.0E-12
+      &XTB
+@IF ${NEWTB-1} == 1
+        GFN_TYPE TBLITE
+@ENDIF
+        &TBLITE
+          METHOD   GFN2            ! GFN1 | GFN2 | IPEA1
+@IF ${NEWTB-1} == 1
+          ACCURACY 0.1             ! 2026.2+: smaller = tighter tblite thresholds (default 1.0)
+@ENDIF
+        &END TBLITE
+      &END XTB
+    &END QS
+    &KPOINTS
+      SCHEME MONKHORST-PACK 4 4 2
+    &END KPOINTS
+    &SCF
+      SCF_GUESS MOPAC
+      EPS_SCF   1.0E-8
+      MAX_SCF   200
+      &MIXING
+        METHOD DIRECT_P_MIXING
+        ALPHA  0.2
+      &END MIXING
+    &END SCF
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC              4.50 4.50 7.33
+      ALPHA_BETA_GAMMA 90.0 90.0 120.0
+      PERIODIC         XYZ
+    &END CELL
+    &COORD
+      SCALED
+      O    0.33333333   0.66666667   0.06250000
+      H    0.09618077   0.54809038   0.01803389
+      H    0.45190962   0.90381923   0.01803389
+      O    0.66666667   0.33333333   0.56250000
+      H    0.54809038   0.09618077   0.51803389
+      H    0.90381923   0.45190962   0.51803389
+      O    0.66666667   0.33333333   0.93750000
+      H    0.54809038   0.45190962   0.98196611
+      H    0.66666667   0.33333333   0.80380286
+      O    0.33333333   0.66666667   0.43750000
+      H    0.33333333   0.66666667   0.30380286
+      H    0.45190962   0.54809038   0.48196611
+    &END COORD
+  &END SUBSYS
+  &PRINT
+    &FORCES ON
+    &END FORCES
+  &END PRINT
+&END FORCE_EVAL

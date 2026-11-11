@@ -1,0 +1,11 @@
+SYSTEM = Si ENCUT scan, ENCUT = @ENCUT@
+# Only ENCUT changes between the runs; everything else stays fixed.
+PREC   = Accurate
+ENCUT  = @ENCUT@
+EDIFF  = 1E-6
+ISMEAR = 0
+SIGMA  = 0.05
+NSW    = 0
+IBRION = -1
+LWAVE  = .FALSE.
+LCHARG = .FALSE.

@@ -1,0 +1,12 @@
+%nprocshared=8
+%mem=12GB
+%chk=h2o_sp_b3lyp_def2tzvp.chk
+#p B3LYP/def2TZVP EmpiricalDispersion=GD3BJ SP
+
+H2O single point, B3LYP-D3(BJ)/def2-TZVP
+
+0 1
+O     0.000000     0.000000     0.117300
+H     0.000000     0.757200    -0.469200
+H     0.000000    -0.757200    -0.469200
+

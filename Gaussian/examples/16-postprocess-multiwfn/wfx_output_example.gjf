@@ -1,0 +1,14 @@
+%chk=water_wfx.chk
+%mem=2GB
+%nprocshared=4
+#p B3LYP/def2TZVP Output=WFX
+
+Water single point that also writes an AIM-style wavefunction file water.wfx
+
+0 1
+O     0.000000    0.000000    0.117300
+H     0.000000    0.757200   -0.469200
+H     0.000000   -0.757200   -0.469200
+
+water.wfx
+

@@ -1,0 +1,10 @@
+SYSTEM  = GaAs SCF (charge density for the finite-difference band run)
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-8
+ISMEAR  = 0
+SIGMA   = 0.01
+NSW     = 0
+IBRION  = -1
+LCHARG  = .TRUE.
+LWAVE   = .FALSE.

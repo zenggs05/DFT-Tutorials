@@ -1,0 +1,15 @@
+Si band path L-G-X-U|K-G
+30              ! points per segment (end points included)
+Line-mode
+Reciprocal
+  0.500  0.500  0.500   L
+  0.000  0.000  0.000   GAMMA
+
+  0.000  0.000  0.000   GAMMA
+  0.500  0.000  0.500   X
+
+  0.500  0.000  0.500   X
+  0.625  0.250  0.625   U
+
+  0.375  0.375  0.750   K
+  0.000  0.000  0.000   GAMMA

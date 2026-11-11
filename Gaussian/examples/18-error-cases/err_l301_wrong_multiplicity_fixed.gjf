@@ -1,0 +1,11 @@
+%chk=ch3_doublet.chk
+#p UB3LYP/6-31G(d) SP
+
+CH3 radical, fixed: 9 electrons, doublet, unrestricted DFT
+
+0 2
+C     0.000000    0.000000    0.000000
+H     1.080000    0.000000    0.000000
+H    -0.540000    0.935307    0.000000
+H    -0.540000   -0.935307    0.000000
+

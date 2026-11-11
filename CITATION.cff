@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If these tutorials or scripts helped your research, please cite this repository."
+title: "DFT-Tutorials: First-principles calculation tutorials and scripts for VASP, Gaussian, CP2K and OpenMX"
+abstract: >-
+  Detailed Chinese-language tutorials, ready-to-run example inputs and helper scripts
+  for density functional theory (DFT) calculations with VASP, Gaussian, CP2K and OpenMX,
+  plus machine-learning-potential (NEP/GPUMD) utilities and a curated list of related GitHub resources.
+authors:
+  - family-names: Zeng
+    given-names: Gaoshan
+    alias: zenggs05
+repository-code: "https://github.com/zenggs05/DFT-Tutorials"
+url: "https://zenggs05.github.io/DFT-Tutorials/"
+license: MIT
+type: software
+keywords:
+  - density functional theory
+  - DFT
+  - first-principles
+  - VASP
+  - Gaussian
+  - CP2K
+  - OpenMX
+  - computational chemistry
+  - computational materials science
+  - tutorial

@@ -1,0 +1,27 @@
+SYSTEM  = Li hop Td -> Hex -> Td in Si64 - climbing-image NEB (VTST)
+
+PREC    = Normal
+ENCUT   = 500
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 0
+SIGMA   = 0.05
+ISPIN   = 1
+LREAL   = Auto
+
+IMAGES  = 3            # the middle image (02) starts at the hexagonal site
+SPRING  = -5
+ICHAIN  = 0
+LCLIMB  = .TRUE.       # symmetric path with a good guess: climbing from the start is acceptable here
+
+IBRION  = 3
+POTIM   = 0
+IOPT    = 7            # 7 = FIRE
+ISIF    = 2
+NSW     = 300
+EDIFFG  = -0.03
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+NCORE   = 4

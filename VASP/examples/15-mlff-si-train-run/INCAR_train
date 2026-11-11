@@ -1,0 +1,38 @@
+# Stage 1: on-the-fly training (VASP >= 6.4 for ML_MODE; 6.3 used ML_ISTART)
+# NpT Langevin MD with a temperature ramp 200 -> 1000 K (~30 % above the
+# highest production temperature of 800 K).
+SYSTEM  = Si64 MLFF on-the-fly training NpT 200-1000 K
+
+# ab initio part: identical in every training/continuation run!
+PREC    = Normal
+ENCUT   = 350          # NpT: >= 1.3 x the fixed-volume cutoff (ENMAX Si = 245 eV)
+EDIFF   = 1E-6         # forces must be accurate: they are the training labels
+ALGO    = Fast
+LREAL   = Auto
+ISMEAR  = 0
+SIGMA   = 0.05
+NELM    = 100
+ISYM    = 0
+# do NOT set MAXMIX > 0 in MLFF training
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+
+# molecular dynamics
+IBRION  = 0
+MDALGO  = 3            # Langevin: stochastic, good phase-space sampling
+ISIF    = 3            # NpT: cell fluctuations make the force field more robust
+TEBEG   = 200
+TEEND   = 1000
+POTIM   = 2.0
+NSW     = 10000
+LANGEVIN_GAMMA   = 10.0
+LANGEVIN_GAMMA_L = 10.0
+PMASS   = 1000
+RANDOM_SEED = 486686595 0 0
+
+# machine-learned force field
+ML_LMLFF = .TRUE.
+ML_MODE  = train       # starts from scratch without ML_AB, continues if ML_AB exists
+# ML_RCUT1 = 8.0       # radial descriptor cutoff (A), default
+# ML_RCUT2 = 5.0       # angular descriptor cutoff (A), default
+# ML_CTIFOR = 0.02     # Bayesian force-error threshold; default is updated automatically

@@ -1,0 +1,12 @@
+%nprocshared=8
+%mem=12GB
+%chk=cu3_radical_vshift.chk
+#p UPBE1PBE/def2TZVP SCF=(VShift=500,MaxCycle=300)
+
+Cu3 doublet radical cluster, single point with level shifting
+
+0 2
+Cu    0.000000    0.000000    0.000000
+Cu    2.300000    0.000000    0.000000
+Cu    1.150000    2.163331    0.000000
+

@@ -1,0 +1,76 @@
+! dimer_ts.inp - Dimer transition-state optimization for H on Cu(111)
+! Chapter 13, step 3b.  Target versions: CP2K 2026.2 (MOLDEN initialization);
+! for CP2K <= 2026.1 see the comment block in &DIMER below.
+!
+! Needs: ts_guess.xyz (or the climbing image of the CI-NEB run) and
+!        ts_guess_vib-VIBRATIONS-1.mol from ts_guess_vib.inp
+!   mpirun -np 32 cp2k.psmp -i dimer_ts.inp -o dimer_ts.out
+! Converged TS = last frame of h_cu111_dimer-pos-1.xyz; then verify it with
+! a frequency calculation (chapter 14, ts_freq_check.inp): exactly ONE
+! imaginary mode, pointing from the fcc to the hcp hollow.
+
+@SET COORD ${COORD-ts_guess.xyz}
+
+&GLOBAL
+  PROJECT h_cu111_dimer
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+@INCLUDE 'cu111_h_force_eval.inc'
+
+&MOTION
+  &GEO_OPT
+    TYPE TRANSITION_STATE
+    ! all official dimer regtests translate with CG + 2PNT line search
+    OPTIMIZER CG
+    MAX_ITER 300
+    MAX_FORCE 2.0E-4
+    RMS_FORCE 1.0E-4
+    &CG
+      &LINE_SEARCH
+        TYPE 2PNT
+      &END LINE_SEARCH
+    &END CG
+    &TRANSITION_STATE
+      METHOD DIMER
+      &DIMER
+        ! half length of the dimer (default 0.01 A)
+        DR [angstrom] 0.01
+        ! rotation is converged when the rotation angle drops below this value
+        ANGLE_TOLERANCE [deg] 2.0
+        INTERPOLATE_GRADIENT T
+        ! --- CP2K >= 2026.2: initial dimer vector from a normal mode ---
+        INITIALIZATION_METHOD MOLDEN
+        VIB_MOLDEN_NAME ts_guess_vib-VIBRATIONS-1.mol
+        ! mode 1 = lowest frequency = the imaginary mode (printed as negative)
+        VIB_INDEX 1
+        VIB_WEIGHT 1.0
+        ! --- CP2K <= 2026.1: delete the four lines above.  The dimer vector
+        !     is then random (default), or give it explicitly with one line
+        !     "dx dy dz" per atom (28 lines) in a &DIMER_VECTOR section.
+        &ROT_OPT
+          OPTIMIZER CG
+          &CG
+            &LINE_SEARCH
+              TYPE 2PNT
+            &END LINE_SEARCH
+          &END CG
+        &END ROT_OPT
+      &END DIMER
+    &END TRANSITION_STATE
+  &END GEO_OPT
+  &CONSTRAINT
+    &FIXED_ATOMS
+      LIST 1..9
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+    &END RESTART
+  &END PRINT
+&END MOTION

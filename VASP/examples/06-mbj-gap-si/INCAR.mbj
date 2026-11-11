@@ -1,0 +1,24 @@
+SYSTEM  = Si mBJ band gap (potential-only: no total energies, no forces)
+
+ISTART  = 1          # start from the PBE WAVECAR of the previous step
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-6
+ISMEAR  = 0
+SIGMA   = 0.01
+LREAL   = .FALSE.
+NBANDS  = 16
+
+METAGGA = MBJ
+LASPH   = .TRUE.
+ALGO    = All
+TIME    = 0.1        # small step: mBJ converges slowly
+NELM    = 200
+# CMBJ  = 1.20       # fix c: needed for slabs/interfaces and for restarts (value from a bulk run)
+LORBIT  = 11
+
+# KPOINTS_OPT (band path) is read automatically in this step (VASP >= 6.3).
+NSW     = 0
+IBRION  = -1
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

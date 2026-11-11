@@ -1,0 +1,16 @@
+SYSTEM  = MoS2 bilayer interlayer scan (rigid layers), PBE-D3(BJ), single point
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-6
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+ISMEAR  = 0
+SIGMA   = 0.05
+
+IVDW    = 12             # try 11 (D3 zero damping), 13 (D4), or a vdW-DF for comparison
+
+IBRION  = -1
+NSW     = 0
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

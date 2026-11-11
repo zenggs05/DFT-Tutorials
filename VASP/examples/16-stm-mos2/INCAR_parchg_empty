@@ -1,0 +1,23 @@
+SYSTEM  = MoS2 partial charge, empty states (positive sample bias)
+
+# ---- must be identical to the SCF run ----
+PREC    = Accurate
+ENCUT   = 400
+ISMEAR  = 0
+SIGMA   = 0.05
+NBANDS  = 24
+ISTART  = 1
+
+# ---- partial charge ----
+LPARD   = .TRUE.
+NBMOD   = -3
+# E_F lies at the valence band top of a semiconductor. Put the window from the
+# conduction band minimum (CBM) to CBM + ~1 eV of YOUR calculation:
+# check E-fermi and the CBM first (OUTCAR, BANDGAP tag or vaspkit 911).
+EINT    = 1.0 3.0
+LSEPB   = .FALSE.
+LSEPK   = .FALSE.
+# LPARDH5 = .TRUE.
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

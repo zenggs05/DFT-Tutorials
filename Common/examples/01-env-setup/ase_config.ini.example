@@ -1,0 +1,18 @@
+# ASE configuration file (ASE >= 3.23). Copy to ~/.config/ase/config.ini
+#   mkdir -p ~/.config/ase && cp ase_config.ini.example ~/.config/ase/config.ini
+# Check what ASE sees with:  ase info --calculators
+# Values in [environment] replace the old environment variables, which
+# ASE 3.29 still reads but with an ASEEnvDeprecationWarning.
+
+[environment]
+VASP_PP_PATH = /home/your_name/vasp_pp
+ASE_VASP_COMMAND = mpirun -np 8 vasp_std
+ASE_GAUSSIAN_COMMAND = g16 < PREFIX.com > PREFIX.log
+ASE_CP2K_COMMAND = mpirun -np 4 cp2k.psmp -s
+OPENMX_DFT_DATA_PATH = /home/your_name/openmx4.0/DFT_DATA19
+
+# Calculators based on GenericFileIOCalculator (e.g. espresso, abinit)
+# read their own sections, for example:
+# [espresso]
+# command = mpirun -np 8 pw.x
+# pseudo_dir = /home/your_name/pseudo

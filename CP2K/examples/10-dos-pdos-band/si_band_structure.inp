@@ -1,0 +1,99 @@
+# Band structure (and DOS) of bulk Si, primitive fcc cell, PBE
+# Step 1: SCF on an 8x8x8 Monkhorst-Pack mesh (diagonalization, k-points).
+# Step 2: non-self-consistent bands along L-G-X-U | K-G (&BAND_STRUCTURE).
+# The band file si_band.bs is opened in APPEND mode: delete it before a rerun.
+# &DOS (+&CURVE) needs CP2K >= 2026.2; remove the &DOS block for older versions.
+
+&GLOBAL
+  PROJECT     si_band
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     300
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &KPOINTS
+      SCHEME MONKHORST-PACK 8 8 8
+    &END KPOINTS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-8
+      MAX_SCF   100
+      ADDED_MOS 8                 ! 4 occupied + 8 empty bands in the SCF
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD  BROYDEN_MIXING
+        ALPHA   0.4
+        NBUFFER 8
+      &END MIXING
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+      &BAND_STRUCTURE
+        FILE_NAME si_band.bs
+        ADDED_MOS 8               ! extra bands for the band-structure step
+        &KPOINT_SET
+          ! coordinates in fractions of the reciprocal lattice vectors
+          UNITS   B_VECTOR
+          NPOINTS 30              ! points per segment
+          SPECIAL_POINT L      0.500 0.500 0.500
+          SPECIAL_POINT GAMMA  0.000 0.000 0.000
+          SPECIAL_POINT X      0.500 0.000 0.500
+          SPECIAL_POINT U      0.625 0.250 0.625
+        &END KPOINT_SET
+        &KPOINT_SET
+          UNITS   B_VECTOR
+          NPOINTS 30
+          SPECIAL_POINT K      0.375 0.375 0.750
+          SPECIAL_POINT GAMMA  0.000 0.000 0.000
+        &END KPOINT_SET
+      &END BAND_STRUCTURE
+      &DOS
+        DELTA_E 0.0005            ! Hartree
+        &PDOS
+          COMPONENTS F
+        &END PDOS
+        &CURVE
+          ENERGY_UNIT EV
+          ENERGY_ZERO HOCO        ! VBM at 0 eV, same zero as the band plot
+          &BROADEN
+            WIDTH [eV] 0.1
+          &END BROADEN
+        &END CURVE
+      &END DOS
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ! primitive fcc vectors, a = 5.431 Angstrom (experimental)
+      A  0.00000  2.71550  2.71550
+      B  2.71550  0.00000  2.71550
+      C  2.71550  2.71550  0.00000
+      PERIODIC XYZ
+    &END CELL
+    &COORD
+      SCALED
+      Si  0.00  0.00  0.00
+      Si  0.25  0.25  0.25
+    &END COORD
+    &KIND Si
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q4
+      POTENTIAL GTH-PBE-q4
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

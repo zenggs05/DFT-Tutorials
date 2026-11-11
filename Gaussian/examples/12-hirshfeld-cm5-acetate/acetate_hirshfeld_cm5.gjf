@@ -1,0 +1,34 @@
+! Chapter 12 example: acetate anion in water, Hirshfeld/CM5 vs MK vs NPA charges
+! Step 1: opt+freq (SMD water) with Pop=Hirshfeld
+! Steps 2-3: re-analyse the SAME density read from the chk (Density=Check implies Guess=Only)
+%chk=acetate.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-311+G(d,p) EmpiricalDispersion=GD3BJ Opt Freq SCRF=(SMD,Solvent=Water)
+   Pop=Hirshfeld
+
+Acetate anion opt+freq, B3LYP-D3(BJ)/6-311+G(d,p), SMD(water), Hirshfeld/CM5
+
+-1 1
+ C      -0.639020    -0.032922    -0.033364
+ C       0.875403     0.051535     0.044772
+ O       1.457987    -1.051972     0.239774
+ O       1.358682     1.209230    -0.094474
+ H      -0.931450    -0.691546    -0.856605
+ H      -1.085127     0.951767    -0.202960
+ H      -1.036475    -0.436090     0.902858
+
+--Link1--
+%oldchk=acetate.chk
+%chk=acetate_mk.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP Geom=AllCheck Density=Check Pop=MK
+
+--Link1--
+%oldchk=acetate.chk
+%chk=acetate_npa.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP Geom=AllCheck Density=Check Pop=NPA
+

@@ -1,0 +1,30 @@
+SYSTEM   = NiO linear response, perturbation V on the d shell of atom 1
+
+PREC     = Accurate
+ENCUT    = 520
+EDIFF    = 1E-6
+NELM     = 150
+LASPH    = .TRUE.
+LREAL    = .FALSE.
+ISMEAR   = 0
+SIGMA    = 0.05
+
+ISPIN    = 2
+MAGMOM   = 2 -2 2 -2 2 -2 2 -2 2 -2 2 -2 2 -2 2 -2 16*0
+LORBIT   = 11
+LMAXMIX  = 4
+
+# LDAUTYPE = 3: LDAUU / LDAUJ are the strengths (eV) of a spherical potential
+# acting on the spin-up / spin-down d manifold of the selected species.
+LDAU     = .TRUE.
+LDAUTYPE = 3
+LDAUL    = 2 -1 -1
+LDAUU    = VPERT 0.00 0.00
+LDAUJ    = VPERT 0.00 0.00
+
+ISTART   = 1           # read WAVECAR of the ground state
+#ICHARG  = 11          # uncommented by run_lr.sh for the NON-self-consistent response
+
+NSW      = 0
+LWAVE    = .FALSE.
+LCHARG   = .FALSE.

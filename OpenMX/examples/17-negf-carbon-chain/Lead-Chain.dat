@@ -1,0 +1,59 @@
+#
+# NEGF Step 1: electrode (lead) of a monatomic carbon chain, DFT-Tutorials OpenMX chapter 17
+# Lead unit cell: 4 C atoms, C-C = 1.5 Ang, period 6.0 Ang along the a-axis (= transport direction x).
+# Basis C6.0 (cutoff radius 6.0 Bohr = 3.175 Ang): orbitals of cell i must not reach cell i+2,
+# i.e. 2 x 3.175 = 6.35 Ang < (2 x 6.0 - 4.5) = 7.5 Ang  -> OK.  (A 3-atom 4.5 Ang cell would fail.)
+# The chain lies at y = z = 5 Ang; b = c = 10 Ang leaves no overlap between periodic images.
+#
+
+System.CurrrentDirectory      ./          # official spelling: three 'r'
+System.Name                   lead-chain
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              0
+
+NEGF.output_hks               on          # write the lead Hamiltonian/density for Step 2
+NEGF.filename.hks             lead-chain.hks
+
+Species.Number                1
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2d1    C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                  4
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+     1  C       0.000000     5.000000     5.000000    2.0 2.0
+     2  C       1.500000     5.000000     5.000000    2.0 2.0
+     3  C       3.000000     5.000000     5.000000    2.0 2.0
+     4  C       4.500000     5.000000     5.000000    2.0 2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang
+<Atoms.UnitVectors
+     6.000000     0.000000     0.000000
+     0.000000    10.000000     0.000000
+     0.000000     0.000000    10.000000
+Atoms.UnitVectors>
+
+scf.XcType                    GGA-PBE     # identical in Step 1 and Step 2
+scf.SpinPolarization          off
+scf.ElectronicTemperature     300.0       # K, identical in Step 1 and Step 2
+scf.energycutoff              220.0       # Ry, identical in Step 1 and Step 2 (same bc-plane grid)
+scf.maxIter                   200
+scf.EigenvalueSolver          Band
+scf.Kgrid                     160 1 1     # many k points along the transport axis (a)
+scf.Mixing.Type               RMM-DIISK
+scf.Init.Mixing.Weight        0.05
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.20
+scf.Mixing.History            30
+scf.Mixing.StartPulay         10
+scf.criterion                 1.0e-10
+
+Band.dispersion               on          # check: two degenerate pi bands cross mu
+Band.Nkpath                   1
+<Band.kpath
+  60   0.0 0.0 0.0   0.5 0.0 0.0   G X
+Band.kpath>
+
+MD.Type                       Nomd

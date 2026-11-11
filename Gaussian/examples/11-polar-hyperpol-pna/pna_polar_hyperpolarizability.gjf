@@ -1,0 +1,40 @@
+! Chapter 11 example: polarizability and first hyperpolarizability of p-nitroaniline (pNA)
+! Step 1: opt+freq   Step 2: static + dynamic (1064 nm) alpha and beta via CPHF=RdFreq
+%chk=pna_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-311+G(d,p) EmpiricalDispersion=GD3BJ Opt Freq
+
+p-Nitroaniline opt+freq, B3LYP-D3(BJ)/6-311+G(d,p), gas phase
+
+0 1
+ N      -2.814048    -0.077446    -0.266096
+ C      -1.432583    -0.013928    -0.064026
+ C      -0.728316    -1.154152     0.336857
+ C       0.667370    -1.141629     0.424927
+ C       1.368118     0.015152     0.066332
+ C       0.681616     1.145223    -0.391314
+ C      -0.714183     1.114575    -0.472914
+ N       2.833187     0.036722     0.152334
+ O       3.415545     1.078876    -0.181038
+ O       3.402674    -0.987357     0.556452
+ H      -3.290597    -0.763289     0.311617
+ H      -3.280706     0.824408    -0.255079
+ H      -1.264427    -2.067415     0.584886
+ H       1.185050    -2.038535     0.757846
+ H       1.210486     2.044443    -0.699481
+ H      -1.239186     1.984351    -0.861302
+
+--Link1--
+%oldchk=pna_opt.chk
+%chk=pna_polar.chk
+%mem=8GB
+%nprocshared=8
+#p CAM-B3LYP/Aug-cc-pVDZ Polar CPHF=RdFreq Geom=Check Guess=Read
+
+p-Nitroaniline alpha/beta, static and 1064 nm, CAM-B3LYP/aug-cc-pVDZ
+
+0 1
+
+1064nm
+

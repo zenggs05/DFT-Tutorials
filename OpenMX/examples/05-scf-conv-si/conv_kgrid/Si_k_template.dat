@@ -1,0 +1,60 @@
+#
+# Diamond Si: k-point convergence template, cutoff fixed (edit to your converged value)
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+# Placeholders are replaced by run_conv.sh with sed; do not run this file directly.
+#
+
+#
+# File names
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 si_k@K@
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0           # no cube files during convergence tests
+
+#
+# Atomic species (Standard basis from the DFT_DATA19 table)
+#
+Species.Number              1
+<Definition.of.Atomic.Species
+  Si   Si7.0-s2p2d1   Si_PBE19
+Definition.of.Atomic.Species>
+
+#
+# Structure: fcc primitive cell, a = 5.43 Ang
+#
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1   Si   0.00   0.00   0.00   2.0  2.0
+  2   Si   0.25   0.25   0.25   2.0  2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  0.0000  2.7150  2.7150
+  2.7150  0.0000  2.7150
+  2.7150  2.7150  0.0000
+Atoms.UnitVectors>
+
+#
+# SCF
+#
+scf.XcType                  GGA-PBE     # LDA|LSDA-CA|LSDA-PW|GGA-PBE
+scf.SpinPolarization        off         # off|on|nc
+scf.ElectronicTemperature   300.0       # K
+scf.energycutoff            220.0       # Ry, real-space integration grid
+scf.EigenvalueSolver        Band        # Cluster|Band|DC|DC-LNO|Krylov|ON2
+scf.Kgrid                   @K@ @K@ @K@
+scf.Generation.Kpoint       GCenter     # GCenter|Regular, OpenMX 4.0 only (3.9 = Regular)
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.Mixing.EveryPulay       1
+scf.maxIter                 100
+scf.criterion               1.0e-9      # Hartree, tight: we compare small energy differences
+
+MD.Type                     Nomd

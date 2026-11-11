@@ -1,0 +1,18 @@
+%chk=h2o2_zmatrix.chk
+%mem=1GB
+%nprocshared=2
+#p B3LYP/6-31G(d) Opt
+
+hydrogen peroxide, Z-matrix input with variables
+
+0 1
+H
+O 1 R1
+O 2 R2 1 A1
+H 3 R1 2 A1 1 D1
+  Variables:
+R1 0.97
+R2 1.45
+A1 100.0
+D1 115.0
+

@@ -1,0 +1,21 @@
+# Copy to ~/.jobflow.yaml (or set JOBFLOW_CONFIG_FILE) to keep job outputs in
+# MongoDB instead of the default in-memory store used by run_locally().
+# Large objects (band structures, DOS, charge densities) go to GridFS ("data").
+JOB_STORE:
+  docs_store:
+    type: MongoStore
+    database: dft_tutorial
+    collection_name: outputs
+    host: localhost
+    port: 27017
+    username: dft_user
+    password: change_me
+  additional_stores:
+    data:
+      type: GridFSStore
+      database: dft_tutorial
+      collection_name: outputs_blobs
+      host: localhost
+      port: 27017
+      username: dft_user
+      password: change_me

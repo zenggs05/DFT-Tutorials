@@ -1,0 +1,20 @@
+{
+  "_comment": "FICTITIOUS demo numbers to exercise calc_dG.py - NOT real VASP results. Replace every value by your own energies (eV) or by run directories, e.g. \"OH\": \"../OH_fcc\".",
+  "_units": "eV; G = E + G_corr, G_corr = ZPE + int Cp dT - TS at 298.15 K",
+  "E": {
+    "slab": -300.000,
+    "OH":   -310.225,
+    "O":    -305.020,
+    "OOH":  -314.495,
+    "H2O":  -14.220,
+    "H2":   -6.770
+  },
+  "G_corr": {
+    "slab": 0.00,
+    "OH":   0.30,
+    "O":    0.05,
+    "OOH":  0.35,
+    "H2O": -0.01,
+    "H2":  -0.04
+  }
+}

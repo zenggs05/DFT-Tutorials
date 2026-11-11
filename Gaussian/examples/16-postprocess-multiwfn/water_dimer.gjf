@@ -1,0 +1,25 @@
+%chk=water_dimer.chk
+%mem=4GB
+%nprocshared=4
+#p B3LYP EmpiricalDispersion=GD3BJ def2SVP Opt Freq
+
+Water dimer step 1/2: opt+freq. Atoms 1-3 = donor water, 4-6 = acceptor water
+
+0 1
+O     0.000000    0.000000    0.000000
+H     0.965000    0.000000    0.000000
+H    -0.240000    0.929000    0.000000
+O     2.910000    0.000000    0.000000
+H     3.230000   -0.493000    0.759000
+H     3.230000   -0.493000   -0.759000
+
+--Link1--
+%chk=water_dimer.chk
+%mem=4GB
+%nprocshared=4
+#p B3LYP EmpiricalDispersion=GD3BJ def2TZVP Geom=Check Guess=Read
+
+Water dimer step 2/2: def2-TZVP single point for IGMH analysis
+
+0 1
+

@@ -1,0 +1,19 @@
+%chk=hcn_hnc_qst2.chk
+%nprocshared=4
+%mem=4GB
+#p B3LYP/6-311G(d,p) Opt=(QST2,CalcFC) Freq
+
+HCN reactant, atom order C N H, H bent 10 deg off the axis to define the plane
+
+0 1
+C     0.000000    0.000000    0.000000
+N     0.000000    0.000000    1.156000
+H     0.185000    0.000000   -1.049000
+
+HNC product, same atom order C N H, H bent to the same side
+
+0 1
+C     0.000000    0.000000    0.000000
+N     0.000000    0.000000    1.169000
+H     0.172000    0.000000    2.154000
+

@@ -1,0 +1,20 @@
+SYSTEM = Si bulk - vasp_ncl consistency test
+
+ISTART = 0
+ICHARG = 2
+PREC   = Accurate
+ENCUT  = 320
+LREAL  = .FALSE.
+ALGO   = Normal
+EDIFF  = 1E-6
+NELM   = 100
+ISMEAR = 0
+SIGMA  = 0.05
+IBRION = -1
+NSW    = 0
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+
+# noncollinear run of a non-magnetic system: 3 components per atom, all zero
+LNONCOLLINEAR = .TRUE.
+MAGMOM = 6*0

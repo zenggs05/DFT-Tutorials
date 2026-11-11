@@ -1,0 +1,23 @@
+SYSTEM  = H2 molecule in a 15.0 x 15.5 x 16.0 A box - relaxation
+
+# ---- electronic part: same PREC/ENCUT/LASPH/LREAL (and IVDW) as the slab ----
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-6
+ALGO    = Fast
+NELM    = 150
+ISMEAR  = 0            # Gaussian smearing for a molecule (HOMO-LUMO gap)
+SIGMA   = 0.01
+ISPIN   = 1            # H2 is closed shell
+LREAL   = .FALSE.
+LASPH   = .TRUE.
+# IVDW  = 12
+
+# ---- ionic part ----
+IBRION  = 2
+ISIF    = 2            # never change the box of an isolated molecule
+NSW     = 50
+EDIFFG  = -0.02
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.

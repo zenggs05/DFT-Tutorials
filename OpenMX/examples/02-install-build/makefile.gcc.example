@@ -1,0 +1,27 @@
+# ---------------------------------------------------------------------------
+# OpenMX 4.0 makefile fragment: GCC + Open MPI + ScaLAPACK + OpenBLAS + FFTW3
+# (package names of Ubuntu 24.04 / Debian 12-13; see chapter 2, section 5)
+#
+# How to use:
+#   1. cd openmx4.0/source && cp makefile makefile.orig
+#   2. In makefile, comment out (#) the ACTIVE definitions of MKLROOT, CC, FC
+#      and LIB, including continuation lines that follow a trailing backslash.
+#      Do NOT touch the lines "CC += -I$(LIBELPADIR)" and "FC += -I$(LIBELPADIR)".
+#   3. Paste the three lines below in place of the commented definitions.
+#   4. make clean && make install && make all
+#
+# Notes:
+#   -fcommon                 needed by GCC >= 10 (else: multiple definition of ...)
+#   -Wno-implicit-function-declaration
+#                            needed by GCC >= 14 (implicit declarations are errors)
+#   -fallow-argument-mismatch
+#                            needed by gfortran >= 10 for the bundled ELPA sources
+#   -lscalapack-openmpi      Debian/Ubuntu library name; other systems: -lscalapack
+#   GCC >= 14 may additionally need: -Wno-error=implicit-int -Wno-error=incompatible-pointer-types
+#   GCC >= 15 may additionally need: -std=gnu17
+#   aarch64 (ARM) needs -Dnosse in CC
+#   Add -march=native only if the build and compute CPUs are identical.
+# ---------------------------------------------------------------------------
+CC  = mpicc  -O3 -fopenmp -fcommon -Wno-implicit-function-declaration
+FC  = mpif90 -O3 -fopenmp -fallow-argument-mismatch
+LIB = -lscalapack-openmpi -lopenblas -lfftw3 -lmpi_mpifh -lgfortran -lpthread -lm -ldl

@@ -1,0 +1,67 @@
+# CP2K template for the CUTOFF / REL_CUTOFF convergence test
+# System: bulk Si, 8-atom cubic cell (a = 5.431 Angstrom, experimental value)
+# The two @SET lines are rewritten by run_cutoff_scan.sh / run_relcutoff_scan.sh.
+@SET CUTOFF 300
+@SET REL_CUTOFF 60
+
+&GLOBAL
+  PROJECT     si8_conv
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM            ! MEDIUM is needed to print the MULTIGRID INFO block
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      NGRIDS     4              ! default, written out for clarity
+      CUTOFF     ${CUTOFF}      ! Ry, finest grid
+      REL_CUTOFF ${REL_CUTOFF}  ! Ry, reference grid for a Gaussian with exponent 1
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12       ! tighter than the default 1.0E-10
+    &END QS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-8          ! SCF noise must be far below the target accuracy
+      MAX_SCF   100
+      ADDED_MOS 10
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD  BROYDEN_MIXING
+        ALPHA   0.4
+        NBUFFER 8
+      &END MIXING
+      &SMEAR ON
+        METHOD FERMI_DIRAC
+        ELECTRONIC_TEMPERATURE [K] 300
+      &END SMEAR
+      &PRINT
+        &RESTART OFF            ! no .wfn files needed for a scan
+        &END RESTART
+      &END PRINT
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 5.431 5.431 5.431
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   si_bulk8.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    &KIND Si
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q4
+      POTENTIAL GTH-PBE-q4
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

@@ -1,0 +1,66 @@
+# Geometry optimisation of an isolated ethanol molecule with the
+# CP2K-native GFN1-xTB implementation (chapter 16 of the CP2K tutorial).
+#
+# Version notes
+#   - native GFN1-xTB is available in all recent CP2K versions (2023.x - 2026.2)
+#   - GFN_TYPE (0 | 1 | TBLITE) only exists since CP2K 2025.1; the default is 1,
+#     so it is not written here to keep the input valid for older versions.
+#     For GFN0-xTB (CP2K >= 2025.1) add "GFN_TYPE 0" to the XTB section.
+#   - parameter files xTB1_parameters and dftd3.dat are read from CP2K_DATA_DIR
+#
+# Run:  cp2k.psmp -i ethanol_gfn1_native.inp -o ethanol_gfn1_native.out
+
+&GLOBAL
+  PROJECT     ethanol_gfn1
+  RUN_TYPE    GEO_OPT
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER  200
+    MAX_FORCE 4.5E-4               ! hartree/bohr (CP2K default)
+  &END GEO_OPT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    CHARGE       0
+    MULTIPLICITY 1
+    &QS
+      METHOD      XTB
+      EPS_DEFAULT 1.0E-10
+      &XTB
+        CHECK_ATOMIC_CHARGES   T   ! abort if Mulliken charges leave the chemical range
+        USE_HALOGEN_CORRECTION T   ! XB term (default T, no effect without halogens)
+      &END XTB
+    &END QS
+    &SCF
+      SCF_GUESS MOPAC              ! cheap semi-empirical starting guess
+      EPS_SCF   1.0E-7
+      MAX_SCF   50
+      &OT ON
+        MINIMIZER      DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF ON
+        EPS_SCF 1.0E-7
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 15.0 15.0 15.0
+      PERIODIC NONE                ! isolated molecule: no Ewald sum for xTB
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   ethanol.xyz
+      COORD_FILE_FORMAT XYZ
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+  &END SUBSYS
+&END FORCE_EVAL

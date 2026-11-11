@@ -1,0 +1,42 @@
+! ts_freq_check.inp - verify the H/Cu(111) transition state of chapter 13
+! Chapter 14, step 5.  Target versions: CP2K 2023.1 ... 2026.2
+!
+! Uses the SAME FORCE_EVAL as the NEB/Dimer runs (included from the chapter-13
+! example directory; paths are relative to the directory you run CP2K in).
+! Copy the Dimer result first:
+!   cp ../13-neb-dimer-h-cu111/ts_dimer.xyz .
+!   mpirun -np 64 cp2k.psmp -i ts_freq_check.inp -o ts_freq_check.out
+!
+! Mobile atoms: top Cu layer (19-27) + H (28) = 10 atoms -> 30 coordinates,
+! 60 displaced force evaluations.  Faster check (H only, 3 modes):
+!   mpirun -np 48 cp2k.psmp -E NFIX=27 -E NPROC_REP=8 -i ts_freq_check.inp -o ts_freq_check_H.out
+! A true first-order saddle point has exactly ONE negative (imaginary) frequency.
+
+@SET COORD ${COORD-ts_dimer.xyz}
+@SET EPS_SCF 1.0E-8
+
+&GLOBAL
+  PROJECT ts_freq
+  RUN_TYPE VIBRATIONAL_ANALYSIS
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+@INCLUDE '../13-neb-dimer-h-cu111/cu111_h_force_eval.inc'
+
+&VIBRATIONAL_ANALYSIS
+  DX 0.01
+  NPROC_REP ${NPROC_REP-8}
+  &PRINT
+    &MOLDEN_VIB ON
+    &END MOLDEN_VIB
+  &END PRINT
+&END VIBRATIONAL_ANALYSIS
+
+&MOTION
+  &CONSTRAINT
+    &FIXED_ATOMS
+      ! default: bottom + middle Cu layers fixed (1-18)
+      LIST 1..${NFIX-18}
+    &END FIXED_ATOMS
+  &END CONSTRAINT
+&END MOTION

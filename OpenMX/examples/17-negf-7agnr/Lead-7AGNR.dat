@@ -1,0 +1,97 @@
+#
+# NEGF Step 1: lead of a hydrogen-passivated 7-armchair graphene nanoribbon (7-AGNR)
+# DFT-Tutorials OpenMX chapter 17. Geometry from ASE graphene_nanoribbon(3.5, 1, 'armchair',
+# saturated=True): C-C 1.42 Ang, C-H 1.09 Ang, unrelaxed. Ribbon period 4.26 Ang along x.
+# Lead cell = 2 periods (8.52 Ang): with C6.0 (3.175 Ang) the closest atoms of cells i and i+2
+# are 9.94 Ang apart > 6.35 Ang, so only nearest-neighbour cells overlap (required by NEGF).
+# One period (4.26 Ang) would NOT satisfy this condition.
+# Basis: DFT_DATA19 'Quick' choices to keep the NEGF step affordable (C6.0-s2p2, H5.0-s2).
+#
+
+System.CurrrentDirectory      ./
+System.Name                   lead-7agnr
+DATA.PATH                     /path/to/openmx4.0/DFT_DATA19   # EDIT: absolute path containing PAO/ and VPS/
+level.of.stdout               1
+level.of.fileout              0
+
+NEGF.output_hks               on
+NEGF.filename.hks             lead-7agnr.hks
+
+Species.Number                2
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2      C_PBE19
+  H    H5.0-s2        H_PBE19
+Definition.of.Atomic.Species>
+
+#
+# C_PBE19: 4 electrons -> 2.0 2.0 ; H_PBE19: 1 electron -> 0.5 0.5
+#
+Atoms.Number                  36
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+     1  C       0.000000     7.540488     6.000000    2.0 2.0
+     2  C       0.000000    10.000000     6.000000    2.0 2.0
+     3  C       0.000000    12.459512     6.000000    2.0 2.0
+     4  H       0.165000     5.366764     6.000000    0.5 0.5
+     5  H       0.165000    14.633236     6.000000    0.5 0.5
+     6  C       0.710000     6.310732     6.000000    2.0 2.0
+     7  C       0.710000     8.770244     6.000000    2.0 2.0
+     8  C       0.710000    11.229756     6.000000    2.0 2.0
+     9  C       0.710000    13.689268     6.000000    2.0 2.0
+    10  C       2.130000     6.310732     6.000000    2.0 2.0
+    11  C       2.130000     8.770244     6.000000    2.0 2.0
+    12  C       2.130000    11.229756     6.000000    2.0 2.0
+    13  C       2.130000    13.689268     6.000000    2.0 2.0
+    14  H       2.675000     5.366764     6.000000    0.5 0.5
+    15  H       2.675000    14.633236     6.000000    0.5 0.5
+    16  C       2.840000     7.540488     6.000000    2.0 2.0
+    17  C       2.840000    10.000000     6.000000    2.0 2.0
+    18  C       2.840000    12.459512     6.000000    2.0 2.0
+    19  C       4.260000     7.540488     6.000000    2.0 2.0
+    20  C       4.260000    10.000000     6.000000    2.0 2.0
+    21  C       4.260000    12.459512     6.000000    2.0 2.0
+    22  H       4.425000     5.366764     6.000000    0.5 0.5
+    23  H       4.425000    14.633236     6.000000    0.5 0.5
+    24  C       4.970000     6.310732     6.000000    2.0 2.0
+    25  C       4.970000     8.770244     6.000000    2.0 2.0
+    26  C       4.970000    11.229756     6.000000    2.0 2.0
+    27  C       4.970000    13.689268     6.000000    2.0 2.0
+    28  C       6.390000     6.310732     6.000000    2.0 2.0
+    29  C       6.390000     8.770244     6.000000    2.0 2.0
+    30  C       6.390000    11.229756     6.000000    2.0 2.0
+    31  C       6.390000    13.689268     6.000000    2.0 2.0
+    32  H       6.935000     5.366764     6.000000    0.5 0.5
+    33  H       6.935000    14.633236     6.000000    0.5 0.5
+    34  C       7.100000     7.540488     6.000000    2.0 2.0
+    35  C       7.100000    10.000000     6.000000    2.0 2.0
+    36  C       7.100000    12.459512     6.000000    2.0 2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit        Ang
+<Atoms.UnitVectors
+      8.520000     0.000000     0.000000
+      0.000000    20.000000     0.000000
+      0.000000     0.000000    12.000000
+Atoms.UnitVectors>
+
+scf.XcType                    GGA-PBE     # identical in Step 1 and Step 2
+scf.SpinPolarization          off         # armchair ribbons are non-magnetic
+scf.ElectronicTemperature     300.0
+scf.energycutoff              200.0       # Ry, identical in Step 1 and Step 2
+scf.maxIter                   200
+scf.EigenvalueSolver          Band
+scf.Kgrid                     100 1 1     # dense along the transport axis, 1 along b and c
+scf.Mixing.Type               RMM-DIISK
+scf.Init.Mixing.Weight        0.05
+scf.Min.Mixing.Weight         0.001
+scf.Max.Mixing.Weight         0.20
+scf.Mixing.History            30
+scf.Mixing.StartPulay         10
+scf.criterion                 1.0e-10
+
+Band.dispersion               on          # check the band gap of the lead (7-AGNR is semiconducting)
+Band.Nkpath                   1
+<Band.kpath
+  60   0.0 0.0 0.0   0.5 0.0 0.0   G X
+Band.kpath>
+
+MD.Type                       Nomd

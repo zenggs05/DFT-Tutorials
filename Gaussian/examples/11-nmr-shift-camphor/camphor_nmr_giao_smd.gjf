@@ -1,0 +1,50 @@
+! Chapter 11 example: 1H/13C shieldings of (1R,4R)-camphor (rigid natural-product-like molecule)
+! Same protocol as tms_reference_nmr.gjf; convert with delta = sigma(TMS) - sigma
+%chk=camphor_opt.chk
+%mem=8GB
+%nprocshared=8
+#p B3LYP/6-31G(d) EmpiricalDispersion=GD3BJ Opt Freq SCRF=(SMD,Solvent=Chloroform)
+
+Camphor opt+freq, B3LYP-D3(BJ)/6-31G(d), SMD(chloroform)
+
+0 1
+ C      -1.974491    -0.729766     0.060723
+ C      -0.627665    -0.170949    -0.442057
+ C      -0.478487    -0.635059    -1.904031
+ C      -0.458552     1.362153    -0.250553
+ C       1.016507     1.603848    -0.660990
+ C       1.739555     0.341128    -0.141135
+ C       0.587399    -0.486952     0.473105
+ C       0.912644    -1.936917     0.739336
+ C       0.199552     0.320333     1.716218
+ O       0.461775     0.030355     2.873072
+ C      -0.546773     1.566292     1.282145
+ H      -2.031474    -1.811985    -0.103998
+ H      -2.806299    -0.265872    -0.481328
+ H      -2.152188    -0.572112     1.127935
+ H      -1.283647    -0.217522    -2.519493
+ H       0.464303    -0.347251    -2.374414
+ H      -0.539721    -1.727233    -1.972101
+ H      -1.164608     1.985532    -0.804537
+ H       1.120057     1.690410    -1.747682
+ H       1.429251     2.517179    -0.219593
+ H       2.502595     0.606300     0.599957
+ H       2.239139    -0.186092    -0.960877
+ H       1.784208    -2.027092     1.397056
+ H       0.081188    -2.448233     1.235619
+ H       1.136985    -2.472405    -0.188449
+ H      -0.035295     2.470573     1.619533
+ H      -1.575962     1.541336     1.646541
+
+--Link1--
+%oldchk=camphor_opt.chk
+%chk=camphor_nmr.chk
+%mem=8GB
+%nprocshared=8
+#p mPW1PW91/6-311+G(2d,p) NMR=GIAO SCRF=(SMD,Solvent=Chloroform)
+   Geom=Check Guess=Read
+
+Camphor GIAO shieldings, mPW1PW91/6-311+G(2d,p), SMD(chloroform)
+
+0 1
+

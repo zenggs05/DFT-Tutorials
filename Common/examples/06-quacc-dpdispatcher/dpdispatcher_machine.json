@@ -1,0 +1,14 @@
+{
+    "batch_type": "Slurm",
+    "context_type": "SSHContext",
+    "local_root": "./",
+    "remote_root": "/scratch/myname/dpdisp_work",
+    "remote_profile": {
+        "hostname": "login.cluster.example.edu",
+        "username": "myname",
+        "port": 22,
+        "key_filename": "~/.ssh/id_ed25519",
+        "timeout": 30
+    },
+    "retry_count": 2
+}

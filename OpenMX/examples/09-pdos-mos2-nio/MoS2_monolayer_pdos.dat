@@ -1,0 +1,51 @@
+# Monolayer 2H-MoS2: SCF + DOS/PDOS data (Dos.fileout). OpenMX 4.0.
+# a = 3.16 A (approximate experimental value; relax it for production), 20 A cell along c.
+# After the run:  ../09-dos-pdos-cdia/run_dosmain.sh mos2 tetra 0.1 1 2 3
+
+System.CurrrentDirectory    ./
+System.Name                 mos2
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: dir containing PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+Species.Number              2
+<Definition.of.Atomic.Species
+  Mo   Mo7.0-s3p2d2     Mo_PBE19
+  S    S7.0-s2p2d1f1    S_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                3
+Atoms.SpeciesAndCoordinates.Unit   Ang
+<Atoms.SpeciesAndCoordinates
+  1  Mo   0.00000   1.82443   10.00000   7.0  7.0
+  2  S    1.58000   0.91221   11.56000   3.0  3.0
+  3  S    1.58000   0.91221    8.44000   3.0  3.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+   3.16000   0.00000   0.00000
+  -1.58000   2.73664   0.00000
+   0.00000   0.00000  20.00000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0
+scf.energycutoff            250.0
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   12 12 1
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-8
+
+MD.Type                     Nomd
+
+Dos.fileout                 on
+Dos.Erange                  -20.0  10.0    # eV relative to E_F; Mo 4s/4p semicore states lie below this window
+Dos.Kgrid                   30 30 1

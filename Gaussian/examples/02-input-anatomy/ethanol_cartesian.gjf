@@ -1,0 +1,18 @@
+%chk=ethanol_cartesian.chk
+%mem=2GB
+%nprocshared=4
+#p B3LYP/6-31G(d) EmpiricalDispersion=GD3BJ Opt Freq
+
+ethanol, Cartesian coordinates, gas phase opt and freq
+
+0 1
+C     1.168181   -0.400382    0.000000
+C     0.000000    0.559462    0.000000
+O    -1.190083   -0.227669    0.000000
+H    -1.946623    0.381525    0.000000
+H     0.042557    1.207508    0.886933
+H     0.042557    1.207508   -0.886933
+H     2.115891    0.144800    0.000000
+H     1.128599   -1.037234    0.885881
+H     1.128599   -1.037234   -0.885881
+

@@ -1,0 +1,26 @@
+%chk=acetic_acid_conn.chk
+%mem=2GB
+%nprocshared=4
+#p B3LYP/6-31G(d) EmpiricalDispersion=GD3BJ Opt Freq Geom=Connectivity
+
+acetic acid, GaussView style input with connectivity table
+
+0 1
+C     0.000000    0.154560    0.000000
+O     0.166384    1.360084    0.000000
+O    -1.236449   -0.415036    0.000000
+H    -1.867646    0.333582    0.000000
+C     1.073776   -0.892748    0.000000
+H     2.048189   -0.408135    0.000000
+H     0.968661   -1.528353    0.881747
+H     0.968661   -1.528353   -0.881747
+
+ 1 2 2.0 3 1.0 5 1.0
+ 2
+ 3 4 1.0
+ 4
+ 5 6 1.0 7 1.0 8 1.0
+ 6
+ 7
+ 8
+

@@ -1,0 +1,4 @@
+scf.maxIter                300
+scf.Min.Mixing.Weight      0.005
+scf.Max.Mixing.Weight      0.10
+scf.Mixing.StartPulay      30

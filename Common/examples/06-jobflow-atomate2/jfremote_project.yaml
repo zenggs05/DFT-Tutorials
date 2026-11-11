@@ -1,0 +1,81 @@
+# jobflow-remote 1.x project file.
+# Copy to ~/.jfremote/dft_tutorial.yaml, edit the placeholders, then run
+#     jf project check --errors
+#     jf admin reset           # initialise the queue database (first time only)
+#     jf runner start
+# The project name is "dft_tutorial"; select it with
+#     export JFREMOTE_PROJECT=dft_tutorial   (needed only if you have several projects)
+
+name: dft_tutorial
+
+workers:
+  # A remote Slurm cluster reached through SSH from the machine running the runner
+  hpc_cpu:
+    type: remote
+    scheduler_type: slurm
+    host: login.cluster.example.edu
+    user: myname
+    # key_filename: ~/.ssh/id_ed25519      # optional, otherwise ssh-agent / defaults
+    work_dir: /scratch/myname/jfr_runs     # absolute path, no $VARIABLES
+    pre_run: |
+      source ~/miniforge3/etc/profile.d/conda.sh
+      conda activate wf
+      module load intel-oneapi vasp/6.5.1
+      ulimit -s unlimited
+      export OMP_NUM_THREADS=1
+    timeout_execute: 60
+    max_jobs: 20                           # never more than 20 jobs in the queue
+    resources:                             # default #SBATCH values (qtoolkit names)
+      partition: cpu
+      nodes: 1
+      ntasks_per_node: 32
+      cpus_per_task: 1
+      time: "08:00:00"
+
+  # Run small jobs (parsing, plotting, fitting) on the runner machine itself
+  local_shell:
+    type: local
+    scheduler_type: shell
+    work_dir: /home/myname/jfr_local
+    timeout_execute: 60
+
+# MongoDB that stores the state of every Job/Flow (must be a MongoStore)
+queue:
+  store:
+    type: MongoStore
+    host: localhost
+    port: 27017
+    database: jfr_dft_tutorial
+    username: dft_user
+    password: change_me
+    collection_name: jobs
+
+# Where job outputs (task documents) are written; same syntax as JOB_STORE in jobflow
+jobstore:
+  docs_store:
+    type: MongoStore
+    host: localhost
+    port: 27017
+    database: jfr_dft_tutorial
+    username: dft_user
+    password: change_me
+    collection_name: outputs
+  additional_stores:
+    data:
+      type: GridFSStore
+      host: localhost
+      port: 27017
+      database: jfr_dft_tutorial
+      username: dft_user
+      password: change_me
+      collection_name: outputs_blobs
+
+# Named execution configurations that can be chosen per job
+exec_config:
+  vasp6:
+    modules:
+      - intel-oneapi
+      - vasp/6.5.1
+    export:
+      OMP_NUM_THREADS: 1
+    pre_run: ulimit -s unlimited

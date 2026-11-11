@@ -1,0 +1,188 @@
+# QM/MM molecular dynamics: one water molecule (atoms 1-3) treated with PBE/DZVP
+# (Quickstep GPW) embedded in 124 flexible TIP3P-like MM waters.
+#   - electrostatic embedding with Gaussian-expanded MM potentials (E_COUPL GAUSS, GEEP)
+#   - periodic QM/MM coupling (&QMMM/&PERIODIC) because the MM box is periodic
+#   - MM force field written directly in this input (PARMTYPE OFF), no external files
+# Chapter 16 of the CP2K tutorial. See water_qmmm_amber.inp for the same system with
+# an AMBER prmtop topology.
+#
+# MM parameters: TIP3P charges and O-O Lennard-Jones (Jorgensen et al. 1983), plus the
+# flexible O-H bond / H-O-H angle terms of the AMBER force field. Force constants are
+# given in atomic units because the K keyword has no unit conversion:
+#   553.0 kcal/mol/A^2  = 0.24678 hartree/bohr^2   (bond, E = K (r - r0)^2)
+#   100.0 kcal/mol/rad^2 = 0.15936 hartree/rad^2   (bend, E = K (theta - theta0)^2)
+#
+# Run:  mpirun -np 8 cp2k.psmp -i water_qmmm_tip3p.inp -o water_qmmm_tip3p.out
+
+&GLOBAL
+  PROJECT     water_qmmm_tip3p
+  RUN_TYPE    MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+&MOTION
+  &MD
+    ENSEMBLE    NVT
+    STEPS       200
+    TIMESTEP    [fs] 0.5
+    TEMPERATURE [K] 300.0
+    &THERMOSTAT
+      TYPE   CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON [fs] 50.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &PRINT
+    &TRAJECTORY
+      &EACH
+        MD 5
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 20
+      &END EACH
+    &END RESTART
+  &END PRINT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QMMM
+  # ------------------------------------------------------------------ QM part
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    CHARGE       0                 ! total charge of the QM region only
+    MULTIPLICITY 1
+    &MGRID
+      CUTOFF     400
+      REL_CUTOFF 50
+      # commensurate grids, as used by all official QM/MM regression tests
+      COMMENSURATE
+    &END MGRID
+    &QS
+      EPS_DEFAULT         1.0E-12
+      EXTRAPOLATION       ASPC
+      EXTRAPOLATION_ORDER 3
+    &END QS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-6
+      MAX_SCF   30
+      &OT ON
+        MINIMIZER      DIIS
+        PRECONDITIONER FULL_ALL
+      &END OT
+      &OUTER_SCF ON
+        EPS_SCF 1.0E-6
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  # ------------------------------------------------------------------ MM part
+  &MM
+    &FORCEFIELD
+      PARMTYPE OFF                 ! all parameters are given below
+      &CHARGE
+        ATOM   O
+        CHARGE -0.834
+      &END CHARGE
+      &CHARGE
+        ATOM   H
+        CHARGE 0.417
+      &END CHARGE
+      &BOND
+        ATOMS O H
+        KIND  AMBER
+        K     0.24678
+        R0    [angstrom] 0.9572
+      &END BOND
+      &BEND
+        ATOMS  H O H
+        KIND   AMBER
+        K      0.15936
+        THETA0 [deg] 104.52
+      &END BEND
+      &NONBONDED
+        &LENNARD-JONES
+          ATOMS   O O
+          EPSILON [K_e] 76.54        ! = 0.1521 kcal/mol (TIP3P O-O)
+          SIGMA   [angstrom] 3.1507
+          RCUT    [angstrom] 7.5
+        &END LENNARD-JONES
+        &LENNARD-JONES
+          ATOMS   O H
+          EPSILON [K_e] 0.0
+          SIGMA   [angstrom] 1.0
+          RCUT    [angstrom] 7.5
+        &END LENNARD-JONES
+        &LENNARD-JONES
+          ATOMS   H H
+          EPSILON [K_e] 0.0
+          SIGMA   [angstrom] 1.0
+          RCUT    [angstrom] 7.5
+        &END LENNARD-JONES
+      &END NONBONDED
+    &END FORCEFIELD
+    &POISSON
+      &EWALD
+        EWALD_TYPE SPME
+        ALPHA      0.44
+        GMAX       32
+      &END EWALD
+    &END POISSON
+  &END MM
+  # ------------------------------------------------------------------ QM/MM coupling
+  &QMMM
+    E_COUPL      GAUSS             ! GEEP electrostatic embedding (GPW/GAPW only)
+    USE_GEEP_LIB 15                ! internal Gaussian expansion, no MM_POTENTIAL file needed
+    CENTER       EVERY_STEP        ! re-centre the QM box on the QM atoms (default)
+    &CELL
+      ABC      10.0 10.0 10.0      ! QM box: must contain the QM density, smaller than the MM box
+      PERIODIC XYZ
+    &END CELL
+    &PERIODIC                      ! periodic QM/MM electrostatics (Laino et al. 2006)
+      &MULTIPOLE ON                ! decouple the periodic images of the QM box
+      &END MULTIPOLE
+    &END PERIODIC
+    &QM_KIND O
+      MM_INDEX 1
+    &END QM_KIND
+    &QM_KIND H
+      MM_INDEX 2 3
+    &END QM_KIND
+    &MM_KIND O
+      RADIUS 0.78                  ! Gaussian width of the smeared MM charge, angstrom
+    &END MM_KIND
+    &MM_KIND H
+      RADIUS 0.44
+    &END MM_KIND
+  &END QMMM
+  # ------------------------------------------------------------------ whole system
+  &SUBSYS
+    &CELL
+      ABC      15.54 15.54 15.54
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   water125.xyz
+      COORD_FILE_FORMAT XYZ
+      CONN_FILE_FORMAT  GENERATE   ! default: bonds, angles, molecules guessed from distances
+    &END TOPOLOGY
+    &KIND O                        ! basis/pseudo used for the QM atoms of kind O
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q1
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

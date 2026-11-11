@@ -1,0 +1,77 @@
+! rutile_kpoints.inp - rutile TiO2, 6-atom primitive cell, energy + forces WITH k-points
+! Improved companion of input_file.inp (same structure, basis, pseudopotentials, PBE).
+! Tutorial: CP2K chapter 2, section 11.  Works with CP2K 2023.x - 2026.2.
+!
+! The 6-atom cell is only 4.593 x 4.593 x 2.959 A: Gamma-only sampling (as in
+! input_file.inp) is far from converged. Here a Monkhorst-Pack mesh is used.
+! Because OT does not support k-points in CP2K <= 2026.2, standard
+! diagonalization with Broyden density mixing is used instead.
+!
+!   rm -f rutile_k446.out; cp2k.psmp -i rutile_kpoints.inp -o rutile_k446.out
+!   cp2k.psmp -E KX=3 -E KY=3 -E KZ=3 -i rutile_kpoints.inp -o rutile_k333.out
+!
+! Requires rutile.xyz (6 lines "El x y z", Angstrom, no header) in the same directory.
+
+&GLOBAL
+  PROJECT rutile_k${KX-4}${KY-4}${KZ-6}
+  RUN_TYPE ENERGY_FORCE
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QS
+  &PRINT
+    &FORCES ON
+    &END FORCES
+  &END PRINT
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+    &MGRID
+      CUTOFF 400
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &KPOINTS
+      ! reciprocal lengths: 1/a = 0.218 1/A, 1/c = 0.338 1/A -> use more points along c
+      SCHEME MONKHORST-PACK ${KX-4} ${KY-4} ${KZ-6}
+    &END KPOINTS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF 1.0E-7
+      MAX_SCF 100
+      &DIAGONALIZATION
+        ALGORITHM STANDARD
+      &END DIAGONALIZATION
+      &MIXING
+        METHOD BROYDEN_MIXING
+        ALPHA 0.3
+        NBUFFER 8
+      &END MIXING
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ! room-temperature experiment: a = 4.594 A, c = 2.959 A, u = 0.305 (approx.)
+      ABC [angstrom] 4.593 4.593 2.959
+      PERIODIC XYZ
+    &END CELL
+    &COORD
+@INCLUDE rutile.xyz
+    &END COORD
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND Ti
+      BASIS_SET DZVP-MOLOPT-SR-GTH
+      POTENTIAL GTH-PBE-q12   ! semicore: 3s2 3p6 3d2 4s2 = 12 electrons
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

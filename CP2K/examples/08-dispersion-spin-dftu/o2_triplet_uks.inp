@@ -1,0 +1,80 @@
+# Chapter 8, example 2: O2 molecule, spin-polarized (UKS) geometry optimization
+# Target versions: CP2K 2023.1 ... 2026.2
+# Ground state of O2 is the triplet X 3Sigma_g-.  Compare with MULT 1 (closed-shell
+# UKS solution, NOT the a 1Delta_g state) by changing the @SET line below.
+@SET MULT 3
+@SET PROJ o2_mult${MULT}
+
+&GLOBAL
+  PROJECT ${PROJ}
+  RUN_TYPE GEO_OPT
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    ! spin-unrestricted Kohn-Sham (aliases: LSD, SPIN_POLARIZED)
+    UKS
+    CHARGE 0
+    ! 2S+1: 3 = triplet (two unpaired electrons)
+    MULTIPLICITY ${MULT}
+    &MGRID
+      CUTOFF 400
+      REL_CUTOFF 60
+    &END MGRID
+    &QS
+      EPS_DEFAULT 1.0E-12
+      EXTRAPOLATION ASPC
+    &END QS
+    &POISSON
+      PERIODIC NONE
+      POISSON_SOLVER MT
+    &END POISSON
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF 1.0E-7
+      MAX_SCF 40
+      &OT
+        MINIMIZER DIIS
+        PRECONDITIONER FULL_ALL
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-7
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 12.0 12.0 12.0
+      PERIODIC NONE
+    &END CELL
+    &COORD
+      O 0.000 0.000  0.625
+      O 0.000 0.000 -0.625
+    &END COORD
+    &TOPOLOGY
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    &KIND O
+      BASIS_SET TZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER 100
+    MAX_FORCE 1.0E-4
+  &END GEO_OPT
+&END MOTION

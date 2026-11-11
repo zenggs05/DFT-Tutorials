@@ -1,0 +1,27 @@
+SYSTEM   = Si HSE06 band structure with zero-weight k-points
+
+ISTART   = 1         # PBE WAVECAR computed with the SAME KPOINTS file (INCAR.pbe step)
+PREC     = Accurate
+ENCUT    = 400
+EDIFF    = 1E-6
+ISMEAR   = 0
+SIGMA    = 0.01
+LREAL    = .FALSE.
+NBANDS   = 16
+LORBIT   = 11        # projections for fat bands
+
+LHFCALC  = .TRUE.
+GGA      = PE
+HFSCREEN = 0.2
+AEXX     = 0.25
+ALGO     = Damped
+TIME     = 0.4
+PRECFOCK = Normal
+HFRCUT   = -1        # avoids discontinuities of the bands near Gamma
+# NELMIN = 10        # only needed if you restart from an already converged HSE WAVECAR
+
+# Never use ICHARG = 11 with hybrid functionals.
+NSW      = 0
+IBRION   = -1
+LWAVE    = .FALSE.
+LCHARG   = .FALSE.

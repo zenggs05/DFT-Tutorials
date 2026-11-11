@@ -1,0 +1,69 @@
+#
+# AB (Bernal) graphite with DFT-D3(BJ): optimize the interlayer lattice constant c
+# by an E(c) scan (MD.Type EvsLC with MD.EvsLC.flag 0 0 1).
+# Atomic positions are fixed by symmetry; a is kept at the experimental 2.464 Ang.
+# Variable-cell optimization (RFC5 etc.) with DFT-D is stated as unsupported in the
+# OpenMX 4.0 manual, so the c axis is scanned instead.
+# Start c = 6.20 Ang, +1 % per step, 16 steps. Fit: fit_evslc.py --mode c
+# OpenMX 4.0 (+patch 4.0.1), database DFT_DATA19
+#
+System.CurrrentDirectory    ./          # official spelling has three r's
+System.Name                 graphite_d3
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  C    C6.0-s2p2d1   C_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                4
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1   C   0.000000000   0.000000000   0.25   2.0  2.0
+  2   C   0.333333333   0.666666667   0.25   2.0  2.0
+  3   C   0.000000000   0.000000000   0.75   2.0  2.0
+  4   C   0.666666667   0.333333333   0.75   2.0  2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+   2.464000   0.000000   0.000000
+  -1.232000   2.133886   0.000000
+   0.000000   0.000000   6.200000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0       # K
+scf.Ngrid                   24 24 72    # fixed grid while c changes
+scf.EigenvalueSolver        Band
+scf.Kgrid                   15 15 5
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; remove for OpenMX 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       10
+scf.maxIter                 150
+scf.criterion               1.0e-9      # Hartree
+
+#
+# Grimme DFT-D3 with Becke-Johnson damping (default parameters are for GGA-PBE)
+#
+scf.dftD                    on
+version.dftD                3           # 2|3, default 2
+DFTD3.damp                  bj          # zero|bj, default bj
+DFTD.Unit                   AU          # the manual recommends AU for D3
+DFTD.rcut_dftD              100.0       # in DFTD.Unit
+DFTD.cncut_dftD             40          # in DFTD.Unit
+DFTD.IntDirection           1 1 1       # bulk: vdW images along a, b and c
+
+#
+# c-axis scan
+#
+MD.Type                     EvsLC
+MD.EvsLC.Step               1.0         # percent per step
+MD.EvsLC.flag               0 0 1       # keep a and b, scale c only
+MD.maxIter                  16

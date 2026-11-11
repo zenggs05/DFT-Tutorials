@@ -1,0 +1,79 @@
+# Write a Molden wavefunction file of H2O for Multiwfn (ADCH/CM5/AIM/IGMH, orbitals, DOS ...)
+# Keywords NLUMO, WRITE_PSEUDO, WRITE_CELL and UNIT of &MO_MOLDEN need CP2K >= 2026.2.
+# For CP2K <= 2026.1 keep only NDIGITS and GTO_KIND, and use diagonalization with
+# ADDED_MOS if virtual orbitals (and orbital energies) are needed in the file.
+# Molden output is not available for k-point calculations (Gamma point only).
+
+&GLOBAL
+  PROJECT     h2o_molden
+  RUN_TYPE    ENERGY
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_MOLOPT_UZH
+    POTENTIAL_FILE_NAME POTENTIAL_UZH
+    &MGRID
+      CUTOFF     400
+      REL_CUTOFF 60
+    &END MGRID
+    &POISSON
+      PERIODIC       NONE
+      POISSON_SOLVER MT
+    &END POISSON
+    &QS
+      EPS_DEFAULT 1.0E-12
+    &END QS
+    &SCF
+      SCF_GUESS ATOMIC
+      EPS_SCF   1.0E-7
+      MAX_SCF   30
+      &OT
+        MINIMIZER      DIIS
+        PRECONDITIONER FULL_SINGLE_INVERSE
+      &END OT
+      &OUTER_SCF
+        EPS_SCF 1.0E-7
+        MAX_SCF 10
+      &END OUTER_SCF
+    &END SCF
+    &XC
+      &XC_FUNCTIONAL PBE
+      &END XC_FUNCTIONAL
+    &END XC
+    &PRINT
+      &MO_MOLDEN
+        NDIGITS      9            ! keep coefficients down to 1E-9 (default 3 is for pictures only)
+        GTO_KIND     SPHERICAL
+        NLUMO        10           ! >= 2026.2: 10 virtual orbitals (OT computes them after SCF)
+        WRITE_PSEUDO T            ! >= 2026.2: [Pseudo] block with valence charges
+        ! WRITE_CELL T            ! >= 2026.2: add [Cell] block, use for PERIODIC systems
+      &END MO_MOLDEN
+    &END PRINT
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC 12.0 12.0 12.0
+      PERIODIC NONE
+    &END CELL
+    &COORD
+      O   0.000000   0.000000   0.117300
+      H   0.000000   0.757000  -0.468600
+      H   0.000000  -0.757000  -0.468600
+    &END COORD
+    &TOPOLOGY
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+    &KIND H
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q1
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+    &KIND O
+      BASIS_SET DZVP-MOLOPT-PBE-GTH-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+  &END SUBSYS
+&END FORCE_EVAL

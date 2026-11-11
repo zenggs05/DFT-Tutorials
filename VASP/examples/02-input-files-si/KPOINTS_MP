@@ -1,0 +1,5 @@
+Monkhorst-Pack mesh
+0              ! automatic generation
+Monkhorst-Pack ! first character M/m = Monkhorst-Pack
+  7  7  7      ! odd N: identical to the Gamma-centred mesh
+  0  0  0      ! optional shift

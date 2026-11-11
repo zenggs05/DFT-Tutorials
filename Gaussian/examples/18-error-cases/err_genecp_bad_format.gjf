@@ -1,0 +1,19 @@
+%chk=pdcl4_bad.chk
+#p B3LYP/GenECP SP
+
+[PdCl4]2- with GenECP but the ECP section is MISSING (only the basis section is given)
+
+-2 1
+Pd    0.000000    0.000000    0.000000
+Cl    2.330000    0.000000    0.000000
+Cl   -2.330000    0.000000    0.000000
+Cl    0.000000    2.330000    0.000000
+Cl    0.000000   -2.330000    0.000000
+
+Cl 0
+6-31+G(d)
+****
+Pd 0
+LANL2DZ
+****
+

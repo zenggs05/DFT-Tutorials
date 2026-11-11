@@ -1,0 +1,12 @@
+SYSTEM = Si step 1: full relaxation (ions + cell)
+PREC   = Accurate
+ENCUT  = 400        # about 1.6 x ENMAX(Si); cell relaxations need a margin (Pulay stress)
+EDIFF  = 1E-6
+ISMEAR = 0
+SIGMA  = 0.05
+IBRION = 2          # conjugate gradient
+ISIF   = 3          # relax positions, cell shape and volume
+NSW    = 60
+EDIFFG = -0.005     # stop when all forces < 0.005 eV/A
+LWAVE  = .FALSE.
+LCHARG = .FALSE.

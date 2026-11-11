@@ -1,0 +1,13 @@
+%nprocshared=8
+%mem=12GB
+%chk=formaldehyde_freq_anharmonic.chk
+#p B3LYP/def2TZVP Opt=VeryTight Int=SuperFine Freq=Anharmonic
+
+Formaldehyde: VeryTight opt + anharmonic (VPT2) frequencies
+
+0 1
+C     0.000000     0.000000     0.000000
+O     0.000000     0.000000     1.205000
+H     0.000000     0.934900    -0.579700
+H     0.000000    -0.934900    -0.579700
+

@@ -1,0 +1,11 @@
+%nprocshared=8
+%mem=12GB
+%chk=h2_stretched_stable_opt.chk
+#p B3LYP/def2SVP Stable=Opt
+
+Stretched H2 (2.0 A): RB3LYP is unstable, Stable=Opt finds the UB3LYP solution
+
+0 1
+H    0.000000    0.000000    0.000000
+H    0.000000    0.000000    2.000000
+
