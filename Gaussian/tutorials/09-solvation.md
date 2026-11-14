@@ -627,7 +627,7 @@ $$
 
 ### 8. 溶液中优化振荡、不收敛
 
-溶剂中的势能面通常比气相更平。可以先在气相中优化，再以该结构为起点在溶剂中优化；或者用 `Opt=CalcFC`、减小 `MaxStep`。诊断方法见 [第5章](05-opt.md) 和仓库脚本 `opt_monitor.py`（`python ../scripts/opt_monitor.py -h`）。也可以用 `python ../scripts/g16_error_doctor.py -h` 自动识别报错类型。
+溶剂中的势能面通常比气相更平。可以先在气相中优化，再以该结构为起点在溶剂中优化；或者用 `Opt=CalcFC`、减小 `MaxStep`。诊断方法见 [第5章](05-opt.md) 和仓库脚本 `opt_monitor.py`（`python ../scripts/opt_monitor.py -h`）。也可以用 [`g16_error_doctor.py`](../scripts/g16_error_doctor.py) 自动识别报错类型（`python ../scripts/g16_error_doctor.py -h` 查看用法）。
 
 ---
 
@@ -660,7 +660,7 @@ $$
 - [cclib/cclib](https://github.com/cclib/cclib)：解析日志中的能量与热化学数据
 - 更多工具见 [../../Resources/github-repos.md](../../Resources/github-repos.md)
 
-**本仓库脚本**：`../scripts/thermo_qrrho.py`（qRRHO、1 M 校正、高水平单点组合）、`../scripts/g16_log_summary.py`（批量汇总能量与热化学）、`../scripts/gjf_builder.py`（生成带溶剂的输入）。各脚本用 `-h` 查看用法。
+**本仓库脚本**：[`../scripts/thermo_qrrho.py`](../scripts/thermo_qrrho.py)（qRRHO、1 M 校正、高水平单点组合）、[`../scripts/g16_log_summary.py`](../scripts/g16_log_summary.py)（批量汇总能量与热化学）、[`../scripts/gjf_builder.py`](../scripts/gjf_builder.py)（生成带溶剂的输入）。各脚本用 `-h` 查看用法。
 
 **关键文献**
 

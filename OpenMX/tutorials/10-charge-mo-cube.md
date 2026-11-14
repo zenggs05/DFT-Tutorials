@@ -63,7 +63,7 @@ $$
 | Voronoi | 在模糊 Voronoi 多面体（fuzzy cell）内积分密度 | 只依赖结构，致密固体中较稳定，还给出 Voronoi 体积 | 不考虑原子半径，分子中常与化学直觉相反 | `Voronoi.charge on` |
 | ESP 拟合 | 拟合点电荷使其再现分子外部的静电势 | 小分子中与化学直觉吻合，适合给力场用 | 体相/大分子内部原子缺少采样点，不适用 | `esp` 后处理程序 |
 | NPA | 由自然原子轨道（NAO）的占据数给出自然布居 | 对基组较不敏感，化学解释清晰 | 需额外计算；大体系要用 O(N) 模式 | `NBO.switch on1/on2` |
-| CWF | 用最接近 Wannier 函数（4.0 新增）的占据数 | 与局域轨道图像对应 | 需先构造 CWF | 见 第14章 |
+| CWF | 用最接近 Wannier 函数（4.0 新增）的占据数 | 与局域轨道图像对应 | 需先构造 CWF | 见 [第14章](14-wannier.md) |
 | Bader | 按密度零通量面划分（外部程序） | 常用于固体电荷转移 | OpenMX 只给价电子密度，需谨慎 | 外部 `bader` 读 `tden.cube` |
 
 OpenMX 4.0 手册（第 35 章）用甲烷给出了一个说明问题的对照（数值摘自手册）：Mulliken 给 C 约 5.02 个价电子（带负电），ESP 给 C 约 −1.07 的有效电荷（也带负电），而 Voronoi 给 C 只有约 2.18 个电子、H 约 1.46 个电子——C 反而带正电，与化学直觉相反，原因是 Voronoi 多面体完全不考虑 C、H 原子尺寸差异。这正说明：**电荷的绝对值没有意义，变化趋势才有意义**。
@@ -173,7 +173,7 @@ print("integral =", rho.sum() * dV)     # number of electrons for tden.cube
 python cube_integrate.py h2o.tden.cube
 ```
 
-积分值与理论电子数相差 1e-2 量级以内是正常的（网格离散化误差）；若相差很大，说明网格太粗（提高 `scf.energycutoff`）或分子跨过了晶胞边界又被截断（Cluster 计算请把盒子取大）。对 `dden.cube` 积分应接近 0；对 `sden.cube` 积分应接近总自旋磁矩（μB）。更完整的 cube 工具（平面平均、密度差、积分）见仓库脚本 `../scripts/omx_cube_tools.py`，用 `python ../scripts/omx_cube_tools.py -h` 查看用法。
+积分值与理论电子数相差 1e-2 量级以内是正常的（网格离散化误差）；若相差很大，说明网格太粗（提高 `scf.energycutoff`）或分子跨过了晶胞边界又被截断（Cluster 计算请把盒子取大）。对 `dden.cube` 积分应接近 0；对 `sden.cube` 积分应接近总自旋磁矩（μB）。更完整的 cube 工具（平面平均、密度差、积分）见仓库脚本 [`omx_cube_tools.py`](../scripts/omx_cube_tools.py)，用 `python ../scripts/omx_cube_tools.py -h` 查看用法。
 
 ---
 
@@ -342,7 +342,7 @@ grep -B 2 -A 6 "Total  :" h2o.std     # NP of every atom and their sum
 
 ### 4.8 结果怎么读：方法对照
 
-运行完后把四种电荷整理成一张表（建议用 `../scripts/omx_parse_out.py` 自动解析 `.out`，用 `-h` 查看用法）：
+运行完后把四种电荷整理成一张表（建议用 [`omx_parse_out.py`](../scripts/omx_parse_out.py) 自动解析 `.out`，用 `-h` 查看用法）：
 
 | 原子 | Mulliken | Voronoi | ESP（-c 0） | NPA |
 |---|---|---|---|---|
@@ -356,7 +356,7 @@ grep -B 2 -A 6 "Total  :" h2o.std     # NP of every atom and their sum
 ### 4.9 Bader 与 CWF
 
 - **Bader**：Henkelman 组的 `bader` 程序可直接读 Gaussian cube：`bader h2o.tden.cube`，输出 `ACF.dat`。注意 OpenMX 的 `tden` 只含价电子（赝密度），核附近没有芯电子峰，Bader 分区在重原子周围可能出现非核吸引子；结果中的电子数应与 VPS 价电子数对照理解，必要时用更密网格（更高 `scf.energycutoff`）。
-- **CWF**：4.0 新增的最接近 Wannier 函数可以给出"原子有效电荷与自旋"，用法见 第14章。
+- **CWF**：4.0 新增的最接近 Wannier 函数可以给出"原子有效电荷与自旋"，用法见 [第14章](14-wannier.md)。
 
 ---
 
@@ -511,7 +511,7 @@ dens = re**2 + im**2
 print("norm in cell =", dens.sum() * abs(np.linalg.det(v)))
 ```
 
-写回 cube 时保持文件头不变即可（或者直接用 `../scripts/omx_cube_tools.py`）。同一 k 点的 LCAO 系数会写入 `.out`，可据此判断能带边的原子/轨道成分（例如 Si 的 VBM 以 p 为主）。
+写回 cube 时保持文件头不变即可（或者直接用 [`omx_cube_tools.py`](../scripts/omx_cube_tools.py)）。同一 k 点的 LCAO 系数会写入 `.out`，可据此判断能带边的原子/轨道成分（例如 Si 的 VBM 以 p 为主）。
 
 ---
 
@@ -723,7 +723,7 @@ OpenMX Viewer（2026-05-26 大更新）支持在一个 cube 的等值面上用�
 | `sden.cube` | e/Bohr³ | ±0.002–±0.01 |
 | 轨道 `homo/lumo` | Bohr^-3/2 | ±0.02–±0.05 |
 
-更系统的出版级作图与配色技巧见 Common 第5章。
+更系统的出版级作图与配色技巧见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 
@@ -748,8 +748,8 @@ cd ~/openmx4.0/source && make analysis_example    # copied to ../work
 | [TB2J-OpenMX](https://github.com/mailhexu/TB2J-OpenMX) | 自旋极化（含 SOC） | 交换、DMI、各向异性交换、磁振子 | [第11章](11-spin-noncollinear.md) |
 | `kSpin`、`calB`、`Z2FH` | 非共线（+SOC） | 自旋织构、Berry 曲率/Chern 数、Z2 | [第12章](12-soc-topology.md) |
 | [OMXsigmaxy](https://github.com/hikaruri/OMXsigmaxy)、[HWC](https://github.com/Ncmexp2717/HWC) | 视功能而定 | 反常霍尔电导、混合 Wannier 中心 | [第12章](12-soc-topology.md) |
-| `polB` | 任意 | Berry 相宏观极化 | 第15章 |
-| [DeepH-pack](https://github.com/mzjb/DeepH-pack)、[HamGNN](https://github.com/QuantumLab-ZY/HamGNN) | 任意 | 机器学习哈密顿量数据集 | 第18章 |
+| `polB` | 任意 | Berry 相宏观极化 | [第15章](15-berry-efield.md) |
+| [DeepH-pack](https://github.com/mzjb/DeepH-pack)、[HamGNN](https://github.com/QuantumLab-ZY/HamGNN) | 任意 | 机器学习哈密顿量数据集 | [第18章](18-parallel-on-errors.md) |
 | [HopTB.jl](https://github.com/HopTB/HopTB.jl) | 任意 | 紧束缚模型、Berry 曲率、光学/非线性响应 | — |
 
 > [!WARNING]

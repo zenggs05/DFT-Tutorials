@@ -16,7 +16,10 @@ and A(r) follows by trapezoidal integration over the windows.  A(r) here is
 -kT ln P(r) and therefore contains the entropic r^2 (Jacobian) term; the
 "PMF" w(r) = -kT ln g(r) is obtained as w(r) = A(r) + 2 kT ln r (option --pmf).
 Constraints on angles, combined CVs, several constraints, fixed atoms etc. need
-the full mass-metric correction (see CP2K trunk tools/blue_moon/).
+the full mass-metric correction of Sprik & Ciccotti, J. Chem. Phys. 109, 7737
+(1998), https://doi.org/10.1063/1.477419 -- not implemented here.
+Sign convention as in the official CP2K exercise "Free Energy Profile of NaCl
+Dissociation" (A = - integral of <lambda>).
 
 Example:
     python3 bluemoon_integrate.py window_*/ --skip 2000 --pmf -T 300 -o bluemoon_fes.dat

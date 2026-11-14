@@ -302,7 +302,7 @@ B 1 2 S 14 -0.1
 ### 5.2 怎么用扫描结果
 
 1. 提取能量曲线（第 8 节），找到最高点，一般在 C···Cl ≈ 2.3–2.4 Å 附近；
-2. 取出该点的结构：在 GaussView 中打开 `.log`，Results → Scan，点击最高点，再 File → Save 另存为 `.gjf`；或用 `python ../scripts/scan_irc_profile.py -h` 查看用法（它会报告最高点），配合 `python ../scripts/log2xyz.py -h` 导出结构；
+2. 取出该点的结构：在 GaussView 中打开 `.log`，Results → Scan，点击最高点，再 File → Save 另存为 `.gjf`；或用仓库脚本 [`scan_irc_profile.py`](../scripts/scan_irc_profile.py) 报告最高点，并用 `--write-max` 把最高点结构直接写成 xyz（`python ../scripts/scan_irc_profile.py -h` 查看用法），也可以配合 [`log2xyz.py`](../scripts/log2xyz.py) 导出结构；
 3. 把这个结构作为初猜，运行 `Opt=(TS,CalcFC,NoEigenTest) Freq`，然后做 IRC（[第7章](07-ts-irc.md) 第 4–7 节）。
 
 > [!TIP]
@@ -339,7 +339,7 @@ B 1 3 S 6 0.2
 | 计算量 | 点数为 (n₁+1)(n₂+1)。先用粗网格（0.2 Å 或 30°）看全貌，再在关注区域加密 |
 | 点的顺序 | 不同坐标谁先变化、谁后变化，以日志汇总表中每个点列出的坐标值为准，不要凭假设对号入座 |
 | 网格角落的高能区 | 例如 C···Cl 和 C–Br 都很短的角落，能量很高，SCF 可能难收敛。若只关心反应通道，可以缩小范围 |
-| 可视化 | Gaussian 16 C.01 起会把多维柔性扫描信息写入 fchk，可在 GaussView 中显示；也可以用 `python ../scripts/scan_irc_profile.py -h` 查看是否支持二维等高线图 |
+| 可视化 | Gaussian 16 C.01 起会把多维柔性扫描信息写入 fchk，可在 GaussView 中显示；仓库脚本 [`scan_irc_profile.py`](../scripts/scan_irc_profile.py) 能识别二维柔性扫描并画等高线图（`python ../scripts/scan_irc_profile.py -h` 查看用法） |
 | 二面角二维扫描 | 例如丙氨酸二肽的 φ/ψ（Ramachandran 图），30° 网格就有 12 × 12 = 144 个点，建议先用小基组或 xtb 预扫 |
 
 二维 S<sub>N</sub>2 势能面上，左上角（C···Cl 长、C–Br 短）是反应物谷，右下角（C···Cl 短、C–Br 长）是产物谷，鞍点位于两谷之间的“山口”处。这就是 More O'Ferrall–Jencks 图的思路，可以直观看出反应是协同的还是分步的。
@@ -430,13 +430,13 @@ awk '/Stationary point found/{f=1} f && /D\(1,2,3,4\)/{print $4; f=0}' "$LOG"
 
 ### 8.3 Python 作图
 
-仓库脚本 `scan_irc_profile.py` 可以解析一维/二维柔性扫描和 IRC，以 kcal/mol 相对最低点作图，并报告最高点作为 TS 初猜：
+仓库脚本 [`scan_irc_profile.py`](../scripts/scan_irc_profile.py) 可以解析一维/二维柔性扫描和 IRC，以 kcal/mol 相对最低点作图，并报告最高点作为 TS 初猜：
 
 ```bash
 python ../scripts/scan_irc_profile.py -h
 ```
 
-如果只想快速看一眼曲线，也可以把上面的 `scan_E.dat` 直接交给 gnuplot、Excel 或 matplotlib。出版级作图规范见 Common 第5章。
+如果只想快速看一眼曲线，也可以把上面的 `scan_E.dat` 直接交给 gnuplot、Excel 或 matplotlib。出版级作图规范见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 
@@ -534,7 +534,7 @@ python ../scripts/scan_irc_profile.py -h
 - [QChASM/AaronTools.py](https://github.com/QChASM/AaronTools.py)：结构操作与输出解析工具包
 - 更多工具见 [../../Resources/github-repos.md](../../Resources/github-repos.md)
 
-**本仓库脚本**：`../scripts/scan_irc_profile.py`（扫描与 IRC 能量曲线，报告最高点）、`../scripts/log2xyz.py`（导出所有扫描点结构为多帧 xyz）、`../scripts/opt_monitor.py`（单点优化收敛诊断）、`../scripts/gjf_builder.py`（生成 scan 模板）。各脚本用 `-h` 查看用法。
+**本仓库脚本**：[`../scripts/scan_irc_profile.py`](../scripts/scan_irc_profile.py)（扫描与 IRC 能量曲线，报告最高点）、[`../scripts/log2xyz.py`](../scripts/log2xyz.py)（导出所有扫描点结构为多帧 xyz）、[`../scripts/opt_monitor.py`](../scripts/opt_monitor.py)（单点优化收敛诊断）、[`../scripts/gjf_builder.py`](../scripts/gjf_builder.py)（生成 scan 模板）。各脚本用 `-h` 查看用法。
 
 **关键文献**
 

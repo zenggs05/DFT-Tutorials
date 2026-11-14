@@ -25,7 +25,7 @@ GEO_OPT 与 CELL_OPT 的选择：
 | 体相晶体的平衡晶格常数、体积、c/a | `CELL_OPT` | 同时优化原子坐标和晶胞 |
 | 层状材料（石墨、MoS2、h-BN）层间距 | `CELL_OPT` + 色散校正 | 没有色散校正时层间距严重偏大，见 [第8章](08-dispersion-spin-dftu.md) |
 | 二维单层（真空方向不能动） | `CELL_OPT` + `CONSTRAINT Z` 或 `KEEP_*` | 只优化面内晶格 |
-| 有限温度下的平均晶格（热膨胀） | NPT 分子动力学 | 优化得到的是势能面极小，不含零点能和热效应，见 第12章 |
+| 有限温度下的平均晶格（热膨胀） | NPT 分子动力学 | 优化得到的是势能面极小，不含零点能和热效应，见 [第12章](12-aimd.md) |
 | 过渡态 | `GEO_OPT` + `TYPE TRANSITION_STATE` 或 NEB | 见 [第13章](13-neb-dimer.md) |
 
 本章示例输入集：[../examples/07-geo-cell-opt/README.md](../examples/07-geo-cell-opt/README.md)。
@@ -206,7 +206,7 @@ CP2K 的判据用原子单位，换算成常用单位后更直观：
 | `RUN_TYPE` | `GEO_OPT` | 固定晶胞，只优化原子坐标 |
 | `&QS/EXTRAPOLATION` | `ASPC`（默认） | 用前几步的波函数外推出本步的 SCF 初猜，可显著减少 SCF 步数；`EXTRAPOLATION_ORDER` 默认 3 |
 | `EPS_SCF` | 1.0E-7 | 比单点能更紧。力的误差大致与 $\sqrt{\text{EPS\_SCF}}$ 同量级，SCF 太松会让优化在终点附近来回振荡 |
-| `&OUTER_SCF` | 10 次外循环 | OT 的标准配置，见第5章 |
+| `&OUTER_SCF` | 10 次外循环 | OT 的标准配置，见[第5章](05-scf-strategy.md) |
 | `TYPE` | `MINIMIZATION`（默认） | 找极小；`TRANSITION_STATE` 用于 Dimer 等过渡态搜索 |
 | `OPTIMIZER` | `BFGS`（默认） | 别名 `MINIMIZER`；可选 `BFGS`、`LBFGS`、`CG` |
 | `MAX_ITER` | 200（默认） | 优化步数上限；CG 和 LBFGS 的一步可能包含多次力计算 |
@@ -657,7 +657,7 @@ CELL_OPT 的 `OPT|` 块在 GEO_OPT 的基础上多了压力相关的几行（示
  OPT| Pressure is converged                                                   NO
 ```
 
-初始晶格偏大时内压为负（体系“想”收缩），随优化逐步趋近外压。`<PROJECT>-1.cell` 每行包含步数、时间、三个晶胞矢量的 9 个分量和体积，可以直接画体积–步数曲线；`plot_opt.py` 也能读取（`python ../../scripts/plot_opt.py -h`）。
+初始晶格偏大时内压为负（体系“想”收缩），随优化逐步趋近外压。`<PROJECT>-1.cell` 每行包含步数、时间、三个晶胞矢量的 9 个分量和体积，可以直接画体积–步数曲线；[`plot_opt.py`](../scripts/plot_opt.py) 也能读取（`python ../../scripts/plot_opt.py -h`）。
 
 ### 6.4 结果判断
 
@@ -916,7 +916,7 @@ mpirun -np 16 cp2k.psmp -i si_cellopt_cont.inp -o si_cellopt_cont.out
 
 **4. `[ABORT] SCF run NOT converged. To continue the calculation regardless, please set the keyword IGNORE_CONVERGENCE_FAILURE.`（出现在优化中途）**
 原因：自 2024.1 起 SCF 不收敛默认中止。优化中途出现，往往是结构走到了不合理的位置（原子太近、键断裂）或外推给出了很差的初猜。
-解决：查看最后几帧结构；把 `EXTRAPOLATION` 改为 `USE_PREV_WF` 或 `USE_GUESS`；减小 `TRUST_RADIUS`；按第5章增强 SCF（`OUTER_SCF`、换预条件子、金属用对角化 + 展宽）。不要用 `IGNORE_CONVERGENCE_FAILURE` 硬跑优化。
+解决：查看最后几帧结构；把 `EXTRAPOLATION` 改为 `USE_PREV_WF` 或 `USE_GUESS`；减小 `TRUST_RADIUS`；按[第5章](05-scf-strategy.md)增强 SCF（`OUTER_SCF`、换预条件子、金属用对角化 + 展宽）。不要用 `IGNORE_CONVERGENCE_FAILURE` 硬跑优化。
 
 **5. LBFGS 提示 `Specific L-BFGS convergence criteria ... run CONVERGED!`，但最大力仍大于 `MAX_FORCE`**
 原因：LBFGS 的专用判据先满足了。
@@ -950,7 +950,7 @@ mpirun -np 16 cp2k.psmp -i si_cellopt_cont.inp -o si_cellopt_cont.out
 
 ## 练习
 
-1. 用示例中的 `h2o_geo_opt_bfgs.inp` 分别以 BFGS、LBFGS、CG（`2PNT` 与 `GOLD`）运行，统计每种方法的优化步数和总 SCF 迭代次数（`grep -c "OPT| Step number"`、`grep "outer SCF loop converged" | wc -l` 或 `cp2k_outparse.py`），比较哪种最省。
+1. 用示例中的 `h2o_geo_opt_bfgs.inp` 分别以 BFGS、LBFGS、CG（`2PNT` 与 `GOLD`）运行，统计每种方法的优化步数和总 SCF 迭代次数（`grep -c "OPT| Step number"`、`grep "outer SCF loop converged" | wc -l` 或 [`cp2k_outparse.py`](../scripts/cp2k_outparse.py)），比较哪种最省。
 2. 把 `MAX_FORCE` 收紧到 1.0E-4 继续优化（从 `-1.restart` 续算），观察键长和键角还变化多少；思考为什么振动分析之前需要这一步。
 3. 对 Si 分别用 CUTOFF 300、400、600、800 Ry 运行 `si_cell_opt.inp`，画出晶格常数随 CUTOFF 的变化；再去掉 `&CELL_REF` 重复一次，比较曲线的平滑程度。
 4. 在 Si 的最终晶格常数附近做 7 个点的 E–V 扫描（固定晶胞 `RUN_TYPE ENERGY`），用 ASE 的 `EquationOfState` 拟合，比较 E–V 极小与 CELL_OPT 结果之差。

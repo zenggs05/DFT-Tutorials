@@ -50,8 +50,8 @@ def main():
     # ionic steps that were written completely (a warning is issued).
     with warnings.catch_warnings(record=True) as wlist:
         warnings.simplefilter("always")
-        vr = Vasprun(xml, parse_potcar_file=False, exception_on_bad_xml=False,
-                     parse_projected_eigen=a.band)
+        # parse_projected_eigen=True is only needed for fat bands (large memory)
+        vr = Vasprun(xml, parse_potcar_file=False, exception_on_bad_xml=False)
     for w in wlist:
         if "XML" in str(w.message) or "incomplete" in str(w.message).lower():
             print("WARNING:", w.message)
@@ -115,6 +115,8 @@ def main():
         lp = find(a.rundir, "LOCPOT")
         if lp is None:
             print("no LOCPOT (set LVHAR = .TRUE. in INCAR)")
+        elif vr.efermi is None:
+            print("no E-fermi in vasprun.xml: cannot compute the work function")
         else:
             loc = Locpot.from_file(lp)
             z = loc.get_axis_grid(2)

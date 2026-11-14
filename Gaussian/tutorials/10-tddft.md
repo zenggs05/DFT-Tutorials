@@ -13,7 +13,7 @@
 - 用 NTO、`Pop=DCT` 和 Multiwfn 空穴-电子分析判断激发是局域激发（LE）还是电荷转移（CT）；
 - 在溶液中区分平衡/非平衡溶剂化，并会使用态特定方法 cLR 与 ExternalIteration。
 
-前置知识：几何优化与频率（[第5章](05-opt.md)、[第6章](06-freq-thermo.md)）、隐式溶剂（[第9章](09-solvation.md)）。开壳层体系的激发态先读 [第13章](13-openshell-stability.md) 的稳定性检查。DFT 理论背景可参考 Common 第7章。
+前置知识：几何优化与频率（[第5章](05-opt.md)、[第6章](06-freq-thermo.md)）、隐式溶剂（[第9章](09-solvation.md)）。开壳层体系的激发态先读 [第13章](13-openshell-stability.md) 的稳定性检查。DFT 理论背景可参考 [Common 第7章](../../Common/tutorials/07-learning-path.md)。
 
 | 任务 | 本章小节 | 配套示例 |
 |---|---|---|
@@ -254,7 +254,7 @@ $$
 2. **Multiwfn**：载入 `.log`，进入主功能 11（谱图绘制），选择 UV-Vis，可设置线型、FWHM、平移，导出 `spectrum_curve.txt`（Multiwfn 2026 起按日期命名版本，见 [Multiwfn 手册 3.13 节](http://sobereva.com/multiwfn/manual/)）；
 3. **本仓库脚本**：`spectrum_uvvis_ecd.py` 解析 TD 输出、在 eV 空间做高斯展宽、输出 CSV 并画 UV-Vis/ECD 图，支持能量平移、对映体翻转和多构象 Boltzmann 加和。运行 `python ../scripts/spectrum_uvvis_ecd.py -h` 查看用法。
 
-出版级作图（字体、配色、坐标轴）参见 Common 第5章 与 [第16章](16-postprocess-multiwfn.md)。也可以用 [cclib](https://github.com/cclib/cclib) 解析 `etenergies`、`etoscs`、`etrotats` 后自行绘图。
+出版级作图（字体、配色、坐标轴）参见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md) 与 [第16章](16-postprocess-multiwfn.md)。也可以用 [cclib](https://github.com/cclib/cclib) 解析 `etenergies`、`etoscs`、`etrotats` 后自行绘图。
 
 ## 6. 实战二：S1 激发态优化与荧光发射
 
@@ -556,7 +556,7 @@ cubegen 0 MO=HOMO dmabn_nto_s2.fchk nto_s2_hole.cub 0 h
 cubegen 0 MO=LUMO dmabn_nto_s2.fchk nto_s2_particle.cub 0 h
 ```
 
-cubegen 与 Multiwfn 的批量用法见 [第16章](16-postprocess-multiwfn.md)；仓库脚本 `batch_cube_multiwfn.sh` 可批量生成 cube（`bash ../scripts/batch_cube_multiwfn.sh -h`）。
+cubegen 与 Multiwfn 的批量用法见 [第16章](16-postprocess-multiwfn.md)；仓库脚本 [`batch_cube_multiwfn.sh`](../scripts/batch_cube_multiwfn.sh) 可批量生成 cube（`bash ../scripts/batch_cube_multiwfn.sh -h`）。
 
 ### 9.2 DCT 电荷转移指标
 

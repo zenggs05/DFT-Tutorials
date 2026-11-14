@@ -156,7 +156,7 @@ HSE06 也是以 PBE 为基础的杂化，通常同样使用 `-PBE0-`/`-HYB-` 赝
 
 ### 3.4 色散校正与杂化泛函
 
-杂化泛函同样需要色散校正。`&VDW_POTENTIAL` 的写法与第8章相同，只是 `REFERENCE_FUNCTIONAL` 要换成杂化泛函名（如 `PBE0`、`B3LYP`）。手写组合泛函时 CP2K 无法自动识别，务必显式写出。
+杂化泛函同样需要色散校正。`&VDW_POTENTIAL` 的写法与[第8章](08-dispersion-spin-dftu.md)相同，只是 `REFERENCE_FUNCTIONAL` 要换成杂化泛函名（如 `PBE0`、`B3LYP`）。手写组合泛函时 CP2K 无法自动识别，务必显式写出。
 
 ---
 
@@ -289,7 +289,7 @@ grep "HFX_MEM_INFO" h2o_pbe0_admm.out | head -12
 grep "GEOMETRY OPTIMIZATION COMPLETED" h2o_pbe0_admm.out
 ```
 
-能量分解中会出现 `Hartree-Fock Exchange energy:` 一行；`ADMM|` 开头的行汇报 ADMM 设置。PBE0 下水分子的 O–H 键长通常比 PBE 略短（更接近实验值 0.957 Å），可以与第7章的 PBE 结果对比。
+能量分解中会出现 `Hartree-Fock Exchange energy:` 一行；`ADMM|` 开头的行汇报 ADMM 设置。PBE0 下水分子的 O–H 键长通常比 PBE 略短（更接近实验值 0.957 Å），可以与[第7章](07-geo-cell-opt.md)的 PBE 结果对比。
 
 ---
 
@@ -405,7 +405,7 @@ grep "ENERGY| Total FORCE_EVAL" water32_pbe0.out
 - 第一步 SCF 远慢于之后各步（ERI 计算），这是正常的。
 
 > [!TIP]
-> 示例的 `water32.xyz` 是在 fcc 格点上随机取向生成的初始构型，没有平衡，只用于演示输入。真实研究应先用经典 MD 或 PBE-D3 AIMD 平衡结构（见第12章）。
+> 示例的 `water32.xyz` 是在 fcc 格点上随机取向生成的初始构型，没有平衡，只用于演示输入。真实研究应先用经典 MD 或 PBE-D3 AIMD 平衡结构（见[第12章](12-aimd.md)）。
 
 ---
 
@@ -677,7 +677,7 @@ export OMP_NUM_THREADS=4
 
 - `SCREEN_ON_INITIAL_P T` 在 MD 第一步需要重启文件提供密度矩阵；
 - 结构优化中每一步都要重新计算 ERI（原子移动后积分变了），开销与单点相近；
-- AIMD 常用 ADMM + 截断 PBE0 + D3，并把杂化泛函 AIMD 的步数控制在必要范围内，先用 GGA 平衡，见第12章。
+- AIMD 常用 ADMM + 截断 PBE0 + D3，并把杂化泛函 AIMD 的步数控制在必要范围内，先用 GGA 平衡，见[第12章](12-aimd.md)。
 
 ---
 

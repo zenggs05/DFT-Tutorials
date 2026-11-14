@@ -10,7 +10,7 @@
 |---|---|---|
 | 孤立 H2O | `h2o_opt_tight.inp` → `h2o_vib_ir.inp` | 紧优化 → 全 Hessian 频率、IR 强度（`&MOMENTS`）、RRHO 热化学（298.15 K） |
 | CO 顶位吸附在 Pt(111) 3×3×3 slab 上 | `co_pt111_opt.inp` → `co_on_pt_partial_hessian.inp` | 固定全部 Pt 的部分 Hessian，吸附物 6 个模式，简谐极限的 ZPE/振动熵 |
-| 第13章 H/Cu(111) 的过渡态 | `ts_freq_check.inp` | 与 NEB/Dimer 同一 `FORCE_EVAL`，检查只有一个虚频 |
+| [第13章](../../tutorials/13-neb-dimer.md) H/Cu(111) 的过渡态 | `ts_freq_check.inp` | 与 NEB/Dimer 同一 `FORCE_EVAL`，检查只有一个虚频 |
 
 所有输入用 `@INCLUDE` 共享 `&FORCE_EVAL`，保证优化和频率计算的设置完全一致。
 

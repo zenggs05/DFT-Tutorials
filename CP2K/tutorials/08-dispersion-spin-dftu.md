@@ -710,7 +710,7 @@ Mulliken 表的列为 `#  Atom  Element  Kind  Atomic population (alpha,beta) Ne
 | 项目 | 推荐设置 | 说明 |
 |---|---|---|
 | 色散方案（GGA） | PBE-D3(BJ) 或 PBE-D4 | 显式写 `TYPE` 和 `REFERENCE_FUNCTIONAL` |
-| 色散方案（杂化） | PBE0-D3(BJ)、B3LYP-D3(BJ) | `REFERENCE_FUNCTIONAL` 改成对应泛函，见第9章 |
+| 色散方案（杂化） | PBE0-D3(BJ)、B3LYP-D3(BJ) | `REFERENCE_FUNCTIONAL` 改成对应泛函，见[第9章](09-hybrid-admm.md) |
 | `R_CUTOFF` | 默认约 10.6 Å；周期体系可增大到 15–20 Å 测试 | 能量变化 < 0.1 meV/原子即可 |
 | 相互作用能基组 | TZVP 以上，或做 BSSE 校正 | DZVP 的 BSSE 可能与色散能量同量级 |
 | 非局域 vdW `CUTOFF` | 从 100 Ry 起测试 | 独立于 `&MGRID` |
@@ -771,7 +771,7 @@ Mulliken 表的列为 `#  Atom  Element  Kind  Atomic population (alpha,beta) Ne
 1. 用苯二聚体示例分别计算 PBE、PBE-D3（零阻尼，`TYPE DFTD3`）、PBE-D3(BJ) 的相互作用能，再用 `RUN_TYPE BSSE` 得到 BSSE 校正后的值，整理成表格。
 2. 把苯二聚体的层间距（坐标文件中第二个苯的 z 坐标）从 3.2 Å 扫到 4.4 Å（步长 0.2 Å，用 Python 改写 xyz），画出 PBE 与 PBE-D3(BJ) 的势能曲线，比较极小位置。
 3. 对 O2 分别用 `MULT 3` 和 `MULT 1` 优化，比较键长和能量；再用 `ROKS` 计算三重态，与 UKS 结果比较 $\langle S^2\rangle$ 与能量。
-4. 对 NiO 的 4 原子菱方胞，在 2026.2 下取 `UEFF` = 0、2、4、6、8 eV，记录 Ni 自旋矩和 `DFT+U energy`；结合第10章的 DOS 读出带隙，画出带隙随 U 的变化。
+4. 对 NiO 的 4 原子菱方胞，在 2026.2 下取 `UEFF` = 0、2、4、6、8 eV，记录 Ni 自旋矩和 `DFT+U energy`；结合[第10章](10-dos-pdos-band.md)的 DOS 读出带隙，画出带隙随 U 的变化。
 5. 把 NiO 输入中两个 Ni 都改成 `MAGNETIZATION 2.0` 并设 `MULTIPLICITY 5`（铁磁，2 个 Ni 各 2 μB），与 AFM 能量比较，估算交换作用强弱。
 6. 去掉石墨示例中的色散校正重跑 CELL_OPT，再分别用 D3(BJ) 和 D4 计算，比较三种情况下的 c 和层间结合能。
 

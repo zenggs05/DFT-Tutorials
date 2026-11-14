@@ -66,5 +66,5 @@ phonopy-bandplot --gnuplot band.yaml > band.dat
 - conf 中显式写了 `PRIMITIVE_AXES`，避免 v4 默认 `AUTO` 与 v3 默认单位矩阵造成结果不一致。
 - 单点计算**不能**弛豫（`IBRION = -1`、`NSW = 0`）。
 - 收敛检查：把 `DIM` 改为 3 3 3（`DIM="3 3 3" bash run_disp.sh prepare`，KPOINTS 改为 2×2×2）比较声子谱。
-- 位移超胞较多时可改用 Slurm job array 提交（见 Common 第2章）。
-- 也可以使用仓库的自动化脚本 `../../scripts/phonopy_workflow.sh`（用法见 `-h`）。
+- 位移超胞较多时可改用 Slurm job array 提交（见 [Common 第2章](../../../Common/tutorials/02-job-scheduler.md)）。
+- 也可以使用仓库的自动化脚本 [`phonopy_workflow.sh`](../../scripts/phonopy_workflow.sh)（用法见 `bash ../../scripts/phonopy_workflow.sh -h`）。

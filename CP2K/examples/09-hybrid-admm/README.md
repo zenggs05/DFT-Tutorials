@@ -61,7 +61,7 @@ grep -i "SCF run NOT converged" *.out                                # should be
 - 每个杂化计算的能量分解中都应出现非零的 `Hartree-Fock Exchange energy:`。
 - water32 PBE0：从 PBE 重启后 SCF 通常十几步内收敛；`calculated on the fly` 为 0 或很小说明 `MAX_MEMORY` 够用。第一步 SCF 明显慢于后续各步（ERI 计算），属于正常现象。
 - Si64 HSE06（2026.2）：可能出现提示截断半径小于 erfc 判据所需半径的警告，这是预期的（5 Å 小于自动值约 14 Å），截断半径需要按教程第 7.2 节做收敛测试；在 2026.1 及以前，`CUTOFF_RADIUS` 对 `SHORTRANGE` 不起作用，会出现 “larger than half the minimal cell dimension” 警告。
-- Γ 点超胞的 HOMO–LUMO 差不是 Si 的间接带隙；带隙请用第10章的 DOS/能带方法计算（实验值约 1.17 eV）。
+- Γ 点超胞的 HOMO–LUMO 差不是 Si 的间接带隙；带隙请用[第10章](../../tutorials/10-dos-pdos-band.md)的 DOS/能带方法计算（实验值约 1.17 eV）。
 
 ## 注意事项
 

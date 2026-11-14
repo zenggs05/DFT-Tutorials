@@ -1,0 +1,70 @@
+#
+# BaTiO3, 5-atom perovskite cell with tetragonal lattice, LDA
+# Purpose : polar P4mm structure (lambda = 1) for polB.
+#           The z coordinates below are only an INITIAL GUESS of typical size;
+#           replace them with the relaxed ones from BaTiO3_tetra_relax.dat.
+# Target  : OpenMX 4.0 (+patch 4.0.1), DFT_DATA19
+# Lattice : a = 3.992 Ang, c = 4.036 Ang (approximate room-temperature
+#           experimental values); the SAME cell is used for every structure
+#           so that only the ionic displacement changes along the path.
+# Polar axis = c (third lattice vector = Cartesian z).
+#
+
+System.CurrrentDirectory    ./           # note: official spelling has three r
+System.Name                 bto_polar
+level.of.stdout             1
+level.of.fileout            0
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+
+#
+# Species (Standard basis of DFT_DATA19). Valence: Ba 10, Ti 12, O 6
+#
+Species.Number      3
+<Definition.of.Atomic.Species
+  Ba   Ba10.0-s3p2d2   Ba_CA19
+  Ti   Ti7.0-s3p2d1    Ti_CA19
+  O    O6.0-s2p2d1     O_CA19
+Definition.of.Atomic.Species>
+
+#
+# Atoms (fractional): Ba at the origin, O1 = apical O below Ti along c
+#
+Atoms.Number        5
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Ba   0.000000   0.000000   0.000000    5.0  5.0
+  2  Ti   0.500000   0.500000   0.515000    6.0  6.0
+  3  O    0.500000   0.500000   0.975000    3.0  3.0
+  4  O    0.500000   0.000000   0.485000    3.0  3.0
+  5  O    0.000000   0.500000   0.485000    3.0  3.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  3.992000   0.000000   0.000000
+  0.000000   3.992000   0.000000
+  0.000000   0.000000   4.036000
+Atoms.UnitVectors>
+
+#
+# SCF (insulator)
+#
+scf.XcType                  LDA          # must match *_CA19 pseudopotentials
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0        # K
+scf.energycutoff            250.0        # Ry, set explicitly
+scf.maxIter                 200
+scf.EigenvalueSolver        band
+scf.Kgrid                   8 8 8
+scf.Mixing.Type             rmm-diisk
+scf.Init.Mixing.Weight      0.05
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          7
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-10      # Hartree
+
+MD.Type                     nomd
+
+# Hamiltonian/overlap for polB
+HS.fileout                  on

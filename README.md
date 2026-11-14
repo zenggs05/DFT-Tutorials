@@ -10,7 +10,9 @@
 
 📖 **在线阅读（带搜索的文档网站）**：<https://zenggs05.github.io/DFT-Tutorials/>
 
-目前收录 **65 章教程**、**152 套示例输入**、**44 个脚本**，以及 **230+ 个相关 GitHub 仓库**的精选索引。
+🎓 **想有人手把手带你入门？** 一对一 DFT/Gaussian 实操课与保研辅导：<https://feiniaofly.cn/>（[详情](#tutoring)）
+
+目前收录 **79 章教程**、**167 套示例输入**、**85 个脚本**，以及 **230+ 个相关 GitHub 仓库**的精选索引。
 
 ## 📚 内容一览
 
@@ -87,8 +89,13 @@
 | [第9章 杂化泛函与 ADMM](CP2K/tutorials/09-hybrid-admm.md) | [09-hybrid-admm](CP2K/examples/09-hybrid-admm/README.md) |
 | [第10章 电子结构分析：DOS、PDOS 与能带](CP2K/tutorials/10-dos-pdos-band.md) | [10-dos-pdos-band](CP2K/examples/10-dos-pdos-band/README.md) |
 | [第11章 实空间性质：cube 文件、电荷分析与功函数](CP2K/tutorials/11-cube-charge-workfunction.md) | [11-cube-charge-workfunction](CP2K/examples/11-cube-charge-workfunction/README.md) |
+| [第12章 从头算分子动力学](CP2K/tutorials/12-aimd.md) | [12-aimd-water](CP2K/examples/12-aimd-water/README.md) |
 | [第13章 过渡态搜索：NEB 与 Dimer](CP2K/tutorials/13-neb-dimer.md) | [13-neb-dimer-h-cu111](CP2K/examples/13-neb-dimer-h-cu111/README.md) |
 | [第14章 振动分析、红外与热化学](CP2K/tutorials/14-vibration-thermo.md) | [14-vibration-thermo](CP2K/examples/14-vibration-thermo/README.md) |
+| [第15章 增强采样：元动力学、PLUMED 与约束 MD](CP2K/tutorials/15-metadynamics-plumed.md) | [15-metadynamics-nacl](CP2K/examples/15-metadynamics-nacl/README.md) |
+| [第16章 QM/MM 与半经验方法（xTB/DFTB）](CP2K/tutorials/16-qmmm-xtb.md) | [16-qmmm-xtb](CP2K/examples/16-qmmm-xtb/README.md) |
+| [第17章 自动化与工具生态：ASE、cp2k-input-tools、Multiwfn、cp2kdata](CP2K/tutorials/17-tools-ecosystem.md) | [17-automation-tools](CP2K/examples/17-automation-tools/README.md) |
+| [第18章 常见错误排查、性能调优与版本迁移](CP2K/tutorials/18-troubleshooting.md) | [18-troubleshooting](CP2K/examples/18-troubleshooting/README.md) |
 
 ### OpenMX
 
@@ -107,14 +114,23 @@
 | [第11章 自旋极化、非共线磁性与交换耦合](OpenMX/tutorials/11-spin-noncollinear.md) | [11-cr-bcc-afm](OpenMX/examples/11-cr-bcc-afm/README.md) [11-fe-bcc-fm](OpenMX/examples/11-fe-bcc-fm/README.md) [11-fe-bcc-jx](OpenMX/examples/11-fe-bcc-jx/README.md) [11-mno-noncollinear](OpenMX/examples/11-mno-noncollinear/README.md) |
 | [第12章 自旋轨道耦合与拓扑性质](OpenMX/tutorials/12-soc-topology.md) | [12-bi2se3-soc-z2](OpenMX/examples/12-bi2se3-soc-z2/README.md) [12-gaas-soc-band](OpenMX/examples/12-gaas-soc-band/README.md) [12-mos2-soc-band](OpenMX/examples/12-mos2-soc-band/README.md) |
 | [第13章 DFT+U（Hubbard U 与 Hund J）](OpenMX/tutorials/13-dft-u.md) | [13-dft-u-nio-mno](OpenMX/examples/13-dft-u-nio-mno/README.md) |
+| [第14章 Wannier 函数：MLWF 与 CWF](OpenMX/tutorials/14-wannier.md) | [14-gaas-cwf](OpenMX/examples/14-gaas-cwf/README.md) [14-graphene-pz-mlwf](OpenMX/examples/14-graphene-pz-mlwf/README.md) [14-si-mlwf-sp3](OpenMX/examples/14-si-mlwf-sp3/README.md) |
+| [第15章 Berry 相宏观极化与外加电场](OpenMX/tutorials/15-berry-efield.md) | [15-batio3-polarization](OpenMX/examples/15-batio3-polarization/README.md) [15-nacl-polb-born](OpenMX/examples/15-nacl-polb-born/README.md) [15-nitrobenzene-efield](OpenMX/examples/15-nitrobenzene-efield/README.md) |
 | [第16章 表面与界面：ESM、功函数、电荷掺杂](OpenMX/tutorials/16-surface-esm-workfunction.md) | [16-al111-esm-workfunction](OpenMX/examples/16-al111-esm-workfunction/README.md) [16-graphene-charge-doping](OpenMX/examples/16-graphene-charge-doping/README.md) [16-pt111-esm-charging](OpenMX/examples/16-pt111-esm-charging/README.md) |
 | [第17章 NEGF 电子输运](OpenMX/tutorials/17-negf-transport.md) | [17-negf-7agnr](OpenMX/examples/17-negf-7agnr/README.md) [17-negf-carbon-chain](OpenMX/examples/17-negf-carbon-chain/README.md) |
+| [第18章 并行、大体系 O(N)、作业脚本与常见错误排查（Parallelization, Large-Scale O(N) Methods, Job Scripts & Troubleshooting in OpenMX）](OpenMX/tutorials/18-parallel-on-errors.md) | [18-api-python](OpenMX/examples/18-api-python/README.md) [18-c60-cluster-elpa](OpenMX/examples/18-c60-cluster-elpa/README.md) [18-job-scripts](OpenMX/examples/18-job-scripts/README.md) [18-on-si-dc-krylov](OpenMX/examples/18-on-si-dc-krylov/README.md) |
 
 ### 通用基础
 
 | 章节 | 示例 |
 |---|---|
 | [第1章 计算环境搭建：Linux/WSL、conda、集群登录与文件传输](Common/tutorials/01-linux-hpc.md) | [01-env-setup](Common/examples/01-env-setup/README.md) |
+| [第2章 HPC 作业调度：Slurm/PBS/LSF 模板与并行设置](Common/tutorials/02-job-scheduler.md) | [02-array-chain-si](Common/examples/02-array-chain-si/README.md) [02-job-templates](Common/examples/02-job-templates/README.md) |
+| [第3章 结构准备：数据库下载、建模（超胞/表面/缺陷/掺杂/异质结）与格式转换](Common/tutorials/03-structure-modeling.md) | [03-defect-doping-mgo](Common/examples/03-defect-doping-mgo/README.md) [03-fetch-convert-si](Common/examples/03-fetch-convert-si/README.md) [03-heterostructure-2d](Common/examples/03-heterostructure-2d/README.md) [03-molecules](Common/examples/03-molecules/README.md) [03-slab-adsorption](Common/examples/03-slab-adsorption/README.md) |
+| [第4章 ASE 与 pymatgen 实战：统一驱动四款软件、输入集与输出解析](Common/tutorials/04-ase-pymatgen.md) | [04-ase-calculators](Common/examples/04-ase-calculators/README.md) [04-ase-emt-basics](Common/examples/04-ase-emt-basics/README.md) [04-output-parsing](Common/examples/04-output-parsing/README.md) [04-pymatgen-io](Common/examples/04-pymatgen-io/README.md) |
+| [第5章 后处理与可视化：VASPKIT、sumo、pyprocar、VESTA、Multiwfn 与出版级作图](Common/tutorials/05-postprocess-visualization.md) | [05-band-dos-plotting](Common/examples/05-band-dos-plotting/README.md) [05-vaspkit-batch](Common/examples/05-vaspkit-batch/README.md) [05-visualization-3d](Common/examples/05-visualization-3d/README.md) |
+| [第6章 工作流自动化与高通量：custodian、atomate2、jobflow、AiiDA](Common/tutorials/06-workflow-automation.md) | [06-aiida-cp2k-vasp](Common/examples/06-aiida-cp2k-vasp/README.md) [06-custodian-vasp-si](Common/examples/06-custodian-vasp-si/README.md) [06-jobflow-atomate2](Common/examples/06-jobflow-atomate2/README.md) [06-quacc-dpdispatcher](Common/examples/06-quacc-dpdispatcher/README.md) |
+| [第7章 DFT 理论速览、学习路线与资源汇总（含机器学习势前沿）](Common/tutorials/07-learning-path.md) | [07-convergence-templates](Common/examples/07-convergence-templates/README.md) [07-learning-resources](Common/examples/07-learning-resources/README.md) [07-mlip-nep-mace](Common/examples/07-mlip-nep-mace/README.md) |
 
 ## 🗂️ 仓库结构
 
@@ -154,6 +170,37 @@ python VASP/scripts/plot_band.py -h
 | Gaussian | Gaussian 16 Rev. C.01/C.02 + GaussView 6 | |
 | CP2K | 2026.2，兼顾 2023.x–2025.x | 新旧语法差异（如 CELL_OPT/TYPE、&DOS/&PDOS）均有对照 |
 | OpenMX | 4.0（patch 4.0.1）+ DFT_DATA19，兼顾 3.9 | 标注 4.0 的默认值变化 |
+
+<a id="tutoring"></a>
+
+## 🎓 一对一辅导推荐
+
+教程适合自学；如果你时间紧、希望有人带着把第一个计算从头跑通，或者正在准备保研，欢迎看看我的个人辅导网站：
+
+👉 **飞鸟想要飞 · 保研全程陪跑与科研入门**：<https://feiniaofly.cn/>
+
+- **DFT / Gaussian 一对一实操课**：线上屏幕共享 + 课后练习，从连接超算、编写输入、提交任务到结果分析，独立完成一个完整计算案例
+- **单次问题诊断 / 远程实操**：报错排查、参数设置、结果分析等具体问题，提前看材料、集中讲透
+- **保研规划与申请辅导**：院校梯度规划、简历与个人陈述优化、模拟面试、面经资料
+- **科研入门与数学建模**：文献调研与研究方法、Linux/超算、Python/机器学习、MCM/ICM 与国赛指导
+
+网站上的「飞鸟研习社」与本仓库同步更新 DFT 中文教程；也欢迎关注公众号 **「飞鸟想要飞」**，获取计算脚本分享与教程更新。
+
+> [!NOTE]
+> 辅导以教学和方法交流为主，不代写、不挂名、不承诺任何结果；具体内容与价格以网站说明和双方确认为准。
+
+## ☕ 支持作者
+
+**制作不易。** 这套教程从选题、编写示例输入、对照官方文档逐条核对，到编写和整理脚本，花了我大量的课余时间。如果它帮你少踩了几个坑、省下了几天摸索的时间，欢迎扫码请我喝杯咖啡 ☕，金额随意，心意最重要，你的支持是我持续更新和补充新章节的最大动力！
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/donate/wechat-pay.jpg" alt="微信收款码 WeChat Pay" width="220"><br>微信 WeChat Pay</td>
+    <td align="center"><img src="assets/donate/alipay.jpg" alt="支付宝收款码 Alipay" width="220"><br>支付宝 Alipay</td>
+  </tr>
+</table>
+
+不方便打赏也完全没关系：点一个 ⭐ **Star**、转发给身边做计算的同学，或者在 Issues 里指出错误、提出想看的主题，同样是很大的鼓励。谢谢你！
 
 ## 🤝 参与贡献
 

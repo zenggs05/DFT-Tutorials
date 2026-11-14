@@ -12,7 +12,7 @@
 
 | 路径 | 说明 |
 |---|---|
-| `1-scf/INCAR, POSCAR, KPOINTS` | 自洽：Γ 中心 8×8×8，`LCHARG=.TRUE.`；POSCAR 用 a = 5.47 Å（请换成第4章优化得到的值） |
+| `1-scf/INCAR, POSCAR, KPOINTS` | 自洽：Γ 中心 8×8×8，`LCHARG=.TRUE.`；POSCAR 用 a = 5.47 Å（请换成[第4章](../../tutorials/04-relax-eos.md)优化得到的值） |
 | `2-band-icharg11/INCAR, KPOINTS` | 非自洽能带：`ICHARG=11`、`NBANDS=16`、`LORBIT=11`；Line-mode 路径 L–Γ–X–U\|K–Γ，每段 40 点 |
 | `3-dos/INCAR, KPOINTS` | 密网格 DOS：Γ 中心 16×16×16、`ISMEAR=-5`、`LORBIT=11`、`NEDOS=3001` |
 | `4-band-kpoints-opt/INCAR, KPOINTS, KPOINTS_OPT` | 一步法：KPOINTS 为均匀网格，KPOINTS_OPT 为同一条路径 |

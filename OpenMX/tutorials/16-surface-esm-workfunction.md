@@ -23,7 +23,7 @@
 | 表面弛豫（固定底层） | `MD.Type RF` + `<MD.Fixed.XYZ` | 同上，`Pt111_relax_fixbottom.dat` |
 | 二维材料掺杂 / 栅压 | `scf.system.charge`，背景补偿或 `on3` + `ESM.direction z` | [16-graphene-charge-doping](../examples/16-graphene-charge-doping/README.md) |
 
-前置知识：输入文件结构见[第3章](03-input-first-calc.md)，基组与空原子见[第4章](04-pao-vps.md)，SCF 与 k 点见[第5章](05-scf-kpoints-convergence.md)，结构优化见[第6章](06-optimization-eos-neb.md)，cube 文件与差分密度见[第10章](10-charge-mo-cube.md)。锯齿势外电场 `scf.Electric.Field` 见第15章。通用的表面建模方法（超胞、切面、异质结）见 Common 第3章。
+前置知识：输入文件结构见[第3章](03-input-first-calc.md)，基组与空原子见[第4章](04-pao-vps.md)，SCF 与 k 点见[第5章](05-scf-kpoints-convergence.md)，结构优化见[第6章](06-optimization-eos-neb.md)，cube 文件与差分密度见[第10章](10-charge-mo-cube.md)。锯齿势外电场 `scf.Electric.Field` 见[第15章](15-berry-efield.md)。通用的表面建模方法（超胞、切面、异质结）见 [Common 第3章](../../Common/tutorials/03-structure-modeling.md)。
 
 ---
 
@@ -158,7 +158,7 @@ python3 make_slab_omx.py -h        # all options
 # distance of outermost atoms to the ESM boundaries: 14.48 / 14.48 Ang
 ```
 
-不想写代码的话，可以用 OpenMX Viewer（2026-05 版）的 **Slab Builder**：按 Miller 指数、板厚、真空厚度和终止面生成 slab，再导出 OpenMX 输入。导出后务必按 3.1 节检查法向是否为第一条矢量。其他建模工具（cif2omx、cif2x、acoord 等）见[第3章](03-input-first-calc.md)和 Common 第3章。
+不想写代码的话，可以用 OpenMX Viewer（2026-05 版）的 **Slab Builder**：按 Miller 指数、板厚、真空厚度和终止面生成 slab，再导出 OpenMX 输入。导出后务必按 3.1 节检查法向是否为第一条矢量。其他建模工具（cif2omx、cif2x、acoord 等）见[第3章](03-input-first-calc.md)和 [Common 第3章](../../Common/tutorials/03-structure-modeling.md)。
 
 ### 3.4 固定底层做表面弛豫
 
@@ -350,7 +350,7 @@ vacuum-level difference V_right - V_left =   0.000 eV (non-zero for asymmetric/p
 
 （示意输出，数值仅供参考）
 
-想自己写脚本的话，核心只有几行：读入 cube，在 b、c 两个方向求平均，取真空平台减去 μ。这一步也可以交给 OpenMX 部分的公共脚本 omx_cube_tools.py，它直接对 cube 做平面平均，不依赖 `gcube2oned`，用法见 `python ../scripts/omx_cube_tools.py -h`：
+想自己写脚本的话，核心只有几行：读入 cube，在 b、c 两个方向求平均，取真空平台减去 μ。这一步也可以交给 OpenMX 部分的公共脚本 [omx_cube_tools.py](../scripts/omx_cube_tools.py) 的 `workfunc` 子命令，它直接对 cube 做平面平均，不依赖 `gcube2oned`，用法见 `python ../scripts/omx_cube_tools.py workfunc -h`。自己实现的最小版本如下：
 
 ```python
 import numpy as np
@@ -452,7 +452,7 @@ ESM.potential.diff            1.0         # eV; only valid with on4
 
 两块金属分别位于 x=0 和 x=|a|，电势差为 1.0 V（以底部金属为参考）。真空区的电场约为 ΔV / 有效间距，板内部的电场被金属屏蔽。检查方法是对 `pt111_on4_dv1.v0.cube` 做平面平均，真空区应当出现线性斜坡。
 
-on4 与 `scf.Electric.Field`（锯齿势，第15章）的区别：
+on4 与 `scf.Electric.Field`（锯齿势，[第15章](15-berry-efield.md)）的区别：
 
 | | `scf.Electric.Field` | ESM `on4` |
 |---|---|---|
@@ -497,7 +497,7 @@ scf.Kgrid                     1 24 24
 python3 dirac_point.py graphene_q0.Band graphene_qm002_bg.Band graphene_qm002_on3.Band
 ```
 
-`.Band` 中的本征值和 μ 都以 Hartree 为单位、未平移；`bandgnu13` 输出的 `GNUBAND`/`BANDDAT1` 已换算为 eV，并以 μ 为零点（第8章）。也可以用 OpenMX 部分的公共脚本 omx_band_plot.py 画图（`python ../scripts/omx_band_plot.py -h`）。
+`.Band` 中的本征值和 μ 都以 Hartree 为单位、未平移；`bandgnu13` 输出的 `GNUBAND`/`BANDDAT1` 已换算为 eV，并以 μ 为零点（第8章）。也可以用 OpenMX 部分的公共脚本 [omx_band_plot.py](../scripts/omx_band_plot.py) 画图（`python ../scripts/omx_band_plot.py -h`）。
 
 **如何判断结果**：中性时 $E_D-\mu\approx0$；电子掺杂 0.02 e/胞（$n\approx3.8\times10^{13}$ cm$^{-2}$）时，按线性色散 $E_F-E_D=\hbar v_F\sqrt{\pi n}$ 估算，费米能级应比狄拉克点高 0.6–0.7 eV（取 $v_F\approx(0.85\text{–}1.0)\times10^6$ m/s 的估算值）。背景电荷和 ESM 两种做法下，能带相对 μ 的位移应当接近，区别在静电势：ESM on3 下石墨烯与“栅极”之间有线性电势坡（栅电场），背景电荷做法里真空中的势则呈抛物线弯曲。
 
@@ -636,4 +636,4 @@ ESM.wall.height               100.0       # eV at x_b + 1 Ang
 
 ---
 
-[← 上一章](13-dft-u.md) | [返回目录](../README.md) | [下一章 →](17-negf-transport.md)
+[← 上一章](15-berry-efield.md) | [返回目录](../README.md) | [下一章 →](17-negf-transport.md)

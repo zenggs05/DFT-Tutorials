@@ -88,6 +88,6 @@ sbatch g16_slurm.sh benzene_opt_restart.gjf                # continue from benze
 - GPU 模板默认让前两个分配到的核控制两块 GPU，这只是最简单的选择。请根据日志中 `nvidia-smi topo -m` 的 CPU Affinity 把控制核改到与 GPU 相连的那颗 CPU 上。A100 需要 G16 Rev. C.02。
 - Linda 模板需要 Linda 版本的 Gaussian 和节点间免密码 ssh；普通（SMP 版）Gaussian 不能跨节点。
 - `Default.Route.example` 只有改名为 `Default.Route` 并放在作业目录（或 `$g16root/g16`）时才生效，它的优先级最低。
-- 想要功能更完整的提交封装，可以使用仓库脚本 `sub_g16.sh`（`bash ../../scripts/sub_g16.sh -h` 查看用法）。
+- 想要功能更完整的提交封装，可以使用仓库脚本 [`sub_g16.sh`](../../scripts/sub_g16.sh)（`bash ../../scripts/sub_g16.sh -h` 查看用法）。
 
 [← 返回第17章](../../tutorials/17-hpc-jobs.md)

@@ -137,7 +137,7 @@ cp2k.psmp -e input.inp | grep -A8 "&CELL"    # 展开后的晶胞设置
 grep -i "CELL|" output.out | head -20         # 程序实际使用的晶胞向量、长度、角度和体积
 ```
 
-建议用 VESTA、OVITO 或 ASE GUI 连同周期像一起看一遍结构：真空方向不应有原子“贴”到盒子边界，周期方向上相邻像之间既不能重叠，也不能出现人为的空隙。建模和格式转换见 Common 第3章 结构准备 和 Common 第4章 ASE 与 pymatgen。
+建议用 VESTA、OVITO 或 ASE GUI 连同周期像一起看一遍结构：真空方向不应有原子“贴”到盒子边界，周期方向上相邻像之间既不能重叠，也不能出现人为的空隙。建模和格式转换见 [Common 第3章 结构准备](../../Common/tutorials/03-structure-modeling.md) 和 [Common 第4章 ASE 与 pymatgen](../../Common/tutorials/04-ase-pymatgen.md)。
 
 ---
 
@@ -441,7 +441,7 @@ grep "ENERGY| Total FORCE_EVAL"             pt111_slab_dipole.out
 
 （2026.2 源码中的判据是：在偶极层所在的平面上，总电荷密度的平面平均绝对值不小于 10⁻⁵（原子单位）。）若 C 轴不沿 `SURF_DIP_DIR`，或 A、B 在 z 方向有分量，则报 `Dipole correction only for surface perpendicular to one Cartesian axis`。
 
-**真空与偶极校正的验证**：分别用 c = 22、26、30 Å 计算，比较能量和受力；再输出 V_HARTREE cube，沿 z 做平面平均。真空区的静电势应当是两段平台，平台之差对应 slab 两侧功函数之差。做法见 [第11章](11-cube-charge-workfunction.md) 和本仓库的 ../scripts/cube_tools.py（`python ../scripts/cube_tools.py -h`）。
+**真空与偶极校正的验证**：分别用 c = 22、26、30 Å 计算，比较能量和受力；再输出 V_HARTREE cube，沿 z 做平面平均。真空区的静电势应当是两段平台，平台之差对应 slab 两侧功函数之差。做法见 [第11章](11-cube-charge-workfunction.md) 和本仓库的 [cube_tools.py](../scripts/cube_tools.py)（`python ../scripts/cube_tools.py -h`）。
 
 > [!TIP]
 > 2D 周期加真正 2D 的 Poisson 求解器（方式 B：`PERIODIC XY` + `POISSON_SOLVER MT` 或 `ANALYTIC`）是偶极校正之外的另一种选择，物理上没有周期像问题。2026.2 修复了 2D 体系在 ANALYTIC/MT 下的解析应力。不过方式 B 用 MT 时同样要求法向盒子 ≥ 2 倍 slab 电荷分布，计算量通常更大。日常的吸附、反应计算用方式 A 即可。
@@ -562,7 +562,7 @@ grep "BRILLOUIN|" si_primitive_kpoints.out | head -12
 
 ### 7.3 k 点并行
 
-k 点计算的 MPI 进程会被分成若干组，每组负责一部分 k 点。`PARALLEL_GROUP_SIZE` 的约束是：组大小能整除总进程数，组数能整除 k 点数。默认值 -1 会自动选择满足约束的最小组大小，k 点多时效率最好。若 k 点数是质数或与进程数不匹配，可以调整进程数，或者显式给出 `PARALLEL_GROUP_SIZE`。MPI 与 OpenMP 的配比见 第18章。
+k 点计算的 MPI 进程会被分成若干组，每组负责一部分 k 点。`PARALLEL_GROUP_SIZE` 的约束是：组大小能整除总进程数，组数能整除 k 点数。默认值 -1 会自动选择满足约束的最小组大小，k 点多时效率最好。若 k 点数是质数或与进程数不匹配，可以调整进程数，或者显式给出 `PARALLEL_GROUP_SIZE`。MPI 与 OpenMP 的配比见 [第18章](18-troubleshooting.md)。
 
 ---
 
@@ -649,7 +649,7 @@ bash run_kpoint_scan.sh                          # NK = 2 3 4 5 6 8 10 12
 NKS="2 4 6 8 10" CP2K="mpirun -np 8 cp2k.psmp" bash run_kpoint_scan.sh
 ```
 
-脚本为每个 NK 建立 `kp_<NK>/` 目录，运行后汇总到 `kpoint_scan.csv`。各列为：网格、实际 k 点数（`BRILLOUIN| List of Kpoints`）、总能量、相对最密网格的能量差（meV/原子）、压力（`STRESS| 1/3 Trace`，单位 bar）。本仓库的通用脚本 ../scripts/conv_kpoints.py 能按晶格长度和 k 点密度自动生成网格序列（`python ../scripts/conv_kpoints.py -h`）。
+脚本为每个 NK 建立 `kp_<NK>/` 目录，运行后汇总到 `kpoint_scan.csv`。各列为：网格、实际 k 点数（`BRILLOUIN| List of Kpoints`）、总能量、相对最密网格的能量差（meV/原子）、压力（`STRESS| 1/3 Trace`，单位 bar）。本仓库的通用脚本 [conv_kpoints.py](../scripts/conv_kpoints.py) 能按晶格长度和 k 点密度自动生成网格序列（`python ../scripts/conv_kpoints.py -h`）。
 
 ### 8.2 判读
 

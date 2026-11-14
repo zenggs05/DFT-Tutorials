@@ -1,0 +1,165 @@
+# Semi-empirical QM/MM: one water molecule (atoms 1-3) described with the CP2K-native
+# GFN1-xTB, embedded in 124 flexible TIP3P-like MM waters. Chapter 16 of the CP2K tutorial.
+#
+# Purpose: the cheapest possible QM/MM set-up (seconds per MD step on a laptop). Use it to
+# test a QM/MM workflow (QM selection, MM force field, thermostat, analysis) before paying
+# for DFT in water_qmmm_tip3p.inp.
+#
+# Notes
+#   - xTB/DFTB QM regions use E_COUPL COULOMB (analytical 1/r with the Mulliken charges of
+#     the tight-binding model). E_COUPL GAUSS (GEEP) is for GPW/GAPW; in CP2K <= 2026.2 the
+#     GAUSS coupling is documented as "not available for DFTB".
+#   - Here the QM/MM electrostatics is NOT periodic (no &QMMM/&PERIODIC), as in the official
+#     regression test tests/QMMM/xTB/regtest/wdim_scc.inp. The MM-MM part is periodic (SPME).
+#     Periodic QM/MM for xTB exists (see tests/QMMM/xTB/regtest/fdeb_7.inp, coupling
+#     POINT_CHARGE + &PERIODIC/&POISSON/&EWALD); check it with "cp2k.psmp -c" on your version.
+#   - The MM force field is the same as in water_qmmm_tip3p.inp (see the unit conversions there).
+#   - water125.xyz is an idealised start box: discard the first ~1 ps.
+#
+# Run:  cp2k.psmp -i xtb_qmmm_water.inp -o xtb_qmmm_water.out
+
+&GLOBAL
+  PROJECT     water_qmmm_xtb
+  RUN_TYPE    MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+&MOTION
+  &MD
+    ENSEMBLE    NVT
+    STEPS       2000
+    TIMESTEP    [fs] 0.5
+    TEMPERATURE [K] 300.0
+    &THERMOSTAT
+      TYPE   CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON [fs] 50.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &PRINT
+    &TRAJECTORY
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+  &END PRINT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QMMM
+  # ------------------------------------------------------------------ QM part (GFN1-xTB)
+  &DFT
+    CHARGE       0                 ! charge of the QM region only
+    MULTIPLICITY 1
+    &QS
+      METHOD      XTB
+      EPS_DEFAULT 1.0E-10
+      &XTB
+        CHECK_ATOMIC_CHARGES T
+      &END XTB
+    &END QS
+    &SCF
+      SCF_GUESS MOPAC
+      EPS_SCF   1.0E-7
+      MAX_SCF   100
+      &MIXING
+        METHOD DIRECT_P_MIXING
+        ALPHA  0.3
+      &END MIXING
+    &END SCF
+  &END DFT
+  # ------------------------------------------------------------------ MM part (TIP3P-like)
+  &MM
+    &FORCEFIELD
+      PARMTYPE OFF
+      &CHARGE
+        ATOM   O
+        CHARGE -0.834
+      &END CHARGE
+      &CHARGE
+        ATOM   H
+        CHARGE 0.417
+      &END CHARGE
+      &BOND
+        ATOMS O H
+        KIND  AMBER
+        K     0.24678              ! hartree/bohr^2 (= 553 kcal/mol/A^2)
+        R0    [angstrom] 0.9572
+      &END BOND
+      &BEND
+        ATOMS  H O H
+        KIND   AMBER
+        K      0.15936             ! hartree/rad^2 (= 100 kcal/mol/rad^2)
+        THETA0 [deg] 104.52
+      &END BEND
+      &NONBONDED
+        &LENNARD-JONES
+          ATOMS   O O
+          EPSILON [K_e] 76.54
+          SIGMA   [angstrom] 3.1507
+          RCUT    [angstrom] 7.5
+        &END LENNARD-JONES
+        &LENNARD-JONES
+          ATOMS   O H
+          EPSILON [K_e] 0.0
+          SIGMA   [angstrom] 1.0
+          RCUT    [angstrom] 7.5
+        &END LENNARD-JONES
+        &LENNARD-JONES
+          ATOMS   H H
+          EPSILON [K_e] 0.0
+          SIGMA   [angstrom] 1.0
+          RCUT    [angstrom] 7.5
+        &END LENNARD-JONES
+      &END NONBONDED
+    &END FORCEFIELD
+    &POISSON
+      &EWALD
+        EWALD_TYPE SPME
+        ALPHA      0.44
+        GMAX       32
+      &END EWALD
+    &END POISSON
+  &END MM
+  # ------------------------------------------------------------------ QM/MM coupling
+  &QMMM
+    E_COUPL COULOMB                ! analytical 1/r coupling for tight-binding QM regions
+    CENTER  EVERY_STEP
+    &CELL
+      ABC      10.0 10.0 10.0      ! QM box, must stay smaller than the MM box
+      PERIODIC XYZ
+    &END CELL
+    &QM_KIND O
+      MM_INDEX 1
+    &END QM_KIND
+    &QM_KIND H
+      MM_INDEX 2 3
+    &END QM_KIND
+    &PRINT                         ! default level MEDIUM; switched on for PRINT_LEVEL LOW
+      &PROGRAM_RUN_INFO ON
+      &END PROGRAM_RUN_INFO
+      &QMMM_LINK_INFO ON
+      &END QMMM_LINK_INFO
+    &END PRINT
+  &END QMMM
+  # ------------------------------------------------------------------ whole system
+  &SUBSYS
+    &CELL
+      ABC      15.54 15.54 15.54
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME   water125.xyz
+      COORD_FILE_FORMAT XYZ
+      CONN_FILE_FORMAT  GENERATE
+    &END TOPOLOGY
+  &END SUBSYS
+&END FORCE_EVAL

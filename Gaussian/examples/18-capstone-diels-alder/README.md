@@ -86,6 +86,6 @@ python plot_profile.py R=0 TS=<dG_TS> P=<dG_P> -o da_profile.png
 - **标准态**：`--conc 1.0` 对每个物种加上 RT ln(24.46)（298.15 K 时 +1.89 kcal/mol）。双分子反应 A + B → TS 中，反应物有两个物种，TS 只有一个，所以 ΔG‡(1 M) = ΔG‡(1 atm) − 1.89 kcal/mol。
 - **频率缩放**：GoodVibes 会根据识别到的方法和基组自动选择频率缩放因子；想关闭缩放用 `-v 1.0`，并在文中说明。
 - **TS 初猜失败**时，可以用第8章的方法做柔性扫描：同时缩短 C1–C6 与 C4–C5（`Geom=GIC` 定义两键之和），取能量最高点作为初猜；或者用 QST2（反应物与产物原子编号一致）。
-- 仓库脚本可替代或辅助：[`thermo_qrrho.py`](../../scripts/thermo_qrrho.py)（教学版 qRRHO + 1 M 校正 + Boltzmann 加权）、`scan_irc_profile.py`（IRC 能量曲线）、[`log2xyz.py`](../../scripts/log2xyz.py)（导出 IRC 端点结构）、[`g16_log_summary.py`](../../scripts/g16_log_summary.py)（汇总所有 log），均用 `-h` 查看用法。
+- 仓库脚本可替代或辅助：[`thermo_qrrho.py`](../../scripts/thermo_qrrho.py)（教学版 qRRHO + 1 M 校正 + Boltzmann 加权）、[`scan_irc_profile.py`](../../scripts/scan_irc_profile.py)（IRC 能量曲线）、[`log2xyz.py`](../../scripts/log2xyz.py)（导出 IRC 端点结构）、[`g16_log_summary.py`](../../scripts/g16_log_summary.py)（汇总所有 log），均用 `-h` 查看用法。
 
 [← 返回第18章](../../tutorials/18-errors-capstone.md)

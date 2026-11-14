@@ -225,7 +225,7 @@ bash run_dosmain.sh cdia_dos tetra            # tetrahedron, all atoms
 bash run_dosmain.sh cdia_dos gauss 0.1 1      # Gaussian a = 0.1 eV, PDOS of atom 1 only
 ```
 
-仓库脚本 ../scripts/omx_dos_auto.py 把"驱动 DosMain + 按元素/角动量求和 + 作图"合在一起，用 `python ../scripts/omx_dos_auto.py -h` 查看用法。
+仓库脚本 [omx_dos_auto.py](../scripts/omx_dos_auto.py) 把"驱动 DosMain + 按元素/角动量求和 + 作图"合在一起，用 `python ../scripts/omx_dos_auto.py -h` 查看用法。
 
 ### 4.6 输出文件与列
 
@@ -720,7 +720,7 @@ btp2 integrate -t Si_BoltzTraP.bt2 300
 - [HopTB/HopTB.jl](https://github.com/HopTB/HopTB.jl) — 由 OpenMX 哈密顿量构建紧束缚模型，计算光学与非线性响应
 - [hikaruri/OMXsigmaxy](https://github.com/hikaruri/OMXsigmaxy) — 由 `.scfout` 计算反常霍尔电导
 - [TnakaTnakaTnaka/TEP_tools](https://github.com/TnakaTnakaTnaka/TEP_tools) — 由透射谱计算 Seebeck、ZT 的思路参考
-- 本仓库：../scripts/omx_dos_auto.py、../scripts/omx_parse_out.py、第5章 后处理与可视化、[相关仓库总表](../../Resources/github-repos.md)
+- 本仓库：[omx_dos_auto.py](../scripts/omx_dos_auto.py)、[omx_parse_out.py](../scripts/omx_parse_out.py)、公共篇 [第5章 后处理与可视化](../../Common/tutorials/05-postprocess-visualization.md)、[相关仓库总表](../../Resources/github-repos.md)
 
 **关键文献**
 

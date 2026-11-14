@@ -118,7 +118,7 @@ $$
 | `&PRINT/&RESTART` | `&SCF` | 打开 | `BACKUP_COPIES 0` | 控制 `<project>-RESTART.wfn`（Γ）或 `<project>-RESTART.kp`（k 点）的写出 |
 
 > [!TIP]
-> `EPS_SCF` 的选择要与任务匹配。能量对波函数误差是二阶的，所以能量通常比 `EPS_SCF` 本身精确得多；但力、应力和振动频率对 SCF 误差更敏感。经验上，单点能和几何优化用 1.0E-6，振动分析用 1.0E-7 到 1.0E-8，AIMD 用 1.0E-6 配合波函数外推（见 第12章）。
+> `EPS_SCF` 的选择要与任务匹配。能量对波函数误差是二阶的，所以能量通常比 `EPS_SCF` 本身精确得多；但力、应力和振动频率对 SCF 误差更敏感。经验上，单点能和几何优化用 1.0E-6，振动分析用 1.0E-7 到 1.0E-8，AIMD 用 1.0E-6 配合波函数外推（见 [第12章](12-aimd.md)）。
 
 ---
 
@@ -642,7 +642,7 @@ grep "SCF run converged" h2o_ot.out restart_from_wfn.out
 | PBE → PBE0/HSE06 | 先 PBE 收敛，再以其 `.wfn` 起步做杂化计算，并可开 `SCREEN_ON_INITIAL_P` | 见 [第9章](09-hybrid-admm.md) |
 | ENERGY → GEO_OPT → VIBRATIONAL_ANALYSIS | 每一步都读上一步的 `.wfn` | 几何变化后 `.wfn` 只是初猜；优化与 MD 中的初猜主要靠 `&QS EXTRAPOLATION`（默认 `ASPC`） |
 | 闭壳层 → 开壳层（UKS） | Γ 点格式只在“重启文件的自旋数少于输入、且输入 `MULTIPLICITY` 为 1”时接受 | 自旋态改变时通常应重新初猜，见 [第8章](08-dispersion-spin-dftu.md) |
-| 中断的长任务续算 | 运动部分用 `*-1.restart` 加 `&EXT_RESTART`，电子部分用 `.wfn` | 见 [第7章](07-geo-cell-opt.md)、第12章 |
+| 中断的长任务续算 | 运动部分用 `*-1.restart` 加 `&EXT_RESTART`，电子部分用 `.wfn` | 见 [第7章](07-geo-cell-opt.md)、[第12章](12-aimd.md) |
 
 ### 9.3 .wfn 与 .kp 不能互换
 
@@ -657,7 +657,7 @@ grep "SCF run converged" h2o_ot.out restart_from_wfn.out
 `.wfn` 和 `.kp` 是两套独立的读写机制，**不能互相重启**。此外，这两种文件都是二进制（unformatted）格式，不保证跨机器、跨版本兼容。不要把它们当作后处理的数据来源；轨道分析请用 molden/cube 输出（见 [第11章](11-cube-charge-workfunction.md)）。
 
 > [!TIP]
-> 想把重启后的结构写回输入，或者从 `-pos-1.xyz` 取最后一帧，可以用本仓库的 ../scripts/restart_update.py（`python ../scripts/restart_update.py -h` 查看用法）。
+> 想把重启后的结构写回输入，或者从 `-pos-1.xyz` 取最后一帧，可以用本仓库的 [restart_update.py](../scripts/restart_update.py)（`python ../scripts/restart_update.py -h` 查看用法）。
 
 ---
 
@@ -676,7 +676,7 @@ grep "SCF run converged" h2o_ot.out restart_from_wfn.out
 6. **初猜**：从便宜计算（小基组、低截断、纯 GGA、较高电子温度）的 `RESTART` 文件起步。
 7. **最后手段**：只有在确认问题出在某个瞬时构型（比如 MD 中的个别步）且后果可控时，才考虑 `IGNORE_CONVERGENCE_FAILURE`，并且要事后逐步检查结果。
 
-本仓库的 ../scripts/cp2k_outparse.py 能汇总输出中的 SCF 收敛状态、步数和 WARNING（`python ../scripts/cp2k_outparse.py -h`），便于批量检查。更完整的报错目录见 第18章。
+本仓库的 [cp2k_outparse.py](../scripts/cp2k_outparse.py) 能汇总输出中的 SCF 收敛状态、步数和 WARNING（`python ../scripts/cp2k_outparse.py -h`），便于批量检查。更完整的报错目录见 [第18章](18-troubleshooting.md)。
 
 ---
 
@@ -689,7 +689,7 @@ grep "SCF run converged" h2o_ot.out restart_from_wfn.out
 | 半导体 + k 点 | 对角化 | `BROYDEN_MIXING`，`ALPHA 0.3–0.4`，`NBUFFER 8` | 1.0E-6 至 1.0E-7 |
 | 金属 + k 点 | 对角化 + 展宽 | `ALPHA 0.1–0.2`，`NBUFFER 8–15`，`FERMI_DIRAC` 300–1000 K，`ADDED_MOS` 足够大 | 1.0E-6 至 1.0E-7 |
 | 金属大超胞（Γ） | 对角化 + 展宽 | 同上，`ADDED_MOS` 取占据数的 10–30% | 1.0E-6 |
-| 杂化泛函 | 先 PBE 再 RESTART | OT + `FULL_ALL`（Γ）；见第9章 | 1.0E-6 |
+| 杂化泛函 | 先 PBE 再 RESTART | OT + `FULL_ALL`（Γ）；见[第9章](09-hybrid-admm.md) | 1.0E-6 |
 | AIMD | OT（绝缘体） | `&QS EXTRAPOLATION ASPC`，`EXTRAPOLATION_ORDER 3` | ≤ 1.0E-6 |
 
 ---

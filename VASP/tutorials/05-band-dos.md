@@ -273,7 +273,7 @@ print(bp.special_points)                            # coordinates in the basis o
 
 **sumo**：在含 POSCAR 的目录运行 `sumo-kgen`（默认 Bradley–Cracknell 路径，`--seekpath`/`--pymatgen` 切换约定，`--density` 控制点密度，默认 60）。
 
-**本仓库脚本**：`../scripts/vasp_inputgen.py` 可以为 band 任务生成 Line-mode KPOINTS 和 KPOINTS_OPT，参数用 `python ../scripts/vasp_inputgen.py -h` 查看。
+**本仓库脚本**：[`vasp_inputgen.py`](../scripts/vasp_inputgen.py) 可以为 band 任务生成 Line-mode KPOINTS 和 KPOINTS_OPT，参数用 `python ../scripts/vasp_inputgen.py -h` 查看。
 
 ### 5.4 二维材料的路径
 
@@ -538,7 +538,7 @@ fig.tight_layout()
 fig.savefig("dos.png", dpi=200)
 ```
 
-功能更完整的版本（按元素/原子/轨道选择、t2g/eg、自旋上下对称作图、d 带中心）见本仓库 `../scripts/plot_dos.py`，用 `python ../scripts/plot_dos.py -h` 查看用法。
+功能更完整的版本（按元素/原子/轨道选择、t2g/eg、自旋上下对称作图、d 带中心）见本仓库 [`plot_dos.py`](../scripts/plot_dos.py)，用 `python ../scripts/plot_dos.py -h` 查看用法。
 
 ---
 
@@ -550,7 +550,7 @@ fig.savefig("dos.png", dpi=200)
 | py4vasp | `calc.bandgap.fundamental()`、`calc.bandgap.direct()` | 读取 vaspout.h5 |
 | VASPKIT | `vaspkit -task 911` | 输出带隙类型、VBM/CBM 及其 k 点 |
 | pymatgen | `Vasprun("vasprun.xml").get_band_structure(line_mode=True).get_band_gap()` | 返回 energy、direct、transition |
-| 本仓库脚本 | `python ../scripts/plot_band.py -h` | 作图同时报告带隙 |
+| 本仓库脚本 [plot_band.py](../scripts/plot_band.py) | `python ../scripts/plot_band.py -h` | 作图同时报告带隙 |
 
 > [!NOTE]
 > 用于报告带隙时，请使用**能带路径 + 均匀网格**中的极值（极值可能在路径之外，比如低对称体系）。参考值：Si 实验间接带隙约 1.17 eV（低温），PBE 一般只给出约 0.5–0.6 eV——这是半局域泛函的系统性低估，不是计算错误。要得到更合理的带隙，请看 [第6章](06-hybrid-metagga.md)。
@@ -721,7 +721,7 @@ fig.tight_layout()
 fig.savefig("band.png", dpi=200)
 ```
 
-用法：`python band_eigenval.py $(grep E-fermi ../1-scf/OUTCAR | tail -1 | awk '{print $3}')`。本仓库的 `../scripts/plot_band.py` 是功能完整的版本（vasprun.xml/KPOINTS_OPT、自旋、零权重 k 点剔除、fat band、带隙报告、导出 Origin 可读的 dat），用 `python ../scripts/plot_band.py -h` 查看用法。更多作图规范见 Common 第5章。
+用法：`python band_eigenval.py $(grep E-fermi ../1-scf/OUTCAR | tail -1 | awk '{print $3}')`。本仓库的 [`plot_band.py`](../scripts/plot_band.py) 是功能完整的版本（vasprun.xml/KPOINTS_OPT、自旋、零权重 k 点剔除、fat band、带隙报告、导出 Origin 可读的 dat），用 `python ../scripts/plot_band.py -h` 查看用法。更多作图规范见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 

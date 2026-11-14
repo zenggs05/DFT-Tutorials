@@ -9,8 +9,10 @@ Markers used (search the files yourself with grep to double-check):
            OSZICAR: #SCF steps of last ionic step == NELM -> SCF not converged
   Gaussian "Normal termination" / "Error termination"
   CP2K     "PROGRAM ENDED AT", "SCF run NOT converged", "ABORT"
-  OpenMX   stdout "The SCF was achieved" / "The SCF was not fully achieved",
-           .out "Utot." and "Elapsed.Time."
+  OpenMX   .out "Utot." and "Elapsed.Time." -> run finished
+           .out last "SCF history at MD=" block: number of "SCF=" lines
+                >= scf.maxIter (echoed input, default 40) -> SCF not converged
+           stdout (.std/.log) "The calculation was normally finished."
 
 Usage:
   python job_status_scanner.py ROOT [--csv status.csv]
@@ -24,10 +26,10 @@ import re
 VASP_ERRORS = {
     "ZBRENT: fatal error": "ZBRENT (ionic step bracketing failed)",
     "Error EDDDAV": "EDDDAV (Davidson/ZHEGV failed)",
-    "Sub-Space-Matrix is not hermitian": "Sub-space matrix not hermitian",
     "VERY BAD NEWS": "VERY BAD NEWS (see message)",
     "BRMIX: very serious problems": "BRMIX mixing problem",
-    "WARNING: Sub-Space-Matrix": "Sub-space matrix warning",
+    # a warning, not an error: reported in the note, status unchanged
+    "WARNING: Sub-Space-Matrix is not hermitian": "Sub-space matrix not hermitian (warning)",
     "Error reading item": "INCAR/KPOINTS read error",
     "M_divide: can not subdivide": "MPI ranks not divisible (NEB IMAGES/KPAR/NCORE)",
 }
@@ -128,15 +130,22 @@ def openmx_status(outfile, d):
     info = {"code": "OpenMX", "status": "RUNNING/KILLED", "energy_eV": "", "steps": "", "note": ""}
     m = re.findall(r"Utot\.\s+(-?\d+\.\d+)", t)
     if m:
-        info["energy_eV"] = f"{float(m[-1]) * HA2EV:.6f}"
+        info["energy_eV"] = f"{float(m[-1]) * HA2EV:.6f}"   # Utot. is in Hartree
     if "Elapsed.Time." in t:
         info["status"] = "FINISHED"
+    # SCF convergence: OpenMX leaves the SCF loop when the criterion is met or
+    # after scf.maxIter iterations, so a last SCF block of scf.maxIter steps
+    # means "not converged".  scf.maxIter is read from the echoed input.
+    mi = re.search(r"^\s*scf\.maxIter\s+(\d+)", t, flags=re.M | re.I)
+    maxiter = int(mi.group(1)) if mi else 40               # OpenMX default
+    blocks = re.split(r"SCF history at MD\s*=", t)
+    if len(blocks) > 1:
+        nscf = len(re.findall(r"^\s*SCF=\s*\d+\s+NormRD=", blocks[-1], flags=re.M))
+        if nscf >= maxiter:
+            info["note"] += f"last SCF block used {nscf} >= scf.maxIter={maxiter} steps (SCF not converged); "
     for std in glob.glob(os.path.join(d, "*.std")) + glob.glob(os.path.join(d, "*.log")):
-        s = tail(std)
-        if "The SCF was not fully achieved" in s:
-            info["note"] += "SCF not fully achieved; "
-        if "The geometry optimization was achieved" in s:
-            info["note"] += "geo-opt converged; "
+        if "The calculation was normally finished." in tail(std):
+            info["status"] = "FINISHED"
     return info
 
 

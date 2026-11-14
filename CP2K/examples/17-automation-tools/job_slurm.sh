@@ -37,7 +37,14 @@ fi
 
 inp=${1:?usage: sbatch job_slurm.sh input.inp}
 out=${inp%.inp}.out
-cp2k.psmp -c "$inp" > /dev/null || { echo "syntax check failed for $inp" >&2; exit 1; }
+# "cp2k -c" prints "SUCCESS, the input could be parsed correctly." on success
+# (output captured first: with pipefail, "cmd | grep -q" can fail through SIGPIPE)
+chk=$(cp2k.psmp -c "$inp" 2>&1 || true)
+if ! grep -q "SUCCESS, the input could be parsed" <<< "$chk"; then
+  echo "syntax check failed for $inp:" >&2
+  echo "$chk" | tail -20 >&2
+  exit 1
+fi
 rm -f "$out"                          # -o appends to an existing file
 
 echo "start $(date)  ranks=${SLURM_NTASKS:-1}  threads=$OMP_NUM_THREADS  host=$(hostname)"

@@ -5,6 +5,7 @@
 #   sbatch --dependency=afterok:$jid job_slurm.sh md_restart.inp
 #   sbatch --dependency=afterok:$jid job_slurm.sh water32_nve.inp
 #   sbatch --dependency=afterok:$jid job_slurm.sh water32_npt_i.inp
+#   (optional) water32_nvt_nose.inp, reftraj_eval.inp, reftraj_npt.inp
 #SBATCH --job-name=cp2k-aimd
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32

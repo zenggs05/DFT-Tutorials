@@ -1,0 +1,106 @@
+#
+# Silicon: 4 bond-centred MLWFs from the 4 valence bands only (isolated
+# group of bands -> no disentanglement needed).
+# Initial guess: s-type projectors placed at the 4 Si-Si bond midpoints
+# (projector centres need not sit on atoms). Positions are Cartesian in Ang.
+# Target: OpenMX 4.0 (+patch 4.0.1), DFT_DATA19.
+#
+
+System.CurrrentDirectory    ./
+System.Name                 si_mlwf_bond4
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+Species.Number              2
+<Definition.of.Atomic.Species
+  Si     Si7.0-s2p2d1       Si_PBE19
+  proj   Si7.0-s1p1d1f1     Si_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Si  0.00  0.00  0.00   2.0 2.0
+  2  Si  0.25  0.25  0.25   2.0 2.0
+Atoms.SpeciesAndCoordinates>
+
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  0.000  2.715  2.715
+  2.715  0.000  2.715
+  2.715  2.715  0.000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0
+scf.energycutoff            220.0
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   10 10 10
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; delete this line for 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-9
+
+MD.Type                     Nomd
+
+Band.dispersion             on
+<Band.KPath.UnitCell
+  5.430  0.000  0.000
+  0.000  5.430  0.000
+  0.000  0.000  5.430
+Band.KPath.UnitCell>
+Band.Nkpath                 5
+<Band.kpath
+  26   0.50 0.50 0.50    0.00 0.00 0.00    L  G
+  30   0.00 0.00 0.00    1.00 0.00 0.00    G  X
+  15   1.00 0.00 0.00    1.00 0.50 0.00    X  W
+  11   1.00 0.50 0.00    0.75 0.75 0.00    W  K
+  32   0.75 0.75 0.00    0.00 0.00 0.00    K  G
+Band.kpath>
+
+#
+# MLWFs of the valence manifold
+#
+Wannier.Func.Calc                     on
+Wannier.Func.Num                      4
+# outer window = exactly the 4 valence bands (Fermi level is in the gap)
+Wannier.Outer.Window.Bottom         -14.0
+Wannier.Outer.Window.Top              0.0
+# inner window not used (bottom = top)
+Wannier.Inner.Window.Bottom           0.0
+Wannier.Inner.Window.Top              0.0
+Wannier.Initial.Guess                 on
+
+# bond midpoints = a/8 * (1,1,1), (1,-1,-1), (-1,1,-1), (-1,-1,1), a = 5.430 Ang
+Wannier.Initial.Projectors.Unit       ANG
+<Wannier.Initial.Projectors
+  proj-s    0.67875  0.67875  0.67875    0.0 0.0 1.0    1.0 0.0 0.0
+  proj-s    0.67875 -0.67875 -0.67875    0.0 0.0 1.0    1.0 0.0 0.0
+  proj-s   -0.67875  0.67875 -0.67875    0.0 0.0 1.0    1.0 0.0 0.0
+  proj-s   -0.67875 -0.67875  0.67875    0.0 0.0 1.0    1.0 0.0 0.0
+Wannier.Initial.Projectors>
+
+Wannier.Kgrid                         8 8 8
+Wannier.MaxShells                     12
+
+Wannier.Dis.SCF.Max.Steps             200
+Wannier.Dis.Conv.Criterion            1.0e-10
+Wannier.Dis.Mixing.Para               0.5
+Wannier.Minimizing.Scheme             2
+Wannier.Minimizing.StepLength         2.0
+Wannier.Minimizing.Secant.Steps       5
+Wannier.Minimizing.Secant.StepLength  2.0
+Wannier.Minimizing.Max.Steps          300
+Wannier.Minimizing.Conv.Criterion     1.0e-10
+
+Wannier.Interpolated.Bands            on
+Wannier.Function.Plot                 on
+Wannier.Function.Plot.SuperCells      1 1 1
+Wannier.Readin.Overlap.Matrix         off

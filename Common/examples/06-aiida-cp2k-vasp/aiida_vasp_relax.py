@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """AiiDA + aiida-vasp (5.x): relax bulk Si with VaspRelaxWorkChain from a protocol.
 
-The "balanced" protocol of aiida-vasp sets PREC/ENCUT/EDIFF/k-spacing, restarts
+The "balanced" protocol of aiida-vasp sets PREC/ENCUT/EDIFF/k-spacing (and GGA = PS,
+i.e. PBEsol, which is overridden to PBE below), restarts
 the relaxation until the volume change is below 1 %, and finishes with a static
 run.  Every intermediate VASP run is a node in the provenance graph.
 
@@ -39,7 +40,10 @@ def main() -> None:
         structure=structure,
         protocol="balanced",
         # Same nesting as the input namespaces; merged on top of the protocol
-        overrides={"vasp": {"parameters": {"incar": {"encut": 400, "ispin": 1, "ncore": 4}}}},
+        # NOTE: the "balanced" protocol of aiida-vasp 5.1 uses GGA = PS (PBEsol);
+        # "gga": "pe" switches back to PBE, consistent with the PBE.54 POTCARs.
+        overrides={"vasp": {"parameters": {"incar": {"encut": 400, "ispin": 1, "ncore": 4,
+                                                     "gga": "pe"}}}},
         relax_settings={"force_cutoff": 0.01, "steps": 40},
         options={
             "resources": {"num_machines": 1, "num_mpiprocs_per_machine": 32},

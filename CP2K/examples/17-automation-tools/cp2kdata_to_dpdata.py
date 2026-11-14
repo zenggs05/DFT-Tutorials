@@ -19,6 +19,10 @@ Things to know (cp2kdata 0.7.x):
     by the dpdata plugin -- check the "frames" count printed below,
   * the energy parser looks for "ENERGY| Total FORCE_EVAL ( QS )", i.e. Quickstep
     outputs; QM/MM or FIST outputs are not covered.
+  * CP2K >= 2025.1 prints "ENERGY| Total FORCE_EVAL ( QS ) energy [hartree]" (no
+    colon). cp2kdata 0.7.3 from PyPI only matches the old "energy [a.u.]:" line and
+    returns no energies; install the GitHub version instead:
+        pip install --upgrade "git+https://github.com/robinzyb/cp2kdata.git"
 """
 import argparse
 import sys
@@ -42,6 +46,9 @@ def summarise_ef(files):
         print(f"   atoms        : {out.get_num_atoms()}  symbols: {' '.join(out.get_chemical_symbols())}")
         if e is not None:
             print(f"   energy       : {e[-1]:.10f} Ha = {e[-1] * HARTREE_TO_EV:.6f} eV")
+        else:
+            print("   energy       : not found (cp2kdata 0.7.3 cannot read the CP2K >= 2025.1 "
+                  "energy line; install cp2kdata from GitHub, see the header of this script)")
         if frc is not None:
             fmax = np.abs(frc[-1]).max() * HARTREE_TO_EV / BOHR_TO_ANG
             print(f"   max |F_i|    : {fmax:.4f} eV/A")
@@ -55,7 +62,11 @@ def to_deepmd(inputs, mode, outdir, output_name=None):
     system = None
     if mode == "ef":
         for f in inputs:
-            s = dpdata.LabeledSystem(f, fmt="cp2kdata/e_f")
+            try:
+                s = dpdata.LabeledSystem(f, fmt="cp2kdata/e_f")
+            except TypeError as exc:     # energies/forces not parsed -> None * float
+                sys.exit(f"{f}: cp2kdata could not parse energies/forces ({exc}); "
+                         "with CP2K >= 2025.1 install cp2kdata from GitHub")
             print(f"{f}: {s.get_nframes()} frame(s)")
             if s.get_nframes() == 0:
                 print("   -> skipped (SCF not converged or nothing parsed)", file=sys.stderr)

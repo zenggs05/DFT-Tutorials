@@ -21,7 +21,7 @@
 | 用过 VASP/QE，想迁移到 OpenMX | 本章 §2.5（与平面波程序的差别）、§5（单位）→ [第4章 PAO/VPS](04-pao-vps.md) → [第5章 SCF/k 点](05-scf-kpoints-convergence.md) |
 | 手上有 OpenMX 3.9 的旧结果，要升级到 4.0 | 本章 §3.3（行为变化），尤其是 `scf.Generation.Kpoint` |
 | 课题是磁性/拓扑/输运/表面 | 本章 §8 的“按研究方向选章节”表 |
-| Linux、集群、作业调度还不熟 | 先读公共篇 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md) 与 第2章 HPC 作业调度 |
+| Linux、集群、作业调度还不熟 | 先读公共篇 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md) 与 [第2章 HPC 作业调度](../../Common/tutorials/02-job-scheduler.md) |
 
 > [!NOTE]
 > 本教程以 **OpenMX 4.0（2026-04-26 发布）+ patch 4.0.1（2026-05-08）** 为准，数据库为 **DFT_DATA19**（VPS/PAO Ver. 2019）。凡是 4.0 与 3.9 行为不同的地方都会标注。截至 2026-11，官方下载页仍提供 3.9（+ patch 3.9.9）与 3.8，供复现旧结果使用。
@@ -95,7 +95,7 @@ $$
 
 | 类别 | 主要功能 | 本教程章节 |
 |---|---|---|
-| 基态 | 总能量与力、分子（Cluster）/周期（Band）计算、O(N) 方法 | [第3章](03-input-first-calc.md)、[第5章](05-scf-kpoints-convergence.md)、第18章 |
+| 基态 | 总能量与力、分子（Cluster）/周期（Band）计算、O(N) 方法 | [第3章](03-input-first-calc.md)、[第5章](05-scf-kpoints-convergence.md)、[第18章](18-parallel-on-errors.md) |
 | 结构 | 结构优化（EF/BFGS/RF/DIIS）、晶胞优化（OptC*/RFC5）、E–V 状态方程、NEB、DFT-D2/D3 | [第6章](06-optimization-eos-neb.md) |
 | 动力学 | NVE、NVT（速度标定、Nosé–Hoover）、4.0 新增 NPT | [第7章](07-md.md) |
 | 电子结构 | 能带、能带展开（unfolding）、DOS/PDOS、COHP/COOP、光学电导、BoltzTraP/BoltzTraP2 接口 | [第8章](08-band.md)、[第9章](09-dos-pdos-cohp-optics.md) |
@@ -103,8 +103,8 @@ $$
 | 磁性 | 共线/非共线自旋、约束 DFT、MAE、自旋螺旋、交换耦合 Jx | [第11章](11-spin-noncollinear.md) |
 | 相对论与拓扑 | SOC、自旋织构、Chern 数、Z2 不变量 | [第12章](12-soc-topology.md) |
 | 强关联 | DFT+U（Dudarev 与一般形式，含 Hund J） | [第13章](13-dft-u.md) |
-| Wannier | MLWF、4.0 新增最接近 Wannier 函数（CWF）、Wannier90 接口 | 第14章 |
-| 外场与极化 | Berry 相宏观极化、锯齿形均匀电场 | 第15章 |
+| Wannier | MLWF、4.0 新增最接近 Wannier 函数（CWF）、Wannier90 接口 | [第14章](14-wannier.md) |
+| 外场与极化 | Berry 相宏观极化、锯齿形均匀电场 | [第15章](15-berry-efield.md) |
 | 表面 | ESM 方法、功函数、电荷掺杂、STM、XPS 芯能级（4.0 可与 ESM 联用） | [第16章](16-surface-esm-workfunction.md) |
 | 输运 | NEGF 电子输运（透射、I–V、本征通道、电流密度） | [第17章](17-negf-transport.md) |
 
@@ -130,7 +130,7 @@ $$
 
 | 新功能 | 关键词 / 工具 | 用途 | 章节 |
 |---|---|---|---|
-| 最接近 Wannier 函数（CWF） | `CWF.Calc`、`CWF.Guiding.Orbitals` 等 | 以原子轨道/杂化轨道/分子轨道为引导构造局域函数，适合成键分析与紧束缚建模 | 第14章 |
+| 最接近 Wannier 函数（CWF） | `CWF.Calc`、`CWF.Guiding.Orbitals` 等 | 以原子轨道/杂化轨道/分子轨道为引导构造局域函数，适合成键分析与紧束缚建模 | [第14章](14-wannier.md) |
 | NPT 分子动力学 | `MD.Type NPT_VS_PR`、`NPT_VS_WV` | 速度标定 + Parrinello–Rahman / Wentzcovitch 变胞 MD | [第7章](07-md.md) |
 | COHP/COOP | 后处理程序 `cohp` | 分析成键/反键贡献 | [第9章](09-dos-pdos-cohp-optics.md) |
 | BoltzTraP2 接口 | — | 半经典玻尔兹曼输运、热电系数 | [第9章](09-dos-pdos-cohp-optics.md) |
@@ -141,8 +141,8 @@ $$
 | CIF → dat | `cif2omx` | 命令行把 CIF 转成 OpenMX 输入，见本章 §6.3 | 本章 |
 | XPS + ESM | — | 表面/板模型的芯能级绝对结合能 | [第16章](16-surface-esm-workfunction.md) |
 | 区域化学势（RCP）分析 | 配合 FLPQ | 表面电子给予能力、吸附位点选择性 | [第16章](16-surface-esm-workfunction.md) |
-| OpenMX API | C/Fortran/Python 调用 | 外部程序把 OpenMX 当作库调用 | 第18章 |
-| ELPA 开发者接口 | `elpa_col`、`elpa_noncol` | 读 `.scfout` 用 ELPA1/ELPA2 并行对角化，供后处理开发者使用 | 第18章 |
+| OpenMX API | C/Fortran/Python 调用 | 外部程序把 OpenMX 当作库调用 | [第18章](18-parallel-on-errors.md) |
+| ELPA 开发者接口 | `elpa_col`、`elpa_noncol` | 读 `.scfout` 用 ELPA1/ELPA2 并行对角化，供后处理开发者使用 | [第18章](18-parallel-on-errors.md) |
 | 能带展开改进 | `Unfolding.Electronic.Band` | 内存更省、速度更快 | [第8章](08-band.md) |
 | md 文件格式文档化 | `System.Name.md` | 与 dpdata 的 `openmx/md` 格式一致，可转 DeePMD 训练集 | [第7章](07-md.md) |
 | Debian 包 | `openmx_4.0.1-1_amd64.deb` 等 | Ubuntu/Debian/WSL 免编译安装 | [第2章](02-install.md) |
@@ -247,12 +247,12 @@ grep valence.electron /path/to/openmx4.0/DFT_DATA19/VPS/Fe_PBE19H.vps /path/to/o
 | `Febcc2.dat`、`Cr2_CNC.dat`、`Mol_MnO_NC.dat` | 铁磁 bcc Fe、约束非共线 Cr2、非共线 MnO 分子 | [第11章](11-spin-noncollinear.md) |
 | `GaAs.dat`、`Bi2Se3-Z2.dat`、`Graphene-Chern.dat` | SOC、Z2、Chern 数 | [第12章](12-soc-topology.md) |
 | `NiO-cFLL.dat`、`NiO-sFLL.dat` | DFT+U | [第13章](13-dft-u.md) |
-| `GaAs-CWF1.dat`、`Si-Wannier90.dat` | CWF 与 Wannier90 接口 | 第14章 |
-| `NaCl.dat`、`Nitro_Benzene.dat` | Berry 相极化、外加电场 | 第15章 |
+| `GaAs-CWF1.dat`、`Si-Wannier90.dat` | CWF 与 Wannier90 接口 | [第14章](14-wannier.md) |
+| `NaCl.dat`、`Nitro_Benzene.dat` | Berry 相极化、外加电场 | [第15章](15-berry-efield.md) |
 | `Al111_WorkFunc_*.dat`、`Al-Si111_ESM.dat` | 功函数、ESM | [第16章](16-surface-esm-workfunction.md) |
 | `C2H4_NEB.dat`、`Gly_NH.dat`、`Si_NPT_VS_PR.dat` | NEB、Nosé–Hoover MD、NPT MD | [第6章](06-optimization-eos-neb.md)、[第7章](07-md.md) |
 | `Sidia_COHP.dat` | COHP/COOP | [第9章](09-dos-pdos-cohp-optics.md) |
-| `DIA512_DC.dat`、`C60_DC.dat` | O(N) 分治法 | 第18章 |
+| `DIA512_DC.dat`、`C60_DC.dat` | O(N) 分治法 | [第18章](18-parallel-on-errors.md) |
 
 完整列表见手册第 78 节 “Included input examples”。
 
@@ -299,7 +299,7 @@ OpenMX 的输入单位比较“混搭”：长度可选 Å 或原子单位，截
 | 1 meV/atom | 3.6749×10⁻⁵ Hartree/atom |
 | 1 Debye | 0.393430 e·Bohr |
 
-示例目录中的 `omx_units.py` 可以做这些换算，例如把 `.out` 中的 Hartree 能量差换成 meV。
+示例目录中的 [`omx_units.py`](../examples/01-overview-tour/omx_units.py) 可以做这些换算，例如把 `.out` 中的 Hartree 能量差换成 meV。
 
 ---
 
@@ -322,9 +322,9 @@ OpenMX 的输入单位比较“混搭”：长度可选 Å 或原子单位，截
 
 一个标准的研究计算通常是这样的顺序：
 
-1. **准备结构**：从数据库或实验 CIF 获取晶体结构，或自己搭建分子/表面模型（通用建模方法见公共篇 第3章 结构准备）。
-2. **生成 `.dat`**：用 OpenMX Viewer 或 `cif2omx` 生成初稿，再手工补充/检查关键词：`DATA.PATH`、基组、初始自旋、`scf.energycutoff`、`scf.Kgrid` 等。本仓库的 `omx_make_input.py` 也可以从 POSCAR/CIF 生成输入（用法见 `python ../scripts/omx_make_input.py -h`）。
-3. **收敛测试**：基组、截断能、k 点（[第4章](04-pao-vps.md)、[第5章](05-scf-kpoints-convergence.md)），可用 `omx_conv_test.py` 批量完成。
+1. **准备结构**：从数据库或实验 CIF 获取晶体结构，或自己搭建分子/表面模型（通用建模方法见[公共篇第3章 结构准备](../../Common/tutorials/03-structure-modeling.md)）。
+2. **生成 `.dat`**：用 OpenMX Viewer 或 `cif2omx` 生成初稿，再手工补充/检查关键词：`DATA.PATH`、基组、初始自旋、`scf.energycutoff`、`scf.Kgrid` 等。本仓库的 [`omx_make_input.py`](../scripts/omx_make_input.py) 也可以从 POSCAR/CIF 生成输入（用法见 `python ../scripts/omx_make_input.py -h`）。
+3. **收敛测试**：基组、截断能、k 点（[第4章](04-pao-vps.md)、[第5章](05-scf-kpoints-convergence.md)），可用 [`omx_conv_test.py`](../scripts/omx_conv_test.py) 批量完成。
 4. **结构优化**（[第6章](06-optimization-eos-neb.md)）→ 用优化后结构做**高精度 SCF**（打开 `HS.fileout`、`Dos.fileout`、`Band.dispersion` 等需要的输出）。
 5. **后处理**：能带、DOS、电荷、极化、交换耦合、Wannier、输运等。
 6. **检查与可视化**：确认 SCF 收敛、Mulliken 电荷/磁矩合理，再画图。
@@ -388,15 +388,15 @@ mpirun -np 4 openmx Methane.dat -nt 1 | tee met.std
 | `bandgnu13` | `System.Name.Band` | 转成 gnuplot 能带数据（eV，化学势为零点） | [第8章](08-band.md) |
 | `DosMain` | `.Dos.val` + `.Dos.vec` | 四面体法/高斯展宽 DOS 与 PDOS | [第9章](09-dos-pdos-cohp-optics.md) |
 | `cohp` | SCF 时写出的 `System.Name.cohp` 等 DOS 相关文件 | COHP/COOP | [第9章](09-dos-pdos-cohp-optics.md) |
-| `polB` | `.scfout`（`HS.fileout on`） | Berry 相宏观极化 | 第15章 |
+| `polB` | `.scfout`（`HS.fileout on`） | Berry 相宏观极化 | [第15章](15-berry-efield.md) |
 | `jx` | `.scfout` | 交换耦合常数 | [第11章](11-spin-noncollinear.md) |
 | `kSpin`、`calB`、`Z2FH` | `.scfout` | 自旋织构、Chern 数/Berry 曲率、Z2 不变量 | [第12章](12-soc-topology.md) |
 | `gcube2oned`、`diff_gcube`、`add_gcube` | cube 文件 | 平面平均势（功函数）、密度差、密度和 | [第10章](10-charge-mo-cube.md)、[第16章](16-surface-esm-workfunction.md) |
 | `cube2xsf`、`md2axsf`、`bin2txt` | cube、md、二进制输出 | 格式转换（XCrySDen 动画等） | [第7章](07-md.md)、[第10章](10-charge-mo-cube.md) |
 | `esp` | 计算结果 | ESP 拟合电荷 | [第10章](10-charge-mo-cube.md) |
-| `analysis_example` | `.scfout` | 读取哈密顿量/重叠矩阵的示例程序，开发后处理代码的起点 | 第18章 |
+| `analysis_example` | `.scfout` | 读取哈密顿量/重叠矩阵的示例程序，开发后处理代码的起点 | [第18章](18-parallel-on-errors.md) |
 
-本仓库 `OpenMX/scripts/` 中还有一组 Python 脚本，用于解析 `.out`（`omx_parse_out.py`）、画能带（`omx_band_plot.py`）、自动驱动 DosMain（`omx_dos_auto.py`）、处理轨迹（`omx_traj.py`）和 cube（`omx_cube_tools.py`）等，用 `python ../scripts/<脚本名> -h` 查看用法。
+本仓库 [`OpenMX/scripts/`](../scripts/README.md) 中还有一组 Python 脚本，用于解析 `.out`（[`omx_parse_out.py`](../scripts/omx_parse_out.py)）、画能带（[`omx_band_plot.py`](../scripts/omx_band_plot.py)）、自动驱动 DosMain（[`omx_dos_auto.py`](../scripts/omx_dos_auto.py)）、处理轨迹（[`omx_traj.py`](../scripts/omx_traj.py)）和 cube（[`omx_cube_tools.py`](../scripts/omx_cube_tools.py)）等，用 `python ../scripts/<脚本名> -h` 查看用法。
 
 ---
 
@@ -409,14 +409,14 @@ mpirun -np 4 openmx Methane.dat -nt 1 | tee met.std
 | [VESTA](https://jp-minerals.org/vesta/en/)、[XCrySDen](https://www.xcrysden.org/) | 结构、cube 等值面、非共线自旋矢量（`*.nc.xsf`） | 桌面软件 |
 | [FermiSurfer](https://mitsuaki1987.github.io/fermisurfer/) | 费米面可视化 | 读 frmsf |
 | [TB2J](https://tb2j.readthedocs.io/en/latest/src/openmx.html) / TB2J-OpenMX | 用磁力定理从 `.scfout` 计算海森堡交换 J、DMI | [第11章](11-spin-noncollinear.md) |
-| DeepH / DeepH-E3 / HamGNN | 以 OpenMX 哈密顿量为训练数据的机器学习哈密顿量 | 第18章 |
+| DeepH / DeepH-E3 / HamGNN | 以 OpenMX 哈密顿量为训练数据的机器学习哈密顿量 | [第18章](18-parallel-on-errors.md) |
 | dpdata | 把 OpenMX MD 输出转成 DeePMD-kit 训练数据 | [第7章](07-md.md) |
 | ALAMODE | 声子、非谐、热导（有 OpenMX 接口） | 弥补 OpenMX 没有 DFPT |
-| Wannier90、BoltzTraP2 | Wannier 插值、热电输运 | 第14章、[第9章](09-dos-pdos-cohp-optics.md) |
-| CrySPY、abICS、cif2x、AiiDA 插件 | 结构预测、构型采样、批量输入生成、高通量工作流 | 公共篇 第6章 |
+| Wannier90、BoltzTraP2 | Wannier 插值、热电输运 | [第14章](14-wannier.md)、[第9章](09-dos-pdos-cohp-optics.md) |
+| CrySPY、abICS、cif2x、AiiDA 插件 | 结构预测、构型采样、批量输入生成、高通量工作流 | [公共篇 第6章](../../Common/tutorials/06-workflow-automation.md) |
 | MateriApps LIVE! | 预装 OpenMX 的 Linux 环境（VirtualBox/Docker 版） | 免安装体验，见 [第2章](02-install.md) |
 
-ASE、pymatgen 等通用 Python 库的使用方法见公共篇 第4章；VESTA 等可视化见公共篇 第5章。
+ASE、pymatgen 等通用 Python 库的使用方法见[公共篇 第4章](../../Common/tutorials/04-ase-pymatgen.md)；VESTA 等可视化见[公共篇 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 
@@ -426,13 +426,13 @@ ASE、pymatgen 等通用 Python 库的使用方法见公共篇 第4章；VESTA �
 
 | 阶段 | 章节 | 你将学会 | 参考用时 |
 |---|---|---|---|
-| 0. 预备 | 公共篇第1–2章 | Linux、conda、集群登录、作业调度 | 视基础而定 |
+| 0. 预备 | 公共篇[第1章](../../Common/tutorials/01-linux-hpc.md)–[第2章](../../Common/tutorials/02-job-scheduler.md) | Linux、conda、集群登录、作业调度 | 视基础而定 |
 | 1. 入门 | [第2章 编译与安装](02-install.md) → [第3章 第一个计算](03-input-first-calc.md) | 装好 OpenMX，读懂 `.dat`、`.std`、`.out` | 1–3 天 |
 | 2. 打基础 | [第4章 PAO/VPS](04-pao-vps.md) → [第5章 SCF/k 点/收敛](05-scf-kpoints-convergence.md) | 选基组、做收敛测试、解决 SCF 不收敛 | 1 周 |
 | 3. 常规性质 | [第6章 优化/EOS/NEB](06-optimization-eos-neb.md)、[第7章 MD](07-md.md)、[第8章 能带](08-band.md)、[第9章 DOS/COHP/光学](09-dos-pdos-cohp-optics.md)、[第10章 电荷/MO/cube](10-charge-mo-cube.md) | 完成一篇常规计算论文所需的大部分内容 | 2–3 周 |
 | 4. 磁性与相对论 | [第11章 自旋/非共线](11-spin-noncollinear.md)、[第12章 SOC/拓扑](12-soc-topology.md)、[第13章 DFT+U](13-dft-u.md) | 磁基态、MAE、交换耦合、拓扑不变量、强关联氧化物 | 2 周 |
-| 5. 专题 | 第14章 Wannier、第15章 Berry 相/电场、[第16章 表面/ESM](16-surface-esm-workfunction.md)、[第17章 NEGF 输运](17-negf-transport.md) | 按课题选读 | 按需 |
-| 6. 生产计算 | 第18章 并行/O(N)/排错 | 大体系、作业脚本、常见错误速查 | 随用随查 |
+| 5. 专题 | [第14章 Wannier](14-wannier.md)、[第15章 Berry 相/电场](15-berry-efield.md)、[第16章 表面/ESM](16-surface-esm-workfunction.md)、[第17章 NEGF 输运](17-negf-transport.md) | 按课题选读 | 按需 |
+| 6. 生产计算 | [第18章 并行/O(N)/排错](18-parallel-on-errors.md) | 大体系、作业脚本、常见错误速查 | 随用随查 |
 
 ### 8.2 按研究方向选章节
 
@@ -445,7 +445,7 @@ ASE、pymatgen 等通用 Python 库的使用方法见公共篇 第4章；VESTA �
 | 表面与催化 | 6、10、16 | 7（MD）、9（COHP） |
 | 分子器件与输运 | 8、9、17 | 16（ESM、门压概念） |
 | 铁电/介电 | 6、15 | 9（光学） |
-| 机器学习势/哈密顿量 | 7（dpdata）、10（`HS.fileout`）、18 | 公共篇第7章 |
+| 机器学习势/哈密顿量 | 7（dpdata）、10（`HS.fileout`）、18 | [公共篇第7章](../../Common/tutorials/07-learning-path.md) |
 
 ### 8.3 学习建议
 
@@ -488,8 +488,8 @@ ASE、pymatgen 等通用 Python 库的使用方法见公共篇 第4章；VESTA �
 
 ### 9.3 本仓库相关页面
 
-- [OpenMX 篇目录](../README.md)、OpenMX 脚本 omx_make_input.py、[相关 GitHub 仓库汇总](../../Resources/github-repos.md)
-- 公共篇：第3章 结构准备、第4章 ASE 与 pymatgen、第7章 DFT 理论速览与学习路线
+- [OpenMX 篇目录](../README.md)、OpenMX 脚本 [omx_make_input.py](../scripts/omx_make_input.py)、[相关 GitHub 仓库汇总](../../Resources/github-repos.md)
+- 公共篇：[第3章 结构准备](../../Common/tutorials/03-structure-modeling.md)、[第4章 ASE 与 pymatgen](../../Common/tutorials/04-ase-pymatgen.md)、[第7章 DFT 理论速览与学习路线](../../Common/tutorials/07-learning-path.md)
 
 ---
 

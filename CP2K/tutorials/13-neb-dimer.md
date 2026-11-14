@@ -22,8 +22,8 @@
 | CI-NEB | 同上 | 最高点被推到鞍点，能垒更准确 | `BAND_TYPE CI-NEB` + `&CI_NEB` |
 | Dimer | 一个近似 TS（来自 NEB、化学直觉或扫描） | 精确鞍点，不需要末态 | `RUN_TYPE GEO_OPT` + `TYPE TRANSITION_STATE` + `METHOD DIMER` |
 | 频率验证 | 收敛的 TS 结构 | 虚频个数、ZPE、指前因子 | `RUN_TYPE VIBRATIONAL_ANALYSIS`，见 [第14章](14-vibration-thermo.md) |
-| 自由能能垒（有限温度、溶剂） | 合适的集体变量 | 自由能面 | 元动力学 / 约束 MD，见 第15章 |
-| 酶或溶液中的大体系反应 | QM/MM 拓扑 | QM/MM 下的 MEP 与 TS | 见 第16章 |
+| 自由能能垒（有限温度、溶剂） | 合适的集体变量 | 自由能面 | 元动力学 / 约束 MD，见 [第15章](15-metadynamics-plumed.md) |
+| 酶或溶液中的大体系反应 | QM/MM 拓扑 | QM/MM 下的 MEP 与 TS | 见 [第16章](16-qmmm-xtb.md) |
 
 本章的完整输入在 [../examples/13-neb-dimer-h-cu111/README.md](../examples/13-neb-dimer-h-cu111/README.md)。流程如下：
 
@@ -189,7 +189,7 @@ NEB 对端点有三条硬性要求：
 几点说明：
 
 - Cu 是金属，所以用对角化 + Broyden 混合 + Fermi–Dirac 展宽，`ADDED_MOS 60` 覆盖费米面以上的分数占据（298 个价电子，149 个占据轨道）。这些设置的原理见 [第5章](05-scf-strategy.md)。OT 在 2026.2 及以前不支持展宽，金属 NEB 不要用 OT。
-- `EPS_SCF` 默认 1.0E-7，比单点计算更紧：NEB 和 Dimer 的收敛判据是力，SCF 噪声会直接变成力噪声。写成 `${EPS_SCF-1.0E-7}` 是为了让第14章的频率验证输入在包含同一文件时把它收紧到 1.0E-8。
+- `EPS_SCF` 默认 1.0E-7，比单点计算更紧：NEB 和 Dimer 的收敛判据是力，SCF 噪声会直接变成力噪声。写成 `${EPS_SCF-1.0E-7}` 是为了让[第14章](14-vibration-thermo.md)的频率验证输入在包含同一文件时把它收紧到 1.0E-8。
 - 只有一侧吸附 H，slab 两侧不对称，所以打开偶极校正（[第6章](06-periodic-surface-kpoints.md)）。
 - 坐标文件名用变量 `${COORD}`，由主输入在 `@INCLUDE` 之前 `@SET`。
 
@@ -467,7 +467,7 @@ $$
 - 先用单点计算测出“一个副本用多少进程最划算”（并行效率开始明显下降之前的进程数），把它作为 `NPROC_REP`，再乘以副本数申请资源；
 - 混合并行时，`NPROC_REP` 只数 MPI 进程，OpenMP 线程另算（`OMP_NUM_THREADS`）；
 - 端点在 `NUMBER_OF_REPLICA` 中占两个名额并分到进程，即使 `OPTIMIZE_END_POINTS F` 也一样（输入参考的说明），资源规划时要算上它们；
-- 本例的 [job_slurm.sh](../examples/13-neb-dimer-h-cu111/job_slurm.sh) 根据 `SLURM_NTASKS` 自动设置 `-E NPROC_REP=$((NTASKS/7))`；通用的 MPI × OpenMP 模板见 ../scripts/job_cp2k_slurm.sh 和 公共篇第2章。
+- 本例的 [job_slurm.sh](../examples/13-neb-dimer-h-cu111/job_slurm.sh) 根据 `SLURM_NTASKS` 自动设置 `-E NPROC_REP=$((NTASKS/7))`；通用的 MPI × OpenMP 模板见 [job_cp2k_slurm.sh](../scripts/job_cp2k_slurm.sh) 和 [公共篇第2章](../../Common/tutorials/02-job-scheduler.md)。
 
 ---
 
@@ -544,7 +544,7 @@ grep "BAND TASK COMPLETED" h_diffusion_cineb.out           # 2026.2：收敛标�
 python3 neb_profile.py h_diffusion_cineb.out --png mep.png
 ```
 
-本仓库还有功能更全的 ../scripts/neb_plot.py（收集各副本能量、画 MEP、导出过渡态 xyz），用 `python ../scripts/neb_plot.py -h` 查看用法。
+本仓库还有功能更全的 [neb_plot.py](../scripts/neb_plot.py)（收集各副本能量、画 MEP、导出过渡态 xyz），用 `python ../scripts/neb_plot.py -h` 查看用法。
 
 判断结果是否可信：
 
@@ -874,7 +874,7 @@ $$
 - [ma455173220/cp2k_scripts](https://github.com/ma455173220/cp2k_scripts)：NEB 初始化与分析的中文脚本思路（无 license，仅参考）
 - [cp2k/cp2k-output-tools](https://github.com/cp2k/cp2k-output-tools)：`cp2kparse` 解析输出为 JSON/YAML
 
-**本仓库脚本**：../scripts/neb_plot.py（MEP 作图、导出 TS 结构）、../scripts/vib_thermo.py（频率与 ZPE）、../scripts/cp2k_outparse.py（解析 OPT| 块）。用法请运行 `python <脚本> -h` 查看。
+**本仓库脚本**：[neb_plot.py](../scripts/neb_plot.py)（MEP 作图、导出 TS 结构）、[vib_thermo.py](../scripts/vib_thermo.py)（频率与 ZPE）、[cp2k_outparse.py](../scripts/cp2k_outparse.py)（解析 OPT| 块）。用法请运行 `python <脚本> -h` 查看。
 
 **关键文献**
 
@@ -890,4 +890,4 @@ $$
 
 ---
 
-[← 上一章](11-cube-charge-workfunction.md) | [返回目录](../README.md) | [下一章 →](14-vibration-thermo.md)
+[← 上一章](12-aimd.md) | [返回目录](../README.md) | [下一章 →](14-vibration-thermo.md)

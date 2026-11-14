@@ -10,7 +10,9 @@ A comprehensive, practical collection of **density functional theory (DFT) tutor
 
 📖 **Read online (searchable website):** <https://zenggs05.github.io/DFT-Tutorials/>
 
-Currently **65 chapters**, **152 example input sets**, **44 scripts**, and a curated index of **230+ related GitHub repositories**.
+🎓 **One-on-one tutoring (Chinese):** <https://feiniaofly.cn/>
+
+Currently **79 chapters**, **167 example input sets**, **85 scripts**, and a curated index of **230+ related GitHub repositories**.
 
 ## Contents
 
@@ -87,8 +89,13 @@ Currently **65 chapters**, **152 example input sets**, **44 scripts**, and a cur
 | 9 | [Hybrid Functionals & ADMM in CP2K](CP2K/tutorials/09-hybrid-admm.md) | 第9章 杂化泛函与 ADMM |
 | 10 | [DOS, PDOS & Band Structure with CP2K](CP2K/tutorials/10-dos-pdos-band.md) | 第10章 电子结构分析：DOS、PDOS 与能带 |
 | 11 | [Cube Files, Charge Analysis & Work Function in CP2K](CP2K/tutorials/11-cube-charge-workfunction.md) | 第11章 实空间性质：cube 文件、电荷分析与功函数 |
-| 12 | [Transition-State Search in CP2K: CI-NEB & Dimer](CP2K/tutorials/13-neb-dimer.md) | 第13章 过渡态搜索：NEB 与 Dimer |
-| 13 | [Vibrational Analysis, IR Intensities & Thermochemistry with CP2K](CP2K/tutorials/14-vibration-thermo.md) | 第14章 振动分析、红外与热化学 |
+| 12 | [AIMD](CP2K/tutorials/12-aimd.md) | 第12章 从头算分子动力学 |
+| 13 | [Transition-State Search in CP2K: CI-NEB & Dimer](CP2K/tutorials/13-neb-dimer.md) | 第13章 过渡态搜索：NEB 与 Dimer |
+| 14 | [Vibrational Analysis, IR Intensities & Thermochemistry with CP2K](CP2K/tutorials/14-vibration-thermo.md) | 第14章 振动分析、红外与热化学 |
+| 15 | [Enhanced Sampling with CP2K: Metadynamics, PLUMED & Constrained MD](CP2K/tutorials/15-metadynamics-plumed.md) | 第15章 增强采样：元动力学、PLUMED 与约束 MD |
+| 16 | [QM/MM and Semi-empirical Methods: GFN-xTB, DFTB](CP2K/tutorials/16-qmmm-xtb.md) | 第16章 QM/MM 与半经验方法（xTB/DFTB） |
+| 17 | [Automation & Tool Ecosystem: ASE, cp2k-input-tools, Multiwfn, cp2kdata](CP2K/tutorials/17-tools-ecosystem.md) | 第17章 自动化与工具生态：ASE、cp2k-input-tools、Multiwfn、cp2kdata |
+| 18 | [Troubleshooting, Performance Tuning & Version Migration](CP2K/tutorials/18-troubleshooting.md) | 第18章 常见错误排查、性能调优与版本迁移 |
 
 ### OpenMX
 
@@ -107,14 +114,23 @@ Currently **65 chapters**, **152 example input sets**, **44 scripts**, and a cur
 | 11 | [Spin Polarization, Noncollinear Magnetism & Exchange Coupling with OpenMX](OpenMX/tutorials/11-spin-noncollinear.md) | 第11章 自旋极化、非共线磁性与交换耦合 |
 | 12 | [Spin-Orbit Coupling & Topological Properties with OpenMX](OpenMX/tutorials/12-soc-topology.md) | 第12章 自旋轨道耦合与拓扑性质 |
 | 13 | [DFT+U with Hubbard U and Hund's J in OpenMX](OpenMX/tutorials/13-dft-u.md) | 第13章 DFT+U（Hubbard U 与 Hund J） |
-| 14 | [Surfaces & Interfaces in OpenMX: ESM, Work Function & Charge Doping](OpenMX/tutorials/16-surface-esm-workfunction.md) | 第16章 表面与界面：ESM、功函数、电荷掺杂 |
-| 15 | [Electron Transport with NEGF in OpenMX](OpenMX/tutorials/17-negf-transport.md) | 第17章 NEGF 电子输运 |
+| 14 | [Wannier Functions in OpenMX: MLWF and CWF](OpenMX/tutorials/14-wannier.md) | 第14章 Wannier 函数：MLWF 与 CWF |
+| 15 | [Berry-Phase Polarization & External Electric Fields in OpenMX](OpenMX/tutorials/15-berry-efield.md) | 第15章 Berry 相宏观极化与外加电场 |
+| 16 | [Surfaces & Interfaces in OpenMX: ESM, Work Function & Charge Doping](OpenMX/tutorials/16-surface-esm-workfunction.md) | 第16章 表面与界面：ESM、功函数、电荷掺杂 |
+| 17 | [Electron Transport with NEGF in OpenMX](OpenMX/tutorials/17-negf-transport.md) | 第17章 NEGF 电子输运 |
+| 18 | [第18章 并行、大体系 O(N)、作业脚本与常见错误排查（Parallelization, Large-Scale O(N) Methods, Job Scripts & Troubleshooting in OpenMX）](OpenMX/tutorials/18-parallel-on-errors.md) | 第18章 并行、大体系 O(N)、作业脚本与常见错误排查（Parallelization, Large-Scale O(N) Methods, Job Scripts & Troubleshooting in OpenMX） |
 
 ### Common
 
 | # | Topic | 中文标题 |
 |---|---|---|
 | 1 | [Setting up a DFT Computing Environment: Linux/WSL, conda, SSH & File Transfer](Common/tutorials/01-linux-hpc.md) | 第1章 计算环境搭建：Linux/WSL、conda、集群登录与文件传输 |
+| 2 | [HPC Job Scheduling: Slurm/PBS/LSF Templates and Parallel Settings](Common/tutorials/02-job-scheduler.md) | 第2章 HPC 作业调度：Slurm/PBS/LSF 模板与并行设置 |
+| 3 | [Structure Preparation: Databases, Supercells, Slabs, Defects, Doping, Heterostructures & Format Conversion](Common/tutorials/03-structure-modeling.md) | 第3章 结构准备：数据库下载、建模（超胞/表面/缺陷/掺杂/异质结）与格式转换 |
+| 4 | [ASE & pymatgen in Practice: Driving VASP, Gaussian, CP2K and OpenMX, Input Sets and Output Parsing](Common/tutorials/04-ase-pymatgen.md) | 第4章 ASE 与 pymatgen 实战：统一驱动四款软件、输入集与输出解析 |
+| 5 | [Post-processing & Visualization: VASPKIT, sumo, PyProcar, py4vasp, VESTA, OVITO, Multiwfn and Publication-quality Figures](Common/tutorials/05-postprocess-visualization.md) | 第5章 后处理与可视化：VASPKIT、sumo、pyprocar、VESTA、Multiwfn 与出版级作图 |
+| 6 | [Workflow Automation & High-Throughput: custodian, atomate2, jobflow, AiiDA](Common/tutorials/06-workflow-automation.md) | 第6章 工作流自动化与高通量：custodian、atomate2、jobflow、AiiDA |
+| 7 | [DFT Primer, Learning Path, Convergence Checklist, Resources and Machine-Learned Potentials](Common/tutorials/07-learning-path.md) | 第7章 DFT 理论速览、学习路线与资源汇总（含机器学习势前沿） |
 
 ## Quick start
 
@@ -126,6 +142,21 @@ python VASP/scripts/plot_band.py -h   # every script supports -h
 
 > [!NOTE]
 > No proprietary source code, binaries or VASP POTCAR files are included; examples explain how to generate them.
+
+## One-on-one tutoring
+
+Need hands-on help? The author offers one-on-one DFT/Gaussian lessons, troubleshooting sessions and graduate-admission (保研) coaching (in Chinese): <https://feiniaofly.cn/>
+
+## ☕ Support this project
+
+Writing and checking these tutorials took a lot of spare time. If they saved you time, you can buy the author a coffee — any amount is appreciated. A ⭐ star, a share, or an issue reporting a mistake helps just as much. Thank you!
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/donate/wechat-pay.jpg" alt="微信收款码 WeChat Pay" width="220"><br>微信 WeChat Pay</td>
+    <td align="center"><img src="assets/donate/alipay.jpg" alt="支付宝收款码 Alipay" width="220"><br>支付宝 Alipay</td>
+  </tr>
+</table>
 
 ## Contributing
 

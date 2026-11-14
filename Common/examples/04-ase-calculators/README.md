@@ -55,7 +55,7 @@ python ase_openmx_si.py --np 8
 - VASP：`si_relax_vasp/OUTCAR` 中出现 `reached required accuracy`；PBE 下 Si 的晶格常数约 5.47 Å（PBE 一般比实验值 5.431 Å 大约 0.7%）。
 - Gaussian：`g16/h2o_opt.log` 末尾为 `Normal termination`，频率任务没有虚频（`grep "imaginary" g16/h2o_freq.log` 无输出）。
 - CP2K：标准输出打印能量和力；运行目录中的 `h2o.inp` 是 ASE 合成的完整输入，`h2o.out` 是 CP2K 输出（`grep "ENERGY| Total FORCE_EVAL" h2o.out`）。调试通信可加 `debug=True`。
-- OpenMX：`omx/si.out` 中有 `Utot.` 行，`omx/si.log`（标准输出）中有 `The SCF was achieved`。
+- OpenMX：`omx/si.out` 中有 `Utot.`（单位 Hartree）和 `Elapsed.Time.` 行；最后一个 `SCF history at MD=` 块中的 `SCF=` 行数应小于 `scf.maxIter`（本例 100），否则说明 SCF 没有收敛。ASE 把标准输出写到 `omx/si.log`。
 
 ## 注意事项
 
@@ -64,4 +64,4 @@ python ase_openmx_si.py --np 8
 - ASE 的 OpenMX 接口会把 `System.CurrentDirectory` 写成绝对路径，脚本中显式设为 `./`；高级功能（DFT+U、NEGF、Wannier）请直接手写 `.dat`。
 - 不要把 POTCAR 提交到 Git 仓库或公开上传，它受 VASP 许可证保护。
 
-返回教程：第4章 ASE 与 pymatgen 实战
+返回教程：[第4章 ASE 与 pymatgen 实战](../../tutorials/04-ase-pymatgen.md)

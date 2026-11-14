@@ -1,0 +1,118 @@
+! nacl_wtmetad_2d.inp - two-dimensional well-tempered metadynamics of NaCl
+! dissociation: CV1 = d(Na-Cl), CV2 = coordination number of Na by water O.
+! Chapter 15, step 2c.  Target versions: CP2K 2023.1 ... 2026.2 (native, no PLUMED)
+!
+! Same physics as nacl_dissociation_wtmetad.inp, but the bias also acts on the
+! hydration shell of Na+, which is the slow "hidden" variable of ion pairing.
+! The well-tempered strength is given here with WTGAMMA instead of DELTA_T
+! (WTGAMMA 8 at 300 K is the same as DELTA_T 2100 K; do not set both unless
+! they satisfy DELTA_T = (WTGAMMA - 1) * TEMPERATURE).
+!
+! 2D needs many more hills than 1D: run it at GFN1-xTB first.
+!   mpirun -np 16 cp2k.psmp -i nacl_wtmetad_2d.inp -o wt2d_xtb.out
+!   mpirun -np 64 cp2k.psmp -E LEVEL=dft -E STEPS=60000 -i nacl_wtmetad_2d.inp -o wt2d_dft.out
+! Free energy surface F(d, CN) and the projection on d:
+!   python3 fes_from_hills.py nacl_wt2d_xtb-HILLS.metadynLog --bohr2ang 1 -T 300 -o fes_d.dat
+!   graph.psmp -cp2k -file nacl_wt2d_xtb-1.restart -ndim 2 -out fes2d_graph.dat
+
+@SET LEVEL ${LEVEL-xtb}
+@SET COORD ${COORD-nacl_eq.xyz}
+
+&GLOBAL
+  PROJECT nacl_wt2d_${LEVEL}
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+! &EXT_RESTART
+!   RESTART_FILE_NAME nacl_wt2d_${LEVEL}-1.restart
+! &END EXT_RESTART
+
+@INCLUDE 'nacl_${LEVEL}_force_eval.inc'
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    ! 400000 x 0.5 fs = 200 ps at xTB level
+    STEPS ${STEPS-400000}
+    TIMESTEP 0.5
+    TEMPERATURE 300.0
+    &THERMOSTAT
+      TYPE CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON 100.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &FREE_ENERGY
+    METHOD METADYN
+    &METADYN
+      DO_HILLS T
+      NT_HILLS 40
+      ! initial height 4.0E-4 hartree = 1.05 kJ/mol
+      WW 4.0E-4
+      WELL_TEMPERED T
+      ! bias factor gamma = (T + DELTA_T)/T
+      WTGAMMA 8.0
+      ! CV1: Na-Cl distance, width in bohr (0.35 bohr = 0.185 A)
+      &METAVAR
+        COLVAR 1
+        SCALE 0.35
+        &WALL
+          TYPE QUADRATIC
+          ! 10.6 bohr = 5.61 A, below half of the 12.42 A box
+          POSITION 10.6
+          &QUADRATIC
+            DIRECTION WALL_PLUS
+            K 0.05
+          &END QUADRATIC
+        &END WALL
+      &END METAVAR
+      ! CV2: coordination number of Na by O (dimensionless)
+      &METAVAR
+        COLVAR 2
+        SCALE 0.20
+        ! keep CN in a physically meaningful range (no dehydrated Na+)
+        &WALL
+          TYPE QUADRATIC
+          POSITION 3.5
+          &QUADRATIC
+            DIRECTION WALL_MINUS
+            K 0.01
+          &END QUADRATIC
+        &END WALL
+      &END METAVAR
+      &PRINT
+        &COLVAR
+          COMMON_ITERATION_LEVELS 3
+          &EACH
+            MD 1
+          &END EACH
+        &END COLVAR
+        &HILLS
+          COMMON_ITERATION_LEVELS 3
+          &EACH
+            MD 1
+          &END EACH
+        &END HILLS
+      &END PRINT
+    &END METADYN
+  &END FREE_ENERGY
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY OFF
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

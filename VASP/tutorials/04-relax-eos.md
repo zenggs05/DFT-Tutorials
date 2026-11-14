@@ -236,7 +236,7 @@ cat $VASP_PP_PATH/potpaw_PBE/Si/POTCAR > POTCAR
 sbatch job.slurm                    # 或交互测试：mpirun -np 4 vasp_std > vasp.out
 ```
 
-作业脚本的写法见 Common 第2章 和本仓库的 `../scripts/job_vasp_slurm.sh`（用 `bash ../scripts/job_vasp_slurm.sh -h` 或打开文件查看说明）。
+作业脚本的写法见 [Common 第2章](../../Common/tutorials/02-job-scheduler.md) 和本仓库的 [`job_vasp_slurm.sh`](../scripts/job_vasp_slurm.sh)（用 `bash ../scripts/job_vasp_slurm.sh -h` 或打开文件查看说明）。
 
 ### 4.3 监控与检查
 
@@ -376,7 +376,7 @@ print("max |F| on free dof = %.4f eV/A (atom %d)" % (norm[i], i + 1))
 ```
 
 > [!NOTE]
-> T/F 标志作用在分数坐标方向上，脚本把它直接套到笛卡尔受力分量上，这对"c 轴垂直于 ab 面、只固定整个原子或只固定 z"的常见 slab 是精确的，对斜交晶胞的部分固定只是近似。本仓库的 `../scripts/check_vasp.py` 会把电子步、离子步、是否收敛、最大受力、常见报错一起检查，用法见 `python ../scripts/check_vasp.py -h`。
+> T/F 标志作用在分数坐标方向上，脚本把它直接套到笛卡尔受力分量上，这对"c 轴垂直于 ab 面、只固定整个原子或只固定 z"的常见 slab 是精确的，对斜交晶胞的部分固定只是近似。本仓库的 [`check_vasp.py`](../scripts/check_vasp.py) 会把电子步、离子步、是否收敛、最大受力、常见报错一起检查，用法见 `python ../scripts/check_vasp.py -h`。
 
 ### 5.3 用 Python 快速看优化轨迹
 
@@ -388,7 +388,7 @@ for i, a in enumerate(traj):
     print("%3d  E = %.6f eV  V = %.3f A^3  fmax = %.4f eV/A" % (i + 1, a.get_potential_energy(), a.get_volume(), fmax))
 ```
 
-更多 ASE/pymatgen 解析方法见 Common 第4章。
+更多 ASE/pymatgen 解析方法见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)。
 
 ---
 
@@ -741,7 +741,7 @@ sbatch job.slurm
 
 ### 9.5 用脚本批量生成输入
 
-本仓库的 `../scripts/vasp_inputgen.py` 可以按任务类型（relax/scf/band/...）生成带注释的 INCAR、KPOINTS，并从 `VASP_PP_PATH` 拼接 POTCAR；具体参数用 `python ../scripts/vasp_inputgen.py -h` 查看。高通量场景下也可以用 pymatgen 的 `MPRelaxSet` 或 atomate2，见 Common 第6章。
+本仓库的 [`vasp_inputgen.py`](../scripts/vasp_inputgen.py) 可以按任务类型（relax/scf/band/...）生成带注释的 INCAR、KPOINTS，并从 `VASP_PP_PATH` 拼接 POTCAR；具体参数用 `python ../scripts/vasp_inputgen.py -h` 查看。高通量场景下也可以用 pymatgen 的 `MPRelaxSet` 或 atomate2，见 [Common 第6章](../../Common/tutorials/06-workflow-automation.md)。
 
 ---
 

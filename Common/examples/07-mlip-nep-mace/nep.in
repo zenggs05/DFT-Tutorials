@@ -1,0 +1,25 @@
+# Minimal NEP training input (GPUMD >= 4.x "nep" executable, NEP4 only)
+# Reads train.xyz (and test.xyz if present) from the current directory.
+# Keyword reference: https://gpumd.org/nep/input_files/nep_in.html
+#
+# Mandatory: number of species and their symbols (order = order in nep.txt)
+type          2 Mo S
+version       4            # the only accepted value in current GPUMD
+# Radial / angular cutoffs in Angstrom (default 8 4; 3 <= angular <= radial <= 10)
+cutoff        6 4
+# Descriptor and network size (documented defaults written out)
+n_max         6 6
+basis_size    6 6
+l_max         4 1
+neuron        30
+# Loss weights (defaults); lambda_v 0 if your DFT data have no reliable stress
+lambda_e      1.0
+lambda_f      1.0
+lambda_v      0.1
+# SNES optimiser (defaults are batch 1000, population 50, generation 100000).
+# A short first run to check the data pipeline; raise generation for production.
+batch         1000
+population    50
+generation    20000
+# Uncomment to evaluate an existing nep.txt on train.xyz/test.xyz instead of training:
+# prediction  1

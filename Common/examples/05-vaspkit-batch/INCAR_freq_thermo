@@ -1,0 +1,23 @@
+# Finite-difference vibrations for VASPKIT 501 (adsorbate) / 502 (gas molecule)
+# Start from a relaxed structure (CONTCAR -> POSCAR). For adsorbates fix the slab
+# atoms with Selective dynamics (F F F) so that only the adsorbate is displaced.
+SYSTEM  = vibrational frequencies for thermal corrections
+
+PREC    = Accurate
+ENCUT   = 450        # same as the relaxation
+EDIFF   = 1E-7       # tight: forces must be accurate
+ISMEAR  = 0
+SIGMA   = 0.05
+LREAL   = .FALSE.
+
+IBRION  = 5          # finite differences, all free degrees of freedom
+NFREE   = 2          # central differences (+/- displacement)
+POTIM   = 0.015      # displacement in Angstrom
+NSW     = 1
+ISYM    = 0          # recommended for finite differences on molecules/adsorbates
+
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.
+# After the run (same directory, CONTCAR/OUTCAR present):
+#   gas molecule : vaspkit < inputs/cmd_502_gas_298K_1atm_singlet.in   (asks T, p, spin multiplicity)
+#   adsorbate    : vaspkit < inputs/cmd_501_adsorbate_298K.in          (asks T)

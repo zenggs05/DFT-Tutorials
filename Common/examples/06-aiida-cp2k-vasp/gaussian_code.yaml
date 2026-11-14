@@ -1,0 +1,14 @@
+# verdi code create core.code.installed --config gaussian_code.yaml
+# Gaussian is shared-memory parallel (%nprocshared), so with_mpi is false.
+label: g16
+description: Gaussian 16 C.02 (example)
+default_calc_job_plugin: gaussian
+computer: localhost
+filepath_executable: /opt/g16/g16
+with_mpi: false
+prepend_text: |
+  # module load gaussian/16-C.02
+  export g16root=/opt
+  source $g16root/g16/bsd/g16.profile
+  export GAUSS_SCRDIR=${TMPDIR:-/tmp}
+append_text: ''

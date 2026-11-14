@@ -1,0 +1,20 @@
+SYSTEM  = GaAs PBE DOS/PDOS on a dense mesh (non-SCF)
+
+PREC    = Accurate
+ENCUT   = 400        # MUST equal the SCF value
+EDIFF   = 1E-7
+LREAL   = .FALSE.
+
+ICHARG  = 11         # fixed SCF density
+ISMEAR  = -5         # tetrahedron method with Bloechl corrections (needs a
+                     # Gamma-centred mesh with enough k-points)
+LORBIT  = 11         # site- and lm-projected DOS in DOSCAR / vasprun.xml
+NEDOS   = 3001       # energy grid points between EMIN and EMAX
+EMIN    = -20        # absolute energies in eV (not relative to E-fermi);
+EMAX    = 15         # choose them so that E-fermi lies well inside
+NBANDS  = 24
+
+NSW     = 0
+IBRION  = -1
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.

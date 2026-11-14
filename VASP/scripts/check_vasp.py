@@ -80,10 +80,10 @@ PATTERNS = [
      "子空间对角化失败：换 ALGO（Normal 与 Fast 互换），检查结构。"),
     ("EDWAV", "error", ["EDWAV: internal error, the gradient is not orthogonal"],
      "梯度不正交：试 ALGO=Normal 或 Fast；反复出现时检查编译（降低优化级别）与 MPI/数学库。"),
-    ("IBZKPT", "error", ["internal error in subroutine IBZKPT",
-                         "Reciprocal lattice and k-lattice belong to different class of lattices"],
+    ("IBZKPT", "error", ["Reciprocal lattice and k-lattice"],
      "k 网格与晶格对称性不相容（常见于六角/三方体系的偶数 Monkhorst-Pack 网格）：改用 Gamma 中心网格或修改网格。"),
     ("TETRAHEDRON", "error", ["Tetrahedron method fails", "tetrahedron method fails",
+                              "subroutine BZINTS", "BZINTS: Tetrahedron",
                               "Routine TETIRR needs special values"],
      "ISMEAR=-5 需要至少 4 个 k 点的 Gamma 中心网格：分子、Gamma 点和 slab 计算改用 ISMEAR=0, SIGMA=0.05。"),
     ("DENTET", "warning", ["DENTET"],
@@ -451,9 +451,12 @@ def parse_outcar(path: Path) -> dict:
                         if not inner or ART_RE.match(inner):
                             continue
                         text.append(inner)
-                        scan_patterns(inner, r["found"], "OUTCAR")
                 except StopIteration:
                     pass
+                if text:
+                    # messages are wrapped over several box lines (e.g. "...BZINTS: Tetrahedron" /
+                    # "method fails ..."), so match the joined text once per box
+                    scan_patterns(" ".join(text), r["found"], "OUTCAR")
                 msg = " ".join(text[:2])[:150] if text else "(empty box)"
                 key = (kind, msg)
                 r["boxes"][key] = r["boxes"].get(key, 0) + 1
@@ -470,9 +473,22 @@ def scan_stdout(paths, found: dict) -> None:
     for p in paths:
         try:
             with open(p, errors="replace") as fh:
+                box = []          # inner text of the current VASP 6 message box
                 for line in fh:
-                    if not _skip_line(line) or "|" in line:
+                    st = line.strip()
+                    if st.startswith("|"):
+                        inner = st.strip("|").strip()
+                        if inner and not ART_RE.match(inner):
+                            box.append(inner)
+                        continue
+                    if box:
+                        # wrapped box messages are matched on their joined text
+                        scan_patterns(" ".join(box), found, p.name)
+                        box = []
+                    if not _skip_line(line):
                         scan_patterns(line, found, p.name)
+                if box:
+                    scan_patterns(" ".join(box), found, p.name)
         except OSError:
             continue
 
@@ -811,7 +827,7 @@ def build_parser():
 
 def main(argv=None) -> int:
     try:
-        sys.stdout.reconfigure(errors="replace")
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except AttributeError:
         pass
     args = build_parser().parse_args(argv)

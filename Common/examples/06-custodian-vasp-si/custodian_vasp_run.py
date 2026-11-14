@@ -9,7 +9,7 @@ Usage (inside a Slurm allocation, NOT on the login node):
     export VASP_CMD="srun vasp_std"            # or "mpirun -np 64 vasp_std"
     python custodian_vasp_run.py               # uses INCAR KPOINTS POSCAR POTCAR in cwd
 
-Tested against custodian 2026.10.21 (Python >= 3.11).
+Written for custodian 2026.10.21 (Python >= 3.11); check handler names after upgrades.
 """
 import os
 import shlex
@@ -50,8 +50,8 @@ def main() -> int:
         FrozenJobErrorHandler(timeout=7200),  # vasp.out not updated for 2 h
         StdErrHandler(),                # std_err.txt: MPI / memory problems
     ]
-    # Writes a STOPCAR shortly before the Slurm time limit (needs SBATCH_TIMELIMIT
-    # or an explicit wall_time in seconds); otherwise the handler does nothing.
+    # Writes a STOPCAR shortly before the time limit. custodian reads PBS_WALLTIME or
+    # SBATCH_TIMELIMIT; on Slurm export CUSTODIAN_WALLTIME (seconds) in the job script.
     if "SBATCH_TIMELIMIT" in os.environ or "CUSTODIAN_WALLTIME" in os.environ:
         wall = os.environ.get("CUSTODIAN_WALLTIME")
         handlers.append(WalltimeHandler(wall_time=int(wall) if wall else None, buffer_time=600))

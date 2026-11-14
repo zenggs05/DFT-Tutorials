@@ -36,7 +36,7 @@ def build_parameters() -> orm.Dict:
                     "POTENTIAL_FILE_NAME": "GTH_POTENTIALS",
                     "QS": {"EPS_DEFAULT": 1.0e-12},
                     "MGRID": {"CUTOFF": 400, "REL_CUTOFF": 50},
-                    "POISSON": {"PERIODIC": "NONE", "POISSON_SOLVER": "MT"},
+                    "POISSON": {"PERIODIC": "NONE", "PSOLVER": "MT"},
                     "SCF": {"SCF_GUESS": "ATOMIC", "EPS_SCF": 1.0e-6, "MAX_SCF": 50,
                             "OT": {"MINIMIZER": "DIIS", "PRECONDITIONER": "FULL_ALL"}},
                     "XC": {"XC_FUNCTIONAL": {"_": "PBE"}},   # "_" = section parameter

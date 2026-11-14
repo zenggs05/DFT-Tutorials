@@ -12,7 +12,7 @@
 
 | 文件 | 说明 |
 |---|---|
-| `POSCAR` | 与示例 16-1 相同的 CO/Pt(111) p(2×2) 初始结构；正式计算请换成第10章优化后的 CONTCAR |
+| `POSCAR` | 与示例 16-1 相同的 CO/Pt(111) p(2×2) 初始结构；正式计算请换成[第10章](../../tutorials/10-adsorption-catalysis.md)优化后的 CONTCAR |
 | `INCAR` | 三次计算共用的单点设置（`LCHARG = .TRUE.`、`ISPIN = 1`） |
 | `KPOINTS` | Γ 中心 6×6×1，三次计算共用 |
 | `split_fragments.py` | 从 POSCAR 中按元素或编号切出片段，晶胞和坐标按原文本复制，不做任何舍入 |
@@ -36,7 +36,7 @@ NP=32 bash run_cdd.sh run    # 依次运行三个单点
 bash run_cdd.sh analyze      # 求差与平面平均
 ```
 
-也可以用 vaspkit 314（依次输入 `AB/CHGCAR slab/CHGCAR co/CHGCAR`）或仓库脚本 `../../scripts/chgdiff.py`（`python ../../scripts/chgdiff.py -h` 查看用法）得到同样的结果。
+也可以用 vaspkit 314（依次输入 `AB/CHGCAR slab/CHGCAR co/CHGCAR`）或仓库脚本 [`chgdiff.py`](../../scripts/chgdiff.py)（`python ../../scripts/chgdiff.py -h` 查看用法）得到同样的结果。
 
 ## 预期结果 / 如何检查
 

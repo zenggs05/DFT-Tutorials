@@ -15,7 +15,7 @@
 | 用 d 带中心解释吸附强弱趋势 | §10 | `7_slab_dos` + `dband_center.py` |
 | 在隐式水溶剂中计算、了解恒电势方法 | §11 | [10-vaspsol-implicit-solvent](../examples/10-vaspsol-implicit-solvent/README.md) |
 
-**前置知识**：结构优化（[第4章](04-relax-eos.md)）、收敛测试（[第3章](03-convergence.md)）、slab 模型与偶极校正（[第9章](09-surface-workfunction.md)）、vdW 修正（[第8章](08-vdw-2d.md)）、DOS（[第5章](05-band-dos.md)）。建模工具见 Common 第3章 和 Common 第4章。过渡态（反应能垒）放在下一章 [第11章](11-neb-dimer.md)。
+**前置知识**：结构优化（[第4章](04-relax-eos.md)）、收敛测试（[第3章](03-convergence.md)）、slab 模型与偶极校正（[第9章](09-surface-workfunction.md)）、vdW 修正（[第8章](08-vdw-2d.md)）、DOS（[第5章](05-band-dos.md)）。建模工具见 [Common 第3章](../../Common/tutorials/03-structure-modeling.md) 和 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)。过渡态（反应能垒）放在下一章 [第11章](11-neb-dimer.md)。
 
 > [!NOTE]
 > 本章所有输入针对 VASP 6.4–6.6（推荐 6.6.1），对 VASP 5.4.4 也基本适用。VASPsol 需要单独打补丁编译（§11）。文中出现的数值输出除特别注明来源外，均为**示意输出，数值仅供参考**，请以你自己的计算为准。
@@ -833,7 +833,7 @@ CHE 模型中电极电势只通过 $-eU$ 进入，表面本身是电中性的。
 | 自旋 | O2、自由基、磁性表面 ISPIN=2 | 比较自旋/非自旋能量，确认基态 |
 | vdW | 统一使用或统一不用 | 体相 a0 用同一泛函重新优化 |
 
-收敛测试的自动化可参考 [`conv_test.sh`](../scripts/conv_test.sh) 与 [`conv_analyze.py`](../scripts/conv_analyze.py)（用法见各自 `-h`），高通量吸附计算的工作流见 Common 第6章。
+收敛测试的自动化可参考 [`conv_test.sh`](../scripts/conv_test.sh) 与 [`conv_analyze.py`](../scripts/conv_analyze.py)（用法见各自 `-h`），高通量吸附计算的工作流见 [Common 第6章](../../Common/tutorials/06-workflow-automation.md)。
 
 ---
 

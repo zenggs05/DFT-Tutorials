@@ -11,6 +11,9 @@
 #   - fixes for periodic tblite gradients / stress went into CP2K 2026.1;
 #     use 2026.1 or newer for GEO_OPT / CELL_OPT runs
 #   - k-points always use diagonalisation (no OT with k-points up to 2026.2)
+#   - 2026.2: XTB/SCC_MIXER defaults to AUTO = tblite's own SCC mixer, whose convergence
+#     follows &TBLITE/ACCURACY; EPS_SCF and &MIXING below then matter for SCC_MIXER CP2K
+#     and for the 2025.2/2026.1 runs (-E NEWTB=0)
 #
 # Structure: idealised O sublattice of ice Ih (a = 4.50 A, c = 7.33 A, approximate
 # lattice constants), hydrogens placed 0.98 A along the O-O bonds following the

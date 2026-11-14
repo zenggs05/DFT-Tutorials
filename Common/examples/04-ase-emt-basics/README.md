@@ -23,7 +23,7 @@
 ## 运行步骤
 
 ```bash
-conda activate dft            # Python >= 3.10（ASE 3.27 起的要求），ase >= 3.28
+conda activate dft            # Python >= 3.10（ASE 3.29 的 Requires-Python），ase >= 3.28
 python -c "import ase; print(ase.__version__)"
 export MPLBACKEND=Agg         # 集群/无图形界面时避免 matplotlib 报错
 
@@ -37,7 +37,7 @@ ase gui neb_final_path.traj   # 有图形界面时查看 NEB 路径
 
 ## 预期结果 / 如何检查
 
-以下为在 ASE 3.29.0、Python 3.13 上实际运行得到的输出（EMT 势，不是 DFT 结果，不要拿去和实验比较）：
+以下为参考输出（示意输出，数值仅供参考，由编写者在 ASE 3.29.0、Python 3.13 上运行得到；不同 ASE 版本的最后几位可能不同。EMT 势，不是 DFT 结果，不要拿去和实验比较）：
 
 ```text
 EOS = birchmurnaghan
@@ -63,4 +63,4 @@ forward barrier = 0.423 eV   reaction energy = 0.000 eV
 - NEB 结果依赖 `method`：复现 ASE ≤ 3.27 的旧结果时写 `method='aseneb'`；新 ASE 不写 `method` 会给出警告。
 - EMT 只适合 Al、Cu、Ag、Au、Ni、Pd、Pt（及少量 H/C/N/O 的粗略描述），只用来练习流程。
 
-返回教程：第4章 ASE 与 pymatgen 实战
+返回教程：[第4章 ASE 与 pymatgen 实战](../../tutorials/04-ase-pymatgen.md)

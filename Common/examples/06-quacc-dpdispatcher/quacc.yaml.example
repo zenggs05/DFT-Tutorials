@@ -1,0 +1,23 @@
+# Copy to ~/.quacc.yaml (or set QUACC_CONFIG_FILE). Every key can also be set
+# as an environment variable with the QUACC_ prefix, e.g. QUACC_VASP_CMD.
+# Keys are fields of quacc.settings.QuaccSettings (quacc 1.8.x).
+
+# No workflow engine: recipes run immediately when called (good for learning).
+# Other values: jobflow, parsl, dask, prefect, ray, redun
+WORKFLOW_ENGINE: null
+
+# Where results are written; one unique sub-folder per job by default
+RESULTS_DIR: /scratch/myname/quacc_results
+# Optional fast scratch disk; files are moved back to RESULTS_DIR afterwards
+# SCRATCH_DIR: /tmp
+
+# VASP: custodian builds "<VASP_PARALLEL_CMD> <VASP_CMD>"
+VASP_PARALLEL_CMD: srun
+VASP_CMD: vasp_std
+VASP_GAMMA_CMD: vasp_gam
+VASP_USE_CUSTODIAN: true
+# Folder that contains potpaw_PBE (same layout as ASE's VASP_PP_PATH)
+VASP_PP_PATH: /home/myname/vasp_pp
+
+# Gaussian executable used by quacc.recipes.gaussian
+GAUSSIAN_CMD: g16

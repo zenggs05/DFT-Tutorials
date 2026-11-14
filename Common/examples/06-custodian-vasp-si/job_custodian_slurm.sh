@@ -11,7 +11,7 @@
 # custodian runs on the first node of the allocation and launches VASP itself.
 # Adjust module names and the conda environment to your cluster.
 
-set -euo pipefail
+set -eo pipefail     # no -u: module and conda activation scripts use unset variables
 ulimit -s unlimited
 export OMP_NUM_THREADS=1
 
@@ -25,6 +25,7 @@ cd "$SLURM_SUBMIT_DIR"
 
 # POTCAR is never stored in the repository: build it from your licensed library
 if [ ! -f POTCAR ]; then
+    : "${VASP_PP_PATH:?POTCAR missing and VASP_PP_PATH is not set}"
     cat "$VASP_PP_PATH/potpaw_PBE/Si/POTCAR" > POTCAR
 fi
 
@@ -32,6 +33,9 @@ fi
 command -v dos2unix >/dev/null && dos2unix -q INCAR KPOINTS POSCAR
 
 export VASP_CMD="srun vasp_std"              # or: mpirun -np $SLURM_NTASKS vasp_std
+# Wall time in seconds, keep it equal to --time above. Slurm does not export the
+# limit to the job, so custodian's WalltimeHandler needs it explicitly.
+export CUSTODIAN_WALLTIME=7200
 python custodian_vasp_run.py
 
 # Alternative: YAML driven run

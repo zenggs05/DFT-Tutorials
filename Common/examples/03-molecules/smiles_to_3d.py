@@ -60,7 +60,9 @@ def main():
 
     with open(args.output, "w", newline="\n") as f:
         f.write("%d\n" % mol.GetNumAtoms())
-        f.write("SMILES=%s charge=%d mult=%d %s_E=%.3f_kcal/mol\n"
+        # SMILES is quoted so that ASE's extxyz comment parser keeps
+        # characters such as '=', '[' or '(' verbatim
+        f.write("SMILES=\"%s\" charge=%d mult=%d %s_E=%.3f_kcal/mol\n"
                 % (args.smiles, charge, mult, ff, energies[best]))
         for atom in mol.GetAtoms():
             pos = conf.GetAtomPosition(atom.GetIdx())

@@ -505,7 +505,7 @@ C.01 起，`Pop=SaveCM5` 与 `Pop=SaveHirshfeld` 把对应电荷作为 MM 电荷
 | 8 → 7 / 8 / 9 | 轨道成分分析：NAO / Hirshfeld / Becke 方法 |
 
 - 轨道成分分析能回答“HOMO 中金属 d 轨道占多少”“LUMO 在哪个片段上”这类问题，比 `Pop=Orbitals` 的粗略输出更可靠；
-- 批量处理：仓库脚本 `batch_cube_multiwfn.sh` 可对目录内所有 chk 执行 formchk/cubegen，并可用命令流文件非交互运行 Multiwfn（`bash ../scripts/batch_cube_multiwfn.sh -h`）；[BaneWfn](https://github.com/bane-dysta/banewfn) 把固定菜单序列模板化，适合大批量分析；
+- 批量处理：仓库脚本 [`batch_cube_multiwfn.sh`](../scripts/batch_cube_multiwfn.sh) 可对目录内所有 chk 执行 formchk/cubegen，并可用命令流文件非交互运行 Multiwfn（`bash ../scripts/batch_cube_multiwfn.sh -h`）；[BaneWfn](https://github.com/bane-dysta/banewfn) 把固定菜单序列模板化，适合大批量分析；
 - 分子表面静电势（ESP 着色、极值点）分析见 [第16章](16-postprocess-multiwfn.md)。
 
 ## 10. 该用哪种电荷？

@@ -1,0 +1,57 @@
+# dft_paper.mplstyle - matplotlib style for journal figures (band/DOS/spectra)
+# Usage:  import matplotlib.pyplot as plt; plt.style.use("dft_paper.mplstyle")
+# Sizes: single column ~ 85 mm (3.35 in), double column ~ 175 mm (6.9 in).
+# Colours: Okabe-Ito colour-blind safe sequence (hex values WITHOUT '#',
+# because '#' starts a comment in style files).
+
+# ---- figure and saving -------------------------------------------------
+figure.figsize      : 3.35, 2.6
+figure.dpi          : 150
+savefig.dpi         : 600          # used for raster formats (png/tiff)
+savefig.bbox        : tight
+savefig.pad_inches  : 0.02
+savefig.transparent : False
+pdf.fonttype        : 42           # embed TrueType fonts (editable text in Illustrator/Inkscape)
+ps.fonttype         : 42
+svg.fonttype        : none         # keep text as text in SVG
+
+# ---- fonts ---------------------------------------------------------------
+font.family         : sans-serif
+font.sans-serif     : Arial, Helvetica, Liberation Sans, DejaVu Sans
+font.size           : 8
+axes.titlesize      : 8
+axes.labelsize      : 8
+xtick.labelsize     : 7
+ytick.labelsize     : 7
+legend.fontsize     : 7
+mathtext.fontset    : dejavusans   # use 'stixsans' for a closer Arial match
+mathtext.default    : regular
+axes.unicode_minus  : True
+
+# ---- axes, ticks, grid ---------------------------------------------------
+axes.linewidth      : 0.6
+axes.labelpad       : 2.0
+axes.grid           : False
+axes.prop_cycle     : cycler('color', ['0072B2', 'D55E00', '009E73', 'CC79A7', 'E69F00', '56B4E9', '000000'])
+xtick.direction     : in
+ytick.direction     : in
+xtick.top           : True
+ytick.right         : True
+xtick.major.size    : 3.0
+ytick.major.size    : 3.0
+xtick.minor.size    : 1.5
+ytick.minor.size    : 1.5
+xtick.major.width   : 0.6
+ytick.major.width   : 0.6
+xtick.minor.width   : 0.5
+ytick.minor.width   : 0.5
+xtick.major.pad     : 2.0
+ytick.major.pad     : 2.0
+
+# ---- lines and legend ----------------------------------------------------
+lines.linewidth     : 1.0
+lines.markersize    : 3.0
+legend.frameon      : False
+legend.handlelength : 1.5
+legend.borderaxespad: 0.3
+image.cmap          : viridis

@@ -101,6 +101,12 @@ nav:
       - 概览: Common/README.md
       - 教程:
           - "第1章 计算环境搭建：Linux/WSL、conda、集群登录与文件传输": Common/tutorials/01-linux-hpc.md
+          - "第2章 HPC 作业调度：Slurm/PBS/LSF 模板与并行设置": Common/tutorials/02-job-scheduler.md
+          - "第3章 结构准备：数据库下载、建模": Common/tutorials/03-structure-modeling.md
+          - "第4章 ASE 与 pymatgen 实战：统一驱动四款软件、输入集与输出解析": Common/tutorials/04-ase-pymatgen.md
+          - "第5章 后处理与可视化：VASPKIT、sumo、pyprocar、VESTA、Multiwfn 与出版级作图": Common/tutorials/05-postprocess-visualization.md
+          - "第6章 工作流自动化与高通量：custodian、atomate2、jobflow、AiiDA": Common/tutorials/06-workflow-automation.md
+          - "第7章 DFT 理论速览、学习路线与资源汇总": Common/tutorials/07-learning-path.md
       - 示例:
           - "01-env-setup": Common/examples/01-env-setup/README.md
           - "02-array-chain-si": Common/examples/02-array-chain-si/README.md
@@ -114,10 +120,17 @@ nav:
           - "04-ase-emt-basics": Common/examples/04-ase-emt-basics/README.md
           - "04-output-parsing": Common/examples/04-output-parsing/README.md
           - "04-pymatgen-io": Common/examples/04-pymatgen-io/README.md
+          - "05-band-dos-plotting": Common/examples/05-band-dos-plotting/README.md
+          - "05-vaspkit-batch": Common/examples/05-vaspkit-batch/README.md
+          - "05-visualization-3d": Common/examples/05-visualization-3d/README.md
           - "06-aiida-cp2k-vasp": Common/examples/06-aiida-cp2k-vasp/README.md
           - "06-custodian-vasp-si": Common/examples/06-custodian-vasp-si/README.md
           - "06-jobflow-atomate2": Common/examples/06-jobflow-atomate2/README.md
           - "06-quacc-dpdispatcher": Common/examples/06-quacc-dpdispatcher/README.md
+          - "07-convergence-templates": Common/examples/07-convergence-templates/README.md
+          - "07-learning-resources": Common/examples/07-learning-resources/README.md
+          - "07-mlip-nep-mace": Common/examples/07-mlip-nep-mace/README.md
+      - 脚本: Common/scripts/README.md
   - "VASP":
       - 概览: VASP/README.md
       - 教程:
@@ -259,8 +272,13 @@ nav:
           - "第9章 杂化泛函与 ADMM": CP2K/tutorials/09-hybrid-admm.md
           - "第10章 电子结构分析：DOS、PDOS 与能带": CP2K/tutorials/10-dos-pdos-band.md
           - "第11章 实空间性质：cube 文件、电荷分析与功函数": CP2K/tutorials/11-cube-charge-workfunction.md
+          - "第12章 从头算分子动力学": CP2K/tutorials/12-aimd.md
           - "第13章 过渡态搜索：NEB 与 Dimer": CP2K/tutorials/13-neb-dimer.md
           - "第14章 振动分析、红外与热化学": CP2K/tutorials/14-vibration-thermo.md
+          - "第15章 增强采样：元动力学、PLUMED 与约束 MD": CP2K/tutorials/15-metadynamics-plumed.md
+          - "第16章 QM/MM 与半经验方法": CP2K/tutorials/16-qmmm-xtb.md
+          - "第17章 自动化与工具生态：ASE、cp2k-input-tools、Multiwfn、cp2kdata": CP2K/tutorials/17-tools-ecosystem.md
+          - "第18章 常见错误排查、性能调优与版本迁移": CP2K/tutorials/18-troubleshooting.md
       - 示例:
           - "01-install-check": CP2K/examples/01-install-check/README.md
           - "02-energy-force-rutile": CP2K/examples/02-energy-force-rutile/README.md
@@ -281,6 +299,7 @@ nav:
           - "16-qmmm-xtb": CP2K/examples/16-qmmm-xtb/README.md
           - "17-automation-tools": CP2K/examples/17-automation-tools/README.md
           - "18-troubleshooting": CP2K/examples/18-troubleshooting/README.md
+      - 脚本: CP2K/scripts/README.md
   - "OpenMX":
       - 概览: OpenMX/README.md
       - 教程:
@@ -297,8 +316,11 @@ nav:
           - "第11章 自旋极化、非共线磁性与交换耦合": OpenMX/tutorials/11-spin-noncollinear.md
           - "第12章 自旋轨道耦合与拓扑性质": OpenMX/tutorials/12-soc-topology.md
           - "第13章 DFT+U": OpenMX/tutorials/13-dft-u.md
+          - "第14章 Wannier 函数：MLWF 与 CWF": OpenMX/tutorials/14-wannier.md
+          - "第15章 Berry 相宏观极化与外加电场": OpenMX/tutorials/15-berry-efield.md
           - "第16章 表面与界面：ESM、功函数、电荷掺杂": OpenMX/tutorials/16-surface-esm-workfunction.md
           - "第17章 NEGF 电子输运": OpenMX/tutorials/17-negf-transport.md
+          - "第18章 并行、大体系 O": OpenMX/tutorials/18-parallel-on-errors.md
       - 示例:
           - "01-overview-tour": OpenMX/examples/01-overview-tour/README.md
           - "02-install-build": OpenMX/examples/02-install-build/README.md
@@ -330,12 +352,22 @@ nav:
           - "12-gaas-soc-band": OpenMX/examples/12-gaas-soc-band/README.md
           - "12-mos2-soc-band": OpenMX/examples/12-mos2-soc-band/README.md
           - "13-dft-u-nio-mno": OpenMX/examples/13-dft-u-nio-mno/README.md
+          - "14-gaas-cwf": OpenMX/examples/14-gaas-cwf/README.md
+          - "14-graphene-pz-mlwf": OpenMX/examples/14-graphene-pz-mlwf/README.md
+          - "14-si-mlwf-sp3": OpenMX/examples/14-si-mlwf-sp3/README.md
+          - "15-batio3-polarization": OpenMX/examples/15-batio3-polarization/README.md
+          - "15-nacl-polb-born": OpenMX/examples/15-nacl-polb-born/README.md
+          - "15-nitrobenzene-efield": OpenMX/examples/15-nitrobenzene-efield/README.md
           - "16-al111-esm-workfunction": OpenMX/examples/16-al111-esm-workfunction/README.md
           - "16-graphene-charge-doping": OpenMX/examples/16-graphene-charge-doping/README.md
           - "16-pt111-esm-charging": OpenMX/examples/16-pt111-esm-charging/README.md
           - "17-negf-7agnr": OpenMX/examples/17-negf-7agnr/README.md
           - "17-negf-carbon-chain": OpenMX/examples/17-negf-carbon-chain/README.md
+          - "18-api-python": OpenMX/examples/18-api-python/README.md
+          - "18-c60-cluster-elpa": OpenMX/examples/18-c60-cluster-elpa/README.md
           - "18-job-scripts": OpenMX/examples/18-job-scripts/README.md
+          - "18-on-si-dc-krylov": OpenMX/examples/18-on-si-dc-krylov/README.md
+      - 脚本: OpenMX/scripts/README.md
   - NEP/GPUMD 脚本: Scripts/README.md
   - GitHub 资源精选: Resources/github-repos.md
   - English: README_en.md

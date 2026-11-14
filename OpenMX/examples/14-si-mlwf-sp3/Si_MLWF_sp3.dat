@@ -1,0 +1,114 @@
+#
+# Silicon (diamond, fcc primitive cell): SCF + 8 maximally localized Wannier
+# functions (MLWFs) from the 4 valence + 4 lowest conduction bands.
+# Initial guess: sp3 hybrids on both Si atoms (entangled conduction bands ->
+# disentanglement with an outer and an inner (frozen) energy window).
+# Target: OpenMX 4.0 (+patch 4.0.1), DFT_DATA19. Works with 3.9 after deleting
+# the scf.Generation.Kpoint line.
+#
+
+System.CurrrentDirectory    ./
+System.Name                 si_mlwf_sp3
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+# Species "proj" only defines the PAOs used as projectors (initial guess).
+# It is not placed on any atom; its VPS is read only for input consistency.
+Species.Number              2
+<Definition.of.Atomic.Species
+  Si     Si7.0-s2p2d1       Si_PBE19
+  proj   Si7.0-s1p1d1f1     Si_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Si  0.00  0.00  0.00   2.0 2.0
+  2  Si  0.25  0.25  0.25   2.0 2.0
+Atoms.SpeciesAndCoordinates>
+
+# a = 5.430 Ang; vectors a/2(0,1,1), a/2(1,0,1), a/2(1,1,0)
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  0.000  2.715  2.715
+  2.715  0.000  2.715
+  2.715  2.715  0.000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0
+scf.energycutoff            220.0
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   10 10 10
+scf.Generation.Kpoint       GCenter     # OpenMX 4.0 default; delete this line for 3.9
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-9
+
+MD.Type                     Nomd
+
+# Band path: needed for Wannier.Interpolated.Bands (same path is used for
+# the original .Band file and the interpolated .Wannier_Band file)
+Band.dispersion             on
+<Band.KPath.UnitCell
+  5.430  0.000  0.000
+  0.000  5.430  0.000
+  0.000  0.000  5.430
+Band.KPath.UnitCell>
+Band.Nkpath                 5
+<Band.kpath
+  26   0.50 0.50 0.50    0.00 0.00 0.00    L  G
+  30   0.00 0.00 0.00    1.00 0.00 0.00    G  X
+  15   1.00 0.00 0.00    1.00 0.50 0.00    X  W
+  11   1.00 0.50 0.00    0.75 0.75 0.00    W  K
+  32   0.75 0.75 0.00    0.00 0.00 0.00    K  G
+Band.kpath>
+
+#
+# Maximally localized Wannier functions
+#
+Wannier.Func.Calc                     on
+Wannier.Func.Num                      8
+# energies in eV relative to the Fermi level (mid-gap for Si at 300 K)
+Wannier.Outer.Window.Bottom         -14.0
+Wannier.Outer.Window.Top             12.0
+Wannier.Inner.Window.Bottom         -14.0      # frozen window: all valence bands
+Wannier.Inner.Window.Top              1.0      # ... plus the conduction-band bottom
+Wannier.Initial.Guess                 on
+
+# name-orbital  center(3)  local z axis(3)  local x axis(3)
+# atom 2 uses a rotated frame (z' = -x, x' = -z) so that its sp3 lobes
+# point along the inverted tetrahedron, i.e. back to atom 1's neighbours
+Wannier.Initial.Projectors.Unit       FRAC
+<Wannier.Initial.Projectors
+  proj-sp3   0.00 0.00 0.00    0.0 0.0  1.0    1.0 0.0  0.0
+  proj-sp3   0.25 0.25 0.25   -1.0 0.0  0.0    0.0 0.0 -1.0
+Wannier.Initial.Projectors>
+
+Wannier.Kgrid                         8 8 8
+Wannier.MaxShells                     12
+
+# stage 1: disentanglement (minimize Omega_I inside the outer window)
+Wannier.Dis.SCF.Max.Steps             2000
+Wannier.Dis.Conv.Criterion            1.0e-10
+Wannier.Dis.Mixing.Para               0.5
+# stage 2: gauge-dependent spread, 2 = SD first, then CG
+Wannier.Minimizing.Scheme             2
+Wannier.Minimizing.StepLength         2.0
+Wannier.Minimizing.Secant.Steps       5
+Wannier.Minimizing.Secant.StepLength  2.0
+Wannier.Minimizing.Max.Steps          300
+Wannier.Minimizing.Conv.Criterion     1.0e-10
+
+# analysis
+Wannier.Interpolated.Bands            on       # writes si_mlwf_sp3.Wannier_Band
+Wannier.Function.Plot                 on       # writes *.mlwf*_r.cube / *_i.cube
+Wannier.Function.Plot.SuperCells      1 1 1    # needs (2*n+1) <= Wannier.Kgrid
+Wannier.Readin.Overlap.Matrix         off      # on = reuse si_mlwf_sp3.mmn (see README)

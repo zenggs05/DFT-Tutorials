@@ -56,7 +56,7 @@ ls si_scf.Band si_scf.Dos.val si_scf.Dos.vec      # band and DOS data
 ls -l si_scf_rst/                                 # timestamps unchanged by the pp run
 ```
 
-能带后处理（bandgnu13 或 `python ../../scripts/omx_band_plot.py -h`）见第8章，DOS（DosMain 或 `python ../../scripts/omx_dos_auto.py -h`）见第9章。
+能带后处理（bandgnu13 或 [`omx_band_plot.py`](../../scripts/omx_band_plot.py)）见[第8章](../../tutorials/08-band.md)，DOS（DosMain 或 [`omx_dos_auto.py`](../../scripts/omx_dos_auto.py)）见[第9章](../../tutorials/09-dos-pdos-cohp-optics.md)；两个脚本都可用 `-h` 查看用法。
 
 ## 注意事项
 

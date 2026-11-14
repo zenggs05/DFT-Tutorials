@@ -47,7 +47,7 @@ ls *.dat#                                      # restart inputs, updated every s
 - 水分子应收敛到 r(OH) ≈ 0.97 Å、∠HOH ≈ 104° 量级（官方手册表 3 的 PBE 结果为 0.971 Å、103.6–103.7°，所用基组与本例不同；实验 0.957 Å、104.5°）；
 - 甲烷应恢复为正四面体，C–H 键长约 1.09–1.10 Å；
 - 最速下降的步数明显多于 RF，最大力曲线可能先越过驻点再回落；
-- 用 OpenMX Viewer 打开 `h2o_rf.md` 可以播放优化过程；本仓库 `python ../../scripts/omx_traj.py -h` 可画能量和最大力随步数的变化。
+- 用 OpenMX Viewer 打开 `h2o_rf.md` 可以播放优化过程；本仓库脚本 [`omx_traj.py`](../../scripts/omx_traj.py)（`python ../../scripts/omx_traj.py -h` 查看用法）可画能量和最大力随步数的变化。
 
 ## 注意事项
 

@@ -1,0 +1,5 @@
+! Lines to append to the si_w90.win file written by OpenMX (Wannier90.fileout on)
+! before running wannier90.x. Keywords are documented in the Wannier90 user guide.
+!   cat w90_extra.win >> si_w90.win
+write_hr  = .true.     ! real-space Hamiltonian si_w90_hr.dat (input for WannierTools etc.)
+write_xyz = .true.     ! Wannier centres as si_w90_centres.xyz

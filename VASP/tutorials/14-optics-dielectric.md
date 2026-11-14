@@ -565,7 +565,7 @@ SIGMA    = 0.05
 | VASPKIT 711 | `vaspkit -task 711` | 读 vasprun.xml（或 REAL.in/IMAG.in），可选能量单位 eV / nm / THz，输出吸收、折射率、消光、反射、损失谱等数据文件；官方说明不适用于低维材料 |
 | sumo-optplot | `sumo-optplot`、`sumo-optplot absorption loss --anisotropic` | 出版级图；可选 absorption、loss、eps_real、eps_imag、n_real、n_imag，`--bandgap` 标出带隙，`--gaussian` 额外展宽 |
 | pymatgen | `Vasprun("vasprun.xml").dielectric`、`.optical_absorption_coeff` | 程序化读取能量、实部、虚部和吸收系数（cm⁻¹） |
-| 仓库脚本 | ../scripts/optics_post.py | 介电函数、光学常数、Tauc 图以及 LEPSILON/LCALCEPS 张量与 Born 电荷的读取；用 `python ../scripts/optics_post.py -h` 查看用法 |
+| 仓库脚本 | [optics_post.py](../scripts/optics_post.py) | 介电函数、光学常数、Tauc 图以及 LEPSILON/LCALCEPS 张量与 Born 电荷的读取；用 `python ../scripts/optics_post.py -h` 查看用法 |
 
 py4vasp 的基本用法：
 

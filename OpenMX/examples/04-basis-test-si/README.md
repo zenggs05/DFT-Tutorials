@@ -40,7 +40,7 @@ python ../06-cellopt-eos-si-c/fit_evslc.py si_standard_eos.EvsLC --lattice fcc -
 2. 表下面的 `Num. of grids` 三行必须相同，否则说明比较的不是同一个积分网格。
 3. 用 `grep -o "scf_conv=[01]" si_*.md` 确认每次计算都是 `scf_conv=1`。
 4. EvsLC 拟合：Standard 与 Precise 的 a0 应相差约 0.01 Å 量级；PBE 文献值约 5.47 Å，实验 5.431 Å。
-5. 能带：用 bandgnu13 或 `python ../../scripts/omx_band_plot.py -h`（本仓库脚本，查看用法）画 `si_*.Band`。三档基组的价带应几乎重合，导带对基组更敏感。Si 的 PBE 带隙为间接带隙、约 0.5–0.6 eV 量级（实验约 1.17 eV），被低估属正常。
+5. 能带：用 bandgnu13 或本仓库脚本 [`omx_band_plot.py`](../../scripts/omx_band_plot.py)（`python ../../scripts/omx_band_plot.py -h` 查看用法）画 `si_*.Band`。三档基组的价带应几乎重合，导带对基组更敏感。Si 的 PBE 带隙为间接带隙、约 0.5–0.6 eV 量级（实验约 1.17 eV），被低估属正常。
 
 ## 注意事项
 

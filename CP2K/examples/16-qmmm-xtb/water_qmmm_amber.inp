@@ -10,6 +10,11 @@
 #     types of the prmtop (TIP3P water: OW, HW); MM_KIND below uses these names.
 #   - QM atoms are selected by their index in the prmtop / inpcrd (1-based).
 #   - EI_SCALE14 / VDW_SCALE14 must be set to the AMBER values (CP2K defaults differ).
+#   - the default AmberTools TIP3P residue is a rigid water: two O-H bonds plus an H-H
+#     "bond" instead of an H-O-H angle term. CP2K treats them as ordinary harmonic bonds,
+#     so the MM water differs from the flexible model of water_qmmm_tip3p.inp. Fine for
+#     this single point; for MD use "set default FlexibleWater on" in tleap or add
+#     constraints.
 #   - TIP3P hydrogens carry no Lennard-Jones term. For production QM/MM consider giving
 #     them a small LJ site (e.g. with ParmEd) to avoid over-polarisation near the QM atoms.
 #
@@ -31,7 +36,7 @@
     &MGRID
       CUTOFF     400
       REL_CUTOFF 50
-      COMMENSURATE
+      COMMENSURATE                 ! mandatory for E_COUPL GAUSS / S-WAVE (run aborts otherwise)
     &END MGRID
     &QS
       EPS_DEFAULT 1.0E-12

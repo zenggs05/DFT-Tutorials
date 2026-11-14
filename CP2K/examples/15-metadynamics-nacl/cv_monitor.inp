@@ -1,0 +1,81 @@
+! cv_monitor.inp - unbiased NVT MD that only MONITORS the collective variables
+! (metadynamics machinery switched on, but DO_HILLS F: no Gaussian is added).
+! Chapter 15, step 1b.  Target versions: CP2K 2023.1 ... 2026.2
+!
+! Purpose: measure the spontaneous fluctuation of each CV in the starting basin
+! (contact ion pair) to choose the Gaussian width SCALE of the biased runs.
+! Needs nacl_eq.xyz from nacl_equil.inp.  Default level: GFN1-xTB.
+!   mpirun -np 16 cp2k.psmp -i cv_monitor.inp -o cv_monitor_xtb.out
+!   mpirun -np 64 cp2k.psmp -E LEVEL=dft -E STEPS=4000 -i cv_monitor.inp -o cv_monitor_dft.out
+! Output: nacl_cvmon_<LEVEL>-COLVAR.metadynLog
+!   columns: time[fs]  CV1  CV2  then hill forces, wall forces, bias and wall
+!   energies (all zero here because DO_HILLS F and no walls).  CVs are in
+!   internal units: CV1 = d(Na-Cl) in bohr, CV2 = coordination number of Na.
+! Rule of thumb: SCALE ~ 1/3 ... 1/2 of the standard deviation of each CV.
+
+@SET LEVEL ${LEVEL-xtb}
+@SET COORD ${COORD-nacl_eq.xyz}
+
+&GLOBAL
+  PROJECT nacl_cvmon_${LEVEL}
+  RUN_TYPE MD
+  PRINT_LEVEL LOW
+&END GLOBAL
+
+@INCLUDE 'nacl_${LEVEL}_force_eval.inc'
+
+&MOTION
+  &MD
+    ENSEMBLE NVT
+    ! 20000 x 0.5 fs = 10 ps (xTB); 2-4 ps are usually enough at DFT level
+    STEPS ${STEPS-20000}
+    TIMESTEP 0.5
+    TEMPERATURE 300.0
+    &THERMOSTAT
+      TYPE CSVR
+      REGION GLOBAL
+      &CSVR
+        TIMECON 100.0
+      &END CSVR
+    &END THERMOSTAT
+  &END MD
+  &FREE_ENERGY
+    METHOD METADYN
+    &METADYN
+      ! no hills: the run is unbiased, CP2K only evaluates and prints the CVs
+      DO_HILLS F
+      &METAVAR
+        COLVAR 1
+        SCALE 0.35
+      &END METAVAR
+      &METAVAR
+        COLVAR 2
+        SCALE 0.20
+      &END METAVAR
+      &PRINT
+        &COLVAR
+          COMMON_ITERATION_LEVELS 3
+          &EACH
+            MD 1
+          &END EACH
+        &END COLVAR
+      &END PRINT
+    &END METADYN
+  &END FREE_ENERGY
+  &PRINT
+    &TRAJECTORY
+      FORMAT XYZ
+      &EACH
+        MD 10
+      &END EACH
+    &END TRAJECTORY
+    &RESTART
+      BACKUP_COPIES 0
+      &EACH
+        MD 100
+      &END EACH
+    &END RESTART
+    &RESTART_HISTORY OFF
+    &END RESTART_HISTORY
+  &END PRINT
+&END MOTION

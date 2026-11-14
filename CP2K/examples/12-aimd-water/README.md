@@ -1,6 +1,6 @@
 # 示例 12：32 个水分子的 AIMD（NVT → 续算 → NVE / NPT → REFTRAJ）
 
-配套教程：第12章 从头算分子动力学（AIMD）
+配套教程：[第12章 从头算分子动力学（AIMD）](../../tutorials/12-aimd.md)
 
 ## 目的
 
@@ -10,7 +10,8 @@
 2. `md_restart.inp`：用 `&EXT_RESTART` 和 `RESTART.wfn` 续算 NVT 生产段，`TIMECON 200 fs`，5 ps；
 3. `water32_nve.inp`：从平衡态出发跑 NVE，检查能量守恒，并每 1 fs 输出速度和体系偶极矩（用于 VDOS/IR）；
 4. `water32_npt_i.inp`：从平衡态出发跑各向同性 NPT（1 atm），检验密度；
-5. `reftraj_eval.inp`：用 REFTRAJ 对生产轨迹中的 10 帧换用 TZV2P 基组重算能量和力（2026.2 的 `EVAL ENERGY_FORCES` 写法）。
+5. `reftraj_eval.inp`：用 REFTRAJ 对生产轨迹中的 10 帧换用 TZV2P 基组重算能量和力（`EVAL ENERGY_FORCES` 写法，2024.1 起可用，2026.2 起是唯一写法）；
+6. 可选：`water32_nvt_nose.inp` 用 Nose–Hoover 链代替 CSVR 做生产段，与第 2 步对比；`reftraj_npt.inp` 对 NPT 轨迹做变晶胞 REFTRAJ 重算（`VARIABLE_VOLUME` + `.cell` 文件）。
 
 电子结构：PBE-D3(BJ)，`DZVP-MOLOPT-PBE-GTH`（BASIS_MOLOPT_UZH）+ `GTH-PBE`（POTENTIAL_UZH），`CUTOFF 400 / REL_CUTOFF 60`（NPT 用 600 Ry），OT + `OUTER_SCF`，`EPS_SCF 1E-6`，ASPC 外推（阶数 3），步长 0.5 fs。
 
@@ -24,7 +25,9 @@
 | `md_restart.inp` | 第 2 步：NVT 生产段（续算） |
 | `water32_nve.inp` | 第 3a 步：NVE + 偶极矩输出 |
 | `water32_npt_i.inp` | 第 3b 步：NPT_I（`STRESS_TENSOR ANALYTICAL`、`CELL_REF`） |
-| `reftraj_eval.inp` | 第 4 步：REFTRAJ 重算 |
+| `reftraj_eval.inp` | 第 4 步：REFTRAJ 重算（定晶胞，NVT 生产轨迹） |
+| `water32_nvt_nose.inp` | 第 2 步的替代：Nose–Hoover 链（`LENGTH 3`、`TIMECON 200 fs`、`REGION GLOBAL`） |
+| `reftraj_npt.inp` | 第 4b 步：对 NPT 轨迹逐帧读入晶胞后重算（`CELL_FILE_NAME` + `VARIABLE_VOLUME T`） |
 | `job_slurm.sh` | Slurm 作业脚本（参数为输入文件名），用 `--dependency` 串联各步 |
 
 ## 运行步骤
@@ -38,8 +41,11 @@ cp2k.psmp -c water32_nvt_csvr.inp            # syntax check
 jid=$(sbatch --parsable job_slurm.sh water32_nvt_csvr.inp)
 pid=$(sbatch --parsable --dependency=afterok:$jid job_slurm.sh md_restart.inp)
 sbatch --dependency=afterok:$jid job_slurm.sh water32_nve.inp
-sbatch --dependency=afterok:$jid job_slurm.sh water32_npt_i.inp
+nid=$(sbatch --parsable --dependency=afterok:$jid job_slurm.sh water32_npt_i.inp)
 sbatch --dependency=afterok:$pid job_slurm.sh reftraj_eval.inp
+# optional
+sbatch --dependency=afterok:$jid job_slurm.sh water32_nvt_nose.inp
+sbatch --dependency=afterok:$nid job_slurm.sh reftraj_npt.inp
 
 # local test run (shorten STEPS first, e.g. to 40)
 mpirun -np 8 cp2k.psmp -i water32_nvt_csvr.inp -o water32_nvt_csvr.out
@@ -71,8 +77,9 @@ python ../../scripts/md_analyze.py -h   # .ener drift / temperature, RDF, MSD, V
 awk '!/^#/ && $1>=1000 {n++; s+=$4; ss+=$4*$4} END {m=s/n; printf "T = %.1f +- %.1f K (%d steps)\n", m, sqrt(ss/n-m*m), n}' water32_nvt-1.ener
 # drift of the conserved quantity in the NVE run, per atom and per ps (96 atoms)
 awk '!/^#/ {if (!f) {c0=$6; t0=$2; f=1}; c=$6; t=$2} END {printf "drift = %.2e Ha/atom/ps\n", (c-c0)/96/((t-t0)/1000)}' water32_nve-1.ener
-# SCF iterations per MD step should stay small (ASPC working)
-grep -c "SCF run converged" water32_nve.out
+# SCF iterations per MD step should stay small (ASPC working): histogram of N in
+# "*** SCF run converged in N steps ***"
+grep "SCF run converged" water32_nve.out | awk '{print $6}' | sort -n | uniq -c
 grep "MD| Energy drift per atom" water32_nve.out | tail -n 3
 ```
 
@@ -90,4 +97,12 @@ grep "MD| Energy drift per atom" water32_nve.out | tail -n 3
 - `water32.xyz` 没有氢键网络，前 1–2 ps 温度会有明显过冲，第 1 步用强耦合（50 fs）就是为此；统计分析请丢弃平衡段；
 - 续算时不要改变原子顺序、元素或基组/赝势的 q 值，否则 `.wfn` 不能用；`.restart` 与 `.wfn` 都来自同一次运行；
 - 2026.2 删除了 REFTRAJ 的 `EVAL_ENERGY_FORCES`/`EVAL_FORCES`，旧输入要改成 `EVAL ENERGY_FORCES`（`EVAL` 至少自 2024.1 起已经存在）；
+- `reftraj_npt.inp` 依赖 `water32_npt_i.inp` 中 `&TRAJECTORY` 与 `&CELL` 的输出间隔相同（都是 `MD 10`）；如果你改了其中一个，CP2K 会因两文件的步号对不上而中止。CP2K 2026.2 起也可以把 NPT 轨迹写成 `FORMAT EXTXYZ`，晶胞随坐标一起读入，就不需要 `.cell` 文件了；
+- `water32_npt_i.inp` 的 `&EXT_RESTART` 中必须保留 `RESTART_CELL F`：默认（T）时，NVT 重启文件中的 `&CELL`（没有 `CELL_REF`）会整段替换输入中的 `&CELL`，`CELL_REF` 被静默丢弃；
+- 续算输入 `md_restart.inp` 只用 `STEPS` 控制本次步数，没有写 `MAX_STEPS`：计数器到达 `MAX_STEPS` 的那一步按“停止”处理，默认不写该步的输出和重启文件（除非 `&MD/&PRINT/FORCE_LAST T`）；
+- `WALLTIME` 或 `EXIT` 文件让 CP2K 提前停止时同样默认不补写最后一步，重启点是最近一次每 20 步写出的 `.restart`；
 - 不要在 MD 中使用 `IGNORE_CONVERGENCE_FAILURE`：未收敛步的力是错的，会悄悄破坏整条轨迹。
+
+---
+
+返回教程：[第12章 从头算分子动力学（AIMD）](../../tutorials/12-aimd.md)

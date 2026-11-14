@@ -13,7 +13,7 @@
 - 用“两步法”为新体系确定 `CUTOFF` 和 `REL_CUTOFF`，并根据总能量和 `count for grid` 两类判据判断是否收敛；
 - 知道 `EPS_DEFAULT`、基组（SR 与非 SR）、赝势硬度对所需截断的影响；
 - 为 CELL_OPT / NPT 单独做应力（压力）收敛，并会使用 `CELL_REF`；
-- 用模板加 shell 脚本（或本仓库的 `conv_cutoff.py`）批量完成扫描，在本地或 Slurm 集群上运行。
+- 用模板加 shell 脚本（或本仓库的 [`conv_cutoff.py`](../scripts/conv_cutoff.py)）批量完成扫描，在本地或 Slurm 集群上运行。
 
 什么时候需要做本章的测试？
 
@@ -369,7 +369,7 @@ cutoff_Ry  energy_Ha        dE_meV_per_atom  scf_converged  grid_counts
 python plot_scan.py cutoff_scan.csv --threshold 0.03 -o cutoff_scan.png
 ```
 
-（`plot_scan.py` 只依赖 numpy 和 matplotlib，用 `python plot_scan.py -h` 查看参数。本仓库的通用驱动脚本 ../scripts/conv_cutoff.py 也能完成“生成、运行、汇总、作图”全流程，用法见 `python ../scripts/conv_cutoff.py -h`。）
+（`plot_scan.py` 只依赖 numpy 和 matplotlib，用 `python plot_scan.py -h` 查看参数。本仓库的通用驱动脚本 [conv_cutoff.py](../scripts/conv_cutoff.py) 也能完成“生成、运行、汇总、作图”全流程，用法见 `python ../scripts/conv_cutoff.py -h`。）
 
 ### 4.5 第二步：固定 CUTOFF，扫描 REL_CUTOFF
 
@@ -401,7 +401,7 @@ cp2k.psmp -i template_noset.inp -o si_400.out -E CUTOFF=400 -E REL_CUTOFF=60
 
 批量生成参数扫描输入的其它途径：
 
-- `cp2k-input-tools` 的 `cp2kgen` 命令按表达式生成参数扫描输入，见 第17章；
+- `cp2k-input-tools` 的 `cp2kgen` 命令按表达式生成参数扫描输入，见 [第17章](17-tools-ecosystem.md)；
 - 本仓库的 ../scripts/conv_cutoff.py（`python ../scripts/conv_cutoff.py -h`）；
 - 官方示例 [cp2k/cp2k-examples converging_grid](https://github.com/cp2k/cp2k-examples/tree/master/converging_grid) 中的脚本套件。
 
@@ -423,7 +423,7 @@ c=${CUTOFFS[$SLURM_ARRAY_TASK_ID]}
 cd cutoff_${c}Ry && srun cp2k.psmp -i input.inp -o output.out
 ```
 
-先用 `DRYRUN=1 bash run_cutoff_scan.sh` 生成全部目录，再提交上述数组作业；全部完成后执行 `bash collect_scan.sh cutoff 8` 汇总。Slurm/PBS 的更多写法见 Common 第2章 HPC 作业调度 和本仓库的 ../scripts/job_cp2k_slurm.sh。
+先用 `DRYRUN=1 bash run_cutoff_scan.sh` 生成全部目录，再提交上述数组作业；全部完成后执行 `bash collect_scan.sh cutoff 8` 汇总。Slurm/PBS 的更多写法见 [Common 第2章 HPC 作业调度](../../Common/tutorials/02-job-scheduler.md) 和本仓库的 [job_cp2k_slurm.sh](../scripts/job_cp2k_slurm.sh)。
 
 ---
 
@@ -598,7 +598,7 @@ done | sort -n
 &END SUBSYS
 ```
 
-CELL_OPT 的完整流程（`EXTERNAL_PRESSURE`、`PRESSURE_TOLERANCE`，以及 2026.2 删除 `&CELL_OPT/TYPE` 的破坏性变更）见 [第7章](07-geo-cell-opt.md)；NPT-MD 见 第12章。
+CELL_OPT 的完整流程（`EXTERNAL_PRESSURE`、`PRESSURE_TOLERANCE`，以及 2026.2 删除 `&CELL_OPT/TYPE` 的破坏性变更）见 [第7章](07-geo-cell-opt.md)；NPT-MD 见 [第12章](12-aimd.md)。
 
 ---
 

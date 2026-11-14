@@ -60,8 +60,7 @@
     &MGRID
       CUTOFF     400
       REL_CUTOFF 50
-      # commensurate grids, as used by all official QM/MM regression tests
-      COMMENSURATE
+      COMMENSURATE                 ! mandatory for E_COUPL GAUSS / S-WAVE (run aborts otherwise)
     &END MGRID
     &QS
       EPS_DEFAULT         1.0E-12
@@ -164,6 +163,14 @@
     &MM_KIND H
       RADIUS 0.44
     &END MM_KIND
+    &PRINT                         ! these print keys default to MEDIUM; switch them on for LOW
+      &PROGRAM_RUN_INFO ON         ! "Number of QM atoms", "Number of MM atoms"
+      &END PROGRAM_RUN_INFO
+      &QMMM_CHARGES ON             ! list of MM point charges and their TOTAL CHARGE
+      &END QMMM_CHARGES
+      &QMMM_LINK_INFO ON           ! QM/MM link summary ("NO QM/MM LINKS DETECTED" here)
+      &END QMMM_LINK_INFO
+    &END PRINT
   &END QMMM
   # ------------------------------------------------------------------ whole system
   &SUBSYS

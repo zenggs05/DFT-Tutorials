@@ -114,7 +114,7 @@ CP2K 输入是**层级结构**，由“段”（SECTION）和“关键字”（K
 | `PRINT_LEVEL`（= `IOLEVEL`） | `MEDIUM` | `SILENT`/`LOW`/`MEDIUM`/`HIGH`/`DEBUG`；大体系 MD 常用 `LOW` 减少输出 |
 | `WALLTIME` | 无 | 最长运行时间（秒或 `HH:MM:SS`）；设得比作业系统时限略短，让 CP2K 在被强制杀掉之前自行结束（优化/MD 可从最近的重启文件续算） |
 | `ECHO_INPUT` | `F` | 在输出开头回显（默认值已显式化的）输入 |
-| `PREFERRED_DIAG_LIBRARY` | 自动 | `ELPA`/`SCALAPACK` 等，排错和性能调优时用（第18章） |
+| `PREFERRED_DIAG_LIBRARY` | 自动 | `ELPA`/`SCALAPACK` 等，排错和性能调优时用（[第18章](18-troubleshooting.md)） |
 
 ### 3.2 &FORCE_EVAL
 
@@ -152,7 +152,7 @@ CP2K 输入是**层级结构**，由“段”（SECTION）和“关键字”（K
 &END EXT_RESTART
 ```
 
-`.restart` 文件本身就是一个完整的 CP2K 输入（包含最新坐标、晶胞、速度、计数器），也可以直接把它当输入运行。续算策略在 [第7章](07-geo-cell-opt.md)、第12章 和 第18章 展开。
+`.restart` 文件本身就是一个完整的 CP2K 输入（包含最新坐标、晶胞、速度、计数器），也可以直接把它当输入运行。续算策略在 [第7章](07-geo-cell-opt.md)、[第12章](12-aimd.md) 和 第18章 展开。
 
 ---
 
@@ -225,7 +225,7 @@ CP2K 输入是**层级结构**，由“段”（SECTION）和“关键字”（K
 | `CIF` | 同时写 `&CELL CELL_FILE_NAME x.cif` + `CELL_FILE_FORMAT CIF`，晶胞与坐标都从 CIF 读；含无序占位的 CIF 必须先处理 |
 | `PDB` | 生物/QM-MM 体系常用，可携带残基信息 |
 
-结构建模（超胞、表面、缺陷）与格式转换见 公共篇第3章 和 公共篇第4章。
+结构建模（超胞、表面、缺陷）与格式转换见 [公共篇第3章](../../Common/tutorials/03-structure-modeling.md) 和 [公共篇第4章](../../Common/tutorials/04-ase-pymatgen.md)。
 
 ### 4.3 &KIND：给每种原子指定基组和赝势
 
@@ -423,7 +423,7 @@ cp2k.psmp -c h2o_energy.inp
 `-c` 只检查**语法**，不会检查基组名是否存在、结构是否合理、PERIODIC 是否一致；这些错误要到真正运行时才暴露。
 
 > [!NOTE]
-> `cp2klint` 依赖 cp2k-input-tools 自带的 CP2K 输入结构描述（XML），其版本可能落后于 CP2K 2026.2，遇到新关键字（如 2026.2 的 `&DOS`）可能误报；以你所用版本的 `cp2k.psmp -c` 为准。cp2k-input-tools 的其他功能见 第17章。
+> `cp2klint` 依赖 cp2k-input-tools 自带的 CP2K 输入结构描述（XML），其版本可能落后于 CP2K 2026.2，遇到新关键字（如 2026.2 的 `&DOS`）可能误报；以你所用版本的 `cp2k.psmp -c` 为准。cp2k-input-tools 的其他功能见 [第17章](17-tools-ecosystem.md)。
 
 ---
 
@@ -615,7 +615,7 @@ grep -A12 "T I M I N G" h2o_energy.out | head -15      # timing 表开头
 grep "PROGRAM ENDED AT" h2o_energy.out                  # 有这一行才说明正常结束
 ```
 
-timing 表按子程序列出调用次数和耗时；表中名为 `CP2K` 的那一行给出总耗时。大体系调优时看哪个子程序最耗时（第18章）。输出末尾的 `REFERENCES` 列出了本次计算用到的方法文献，发表论文时应引用。
+timing 表按子程序列出调用次数和耗时；表中名为 `CP2K` 的那一行给出总耗时。大体系调优时看哪个子程序最耗时（[第18章](18-troubleshooting.md)）。输出末尾的 `REFERENCES` 列出了本次计算用到的方法文献，发表论文时应引用。
 
 > [!TIP]
 > 本节的解析脚本可以一次性提取 SCF 是否收敛、步数、总能量、Mulliken 电荷、警告与耗时：用 `python ../scripts/cp2k_outparse.py -h` 查看用法。
@@ -777,7 +777,7 @@ grep "BRILLOUIN|" si8_k4.out                                 # 确认 k 点方�
 grep "ENERGY| Total FORCE_EVAL" si8_k0.out si8_k4.out
 ```
 
-8 原子 Si 晶胞边长只有 5.43 Å，Gamma 点能量与 4×4×4 网格的结果会有明显差别（通常每原子几十 meV 以上）；继续加密到 6×6×6、8×8×8 可以看到收敛。k 点收敛方法见 [第6章](06-periodic-surface-kpoints.md)，也可用本节脚本 `conv_kpoints.py`（`python ../scripts/conv_kpoints.py -h` 查看用法）自动化。
+8 原子 Si 晶胞边长只有 5.43 Å，Gamma 点能量与 4×4×4 网格的结果会有明显差别（通常每原子几十 meV 以上）；继续加密到 6×6×6、8×8×8 可以看到收敛。k 点收敛方法见 [第6章](06-periodic-surface-kpoints.md)，也可用本节脚本 [`conv_kpoints.py`](../scripts/conv_kpoints.py)（`python ../scripts/conv_kpoints.py -h` 查看用法）自动化。
 
 > [!NOTE]
 > 为什么这里不用 OT？**在 CP2K 2026.2 及以前，OT 不支持 k 点**（2026.2 手册 k 点兼容性表中标为 Unsupported；trunk 开发版已开始支持）。所以只要输入可能启用 k 点，就用对角化。`ADDED_MOS` 为展宽提供空轨道，其取值原则见 [第5章](05-scf-strategy.md)。
@@ -912,7 +912,7 @@ done
 | `ENERGY_FORCE`（**默认**） | 单点能量 + 原子力（可加应力） | `&FORCE_EVAL`（+ `&PRINT &FORCES`） | 本章 |
 | `GEO_OPT`（= `GEOMETRY_OPTIMIZATION`） | 几何优化（也可做 Dimer 过渡态） | `&MOTION/&GEO_OPT` | [第7章](07-geo-cell-opt.md)、[第13章](13-neb-dimer.md) |
 | `CELL_OPT` | 晶胞 + 原子位置同时优化 | `&MOTION/&CELL_OPT` + `STRESS_TENSOR` | [第7章](07-geo-cell-opt.md) |
-| `MD`（= `MOLECULAR_DYNAMICS`） | 分子动力学（NVE/NVT/NPT…） | `&MOTION/&MD` | 第12章、第15章 |
+| `MD`（= `MOLECULAR_DYNAMICS`） | 分子动力学（NVE/NVT/NPT…） | `&MOTION/&MD` | [第12章](12-aimd.md)、[第15章](15-metadynamics-plumed.md) |
 | `BAND` | NEB / CI-NEB 等链方法 | `&MOTION/&BAND` | [第13章](13-neb-dimer.md) |
 | `VIBRATIONAL_ANALYSIS`（= `NORMAL_MODES`） | 有限差分 Hessian、频率、IR 强度 | 顶层 `&VIBRATIONAL_ANALYSIS` | [第14章](14-vibration-thermo.md) |
 | `LINEAR_RESPONSE`（= `LR`） | 线性响应性质（NMR、极化率等） | `&FORCE_EVAL/&PROPERTIES` | — |
@@ -960,7 +960,7 @@ done
 | 输出中有两次运行的内容 | `-o` 追加写入 | 运行前删除旧输出 |
 | 警告 `... RESTART.wfn. This file does not exist ... Calculation continues using ATOMIC GUESS.` | `SCF_GUESS RESTART` 但重启文件还不存在 | 第一次计算属正常；确认后续计算确实读到了想要的文件 |
 
-更多报错及其排查流程见 第18章 与官方排错指南。
+更多报错及其排查流程见 [第18章](18-troubleshooting.md) 与官方排错指南。
 
 ---
 

@@ -25,7 +25,7 @@
 | 需要复现 3.9 的旧结果 | 另装一份 3.9 + patch 3.9.9 | §10 |
 
 > [!NOTE]
-> Linux 基础操作、conda、SSH 与文件传输见公共篇 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md)；Slurm/PBS 作业脚本见公共篇 第2章 HPC 作业调度。
+> Linux 基础操作、conda、SSH 与文件传输见公共篇 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md)；Slurm/PBS 作业脚本见公共篇 [第2章 HPC 作业调度](../../Common/tutorials/02-job-scheduler.md)。
 
 ---
 
@@ -202,7 +202,7 @@ ldd ../work/openmx | grep "not found"                   # should print nothing
 
 ### 4.4 一键脚本
 
-本章示例 [02-install-build](../examples/02-install-build/README.md) 提供 `build_openmx_oneapi.sh`：自动下载、打补丁、备份并改写 makefile（AMD CPU 自动把 `-xHOST` 换成 `-march=x86-64-v3`）、编译并可选地运行 runtest。仓库脚本 `omx_build.sh` 提供同样功能的通用版本，用 `bash ../scripts/omx_build.sh -h` 查看用法。
+本章示例 [02-install-build](../examples/02-install-build/README.md) 提供 `build_openmx_oneapi.sh`：自动下载、打补丁、备份并改写 makefile（AMD CPU 自动把 `-xHOST` 换成 `-march=x86-64-v3`）、编译并可选地运行 runtest。仓库脚本 [`omx_build.sh`](../scripts/omx_build.sh) 提供同样功能的通用版本，用 `bash ../scripts/omx_build.sh -h` 查看用法。
 
 ---
 
@@ -537,7 +537,7 @@ mpicc -show
 - 作业脚本中设置 `ulimit -s unlimited`、`export OMP_NUM_THREADS=<-nt 的值>`、`export OMP_STACKSIZE=512M`（大体系或 OpenMP 运行出现段错误时尤其重要）；
 - 在计算节点上（交互作业）跑一次 `-runtest`，确认与登录节点结果一致。
 
-作业脚本模板见仓库 `job_omx_slurm.sh`、`job_omx_pbs.sh` 和 第18章。
+作业脚本模板见仓库 [`job_omx_slurm.sh`](../scripts/job_omx_slurm.sh)、[`job_omx_pbs.sh`](../scripts/job_omx_pbs.sh) 和 [第18章](18-parallel-on-errors.md)。
 
 ---
 

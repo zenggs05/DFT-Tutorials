@@ -85,7 +85,7 @@ $$
 
 ## 3. 切表面：建模工具
 
-通用的建模知识（数据库下载、超胞、表面、缺陷、异质结）见 Common 第3章 与 Common 第4章。这里给出与 VASP 表面计算直接相关的写法。
+通用的建模知识（数据库下载、超胞、表面、缺陷、异质结）见 [Common 第3章](../../Common/tutorials/03-structure-modeling.md) 与 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)。这里给出与 VASP 表面计算直接相关的写法。
 
 ### 3.1 ASE
 

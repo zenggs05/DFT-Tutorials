@@ -1,0 +1,15 @@
+SYSTEM  = GaAs PBE SCF (writes CHGCAR for the band and DOS runs)
+
+PREC    = Accurate
+ENCUT   = 400        # > 1.3 x max(ENMAX) of Ga_d / As; keep identical in all steps
+EDIFF   = 1E-7
+ISMEAR  = 0          # Gaussian smearing, safe for a semiconductor
+SIGMA   = 0.02
+LREAL   = .FALSE.
+
+NSW     = 0
+IBRION  = -1
+
+LCHARG  = .TRUE.     # CHGCAR is read by the ICHARG = 11 runs
+LWAVE   = .FALSE.
+LORBIT  = 11         # also gives a first PDOS/magnetisation summary in OUTCAR

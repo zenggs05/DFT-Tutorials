@@ -8,7 +8,10 @@
 !   mpirun -np 16 cp2k.psmp -E LEVEL=xtb -E STEPS=200000 -i nacl_dissociation_wtmetad.inp -o wtmetad_xtb.out
 ! Output: nacl_wtmetad_<LEVEL>-COLVAR.metadynLog, nacl_wtmetad_<LEVEL>-HILLS.metadynLog
 ! Free-energy profile: python3 fes_from_hills.py nacl_wtmetad_dft-HILLS.metadynLog --bohr2ang
-! Continue a run: uncomment &EXT_RESTART (hills are stored in the restart file).
+! Continue a run: uncomment &EXT_RESTART (hills are stored in the restart file)
+! and set STEPS to the number of ADDITIONAL steps (the step counter is restored;
+! MAX_STEPS in &MD can cap the total).  The *.metadynLog files are appended to.
+! Full-precision hills for the analysis: fes_from_hills.py <PROJECT>-1.restart
 
 @SET LEVEL ${LEVEL-dft}
 @SET COORD ${COORD-nacl_eq.xyz}
@@ -20,7 +23,7 @@
 &END GLOBAL
 
 ! &EXT_RESTART
-!   RESTART_FILE_NAME nacl_wtmetad_dft-1.restart
+!   RESTART_FILE_NAME nacl_wtmetad_${LEVEL}-1.restart
 ! &END EXT_RESTART
 
 @INCLUDE 'nacl_${LEVEL}_force_eval.inc'

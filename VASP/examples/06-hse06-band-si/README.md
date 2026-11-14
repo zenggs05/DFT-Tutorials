@@ -60,7 +60,7 @@ calc.band.plot("kpoints_opt")
 print(calc.bandgap.fundamental())
 ```
 
-零权重法的结果需要剔除有权重的网格点后作图：`vaspkit -task 252`、`sumo-bandplot` 或本仓库 `python ../../scripts/plot_band.py -h`。
+零权重法的结果需要剔除有权重的网格点后作图：`vaspkit -task 252`、`sumo-bandplot` 或本仓库 [plot_band.py](../../scripts/plot_band.py)（`python ../../scripts/plot_band.py -h`）。
 
 - HSE06 的 Si 间接带隙应在约 1.1–1.3 eV（文献量级；实验约 1.17 eV），明显大于 PBE 的约 0.5–0.6 eV。
 - 两种方法得到的能带应基本重合（零权重法每段点数较少，曲线更粗糙）。

@@ -1,0 +1,21 @@
+# Slab single point that writes LOCPOT for VASPKIT 426 (planar average) / work function
+SYSTEM  = slab work function (single point on a relaxed slab)
+
+PREC    = Accurate
+ENCUT   = 450
+EDIFF   = 1E-6
+ISMEAR  = 1          # metals; use ISMEAR = 0 for semiconductors
+SIGMA   = 0.1
+LREAL   = Auto
+
+NSW     = 0
+IBRION  = -1
+
+LVHAR   = .TRUE.     # LOCPOT = electrostatic (ionic + Hartree) potential: flat in vacuum
+IDIPOL  = 3          # dipole correction along z (asymmetric slabs)
+LDIPOL  = .TRUE.
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.
+# After the run:  vaspkit < inputs/cmd_426_planar_avg_z.in   -> planar-average .dat file
+#                 (PLANAR_AVERAGE.dat or POTPAVG.dat, depending on version) + "Vacuum-Level" line
+#                 grep E-fermi OUTCAR ;  work function = E_vac - E_F

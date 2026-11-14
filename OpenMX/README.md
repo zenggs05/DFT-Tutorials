@@ -24,8 +24,11 @@
 | [第11章 自旋极化、非共线磁性与交换耦合（Spin Polarization, Noncollinear Magnetism & Exchange Coupling with OpenMX）](tutorials/11-spin-noncollinear.md) | [11-cr-bcc-afm](examples/11-cr-bcc-afm/README.md)<br>[11-fe-bcc-fm](examples/11-fe-bcc-fm/README.md)<br>[11-fe-bcc-jx](examples/11-fe-bcc-jx/README.md)<br>[11-mno-noncollinear](examples/11-mno-noncollinear/README.md) |
 | [第12章 自旋轨道耦合与拓扑性质（Spin-Orbit Coupling & Topological Properties with OpenMX）](tutorials/12-soc-topology.md) | [12-bi2se3-soc-z2](examples/12-bi2se3-soc-z2/README.md)<br>[12-gaas-soc-band](examples/12-gaas-soc-band/README.md)<br>[12-mos2-soc-band](examples/12-mos2-soc-band/README.md) |
 | [第13章 DFT+U（Hubbard U 与 Hund J）（DFT+U with Hubbard U and Hund's J in OpenMX）](tutorials/13-dft-u.md) | [13-dft-u-nio-mno](examples/13-dft-u-nio-mno/README.md) |
+| [第14章 Wannier 函数：MLWF 与 CWF（Wannier Functions in OpenMX: MLWF and CWF）](tutorials/14-wannier.md) | [14-gaas-cwf](examples/14-gaas-cwf/README.md)<br>[14-graphene-pz-mlwf](examples/14-graphene-pz-mlwf/README.md)<br>[14-si-mlwf-sp3](examples/14-si-mlwf-sp3/README.md) |
+| [第15章 Berry 相宏观极化与外加电场（Berry-Phase Polarization & External Electric Fields in OpenMX）](tutorials/15-berry-efield.md) | [15-batio3-polarization](examples/15-batio3-polarization/README.md)<br>[15-nacl-polb-born](examples/15-nacl-polb-born/README.md)<br>[15-nitrobenzene-efield](examples/15-nitrobenzene-efield/README.md) |
 | [第16章 表面与界面：ESM、功函数、电荷掺杂（Surfaces & Interfaces in OpenMX: ESM, Work Function & Charge Doping）](tutorials/16-surface-esm-workfunction.md) | [16-al111-esm-workfunction](examples/16-al111-esm-workfunction/README.md)<br>[16-graphene-charge-doping](examples/16-graphene-charge-doping/README.md)<br>[16-pt111-esm-charging](examples/16-pt111-esm-charging/README.md) |
 | [第17章 NEGF 电子输运（Electron Transport with NEGF in OpenMX）](tutorials/17-negf-transport.md) | [17-negf-7agnr](examples/17-negf-7agnr/README.md)<br>[17-negf-carbon-chain](examples/17-negf-carbon-chain/README.md) |
+| [第18章 并行、大体系 O(N)、作业脚本与常见错误排查（Parallelization, Large-Scale O(N) Methods, Job Scripts & Troubleshooting in OpenMX）](tutorials/18-parallel-on-errors.md) | [18-api-python](examples/18-api-python/README.md)<br>[18-c60-cluster-elpa](examples/18-c60-cluster-elpa/README.md)<br>[18-job-scripts](examples/18-job-scripts/README.md)<br>[18-on-si-dc-krylov](examples/18-on-si-dc-krylov/README.md) |
 
 ## 全部示例
 
@@ -61,12 +64,39 @@
 | [12-gaas-soc-band](examples/12-gaas-soc-band/README.md) | 算例 12-gaas-soc-band：GaAs 能带的自旋轨道劈裂 |
 | [12-mos2-soc-band](examples/12-mos2-soc-band/README.md) | 算例 12-mos2-soc-band：单层 MoS2 的 SOC 价带劈裂与自旋–能谷锁定 |
 | [13-dft-u-nio-mno](examples/13-dft-u-nio-mno/README.md) | 示例 13：NiO / MnO 的 DFT+U |
+| [14-gaas-cwf](examples/14-gaas-cwf/README.md) | 示例 14-3：GaAs 的最接近 Wannier 函数 |
+| [14-graphene-pz-mlwf](examples/14-graphene-pz-mlwf/README.md) | 示例 14-2：石墨烯 pz 双带 MLWF |
+| [14-si-mlwf-sp3](examples/14-si-mlwf-sp3/README.md) | 示例 14-1：Si 的最大局域化 Wannier 函数 |
+| [15-batio3-polarization](examples/15-batio3-polarization/README.md) | 示例 15-2：四方 BaTiO3 的自发极化 |
+| [15-nacl-polb-born](examples/15-nacl-polb-born/README.md) | 示例 15-1：NaCl 中 Na 的 Born 有效电荷 |
+| [15-nitrobenzene-efield](examples/15-nitrobenzene-efield/README.md) | 示例 15-3：硝基苯在外加均匀电场中的响应 |
 | [16-al111-esm-workfunction](examples/16-al111-esm-workfunction/README.md) | 示例 16-1：Al |
 | [16-graphene-charge-doping](examples/16-graphene-charge-doping/README.md) | 示例 16-3：石墨烯电荷掺杂 |
 | [16-pt111-esm-charging](examples/16-pt111-esm-charging/README.md) | 示例 16-2：带电 Pt |
 | [17-negf-7agnr](examples/17-negf-7agnr/README.md) | 示例 17-2：7-扶手椅型石墨烯纳米带 |
 | [17-negf-carbon-chain](examples/17-negf-carbon-chain/README.md) | 示例 17-1：碳原子链的 NEGF 输运 |
-| [18-job-scripts](examples/18-job-scripts/README.md) | 示例 18-job-scripts |
+| [18-api-python](examples/18-api-python/README.md) | 示例 18-4：用 OpenMX 4.0 Python API 在一个 MPI 作业中并行跑多个输入 |
+| [18-c60-cluster-elpa](examples/18-c60-cluster-elpa/README.md) | 示例 18-3：C60 的 Cluster 对角化 |
+| [18-job-scripts](examples/18-job-scripts/README.md) | 示例 18-1：OpenMX 作业脚本 |
+| [18-on-si-dc-krylov](examples/18-on-si-dc-krylov/README.md) | 示例 18-2：Si 超胞的 O |
+
+## 辅助脚本
+
+完整说明见 [scripts/README.md](scripts/README.md)。
+
+- [job_omx_pbs.sh](scripts/job_omx_pbs.sh)
+- [job_omx_slurm.sh](scripts/job_omx_slurm.sh)
+- [omx_band_plot.py](scripts/omx_band_plot.py)
+- [omx_build.sh](scripts/omx_build.sh)
+- [omx_conv_test.py](scripts/omx_conv_test.py)
+- [omx_cube_tools.py](scripts/omx_cube_tools.py)
+- [omx_dos_auto.py](scripts/omx_dos_auto.py)
+- [omx_eos_fit.py](scripts/omx_eos_fit.py)
+- [omx_magconf.py](scripts/omx_magconf.py)
+- [omx_make_input.py](scripts/omx_make_input.py)
+- [omx_negf_plot.py](scripts/omx_negf_plot.py)
+- [omx_parse_out.py](scripts/omx_parse_out.py)
+- [omx_traj.py](scripts/omx_traj.py)
 
 ## 相关资源
 

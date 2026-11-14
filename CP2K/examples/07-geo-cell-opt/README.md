@@ -73,7 +73,7 @@ grep -i "SCF run NOT converged" *.out                    # should print nothing
 
 - **CP2K 2026.2**：不要在 `&CELL_OPT` 中写 `TYPE`，否则直接中止；`KEEP_VOLUME`、`&FINAL_STRUCTURE`、`&CELL/CANONICALIZE`、`EXTRAPOLATION GEXT_PROJ` 只有 2026.2 才有。
 - **k 点与 OT**：2026.2 及以前，k 点计算只能用对角化，因此 Si 和 MoS2 示例用 `&DIAGONALIZATION` + Broyden 混合。
-- **CUTOFF**：晶胞优化的 600 Ry 只是示例值，正式计算请按第4章用应力做收敛测试。
+- **CUTOFF**：晶胞优化的 600 Ry 只是示例值，正式计算请按[第4章](../../tutorials/04-cutoff-convergence.md)用应力做收敛测试。
 - **MgO 晶格常数**：slab 示例直接用了实验值 4.21 Å，正式计算应改为同一设置下体相 CELL_OPT 的结果，并增加层数。
 - **数据文件**：`BASIS_MOLOPT_UZH`、`POTENTIAL_UZH`、`dftd3.dat` 需在 `CP2K_DATA_DIR` 中可找到（toolchain/conda/容器版本一般已自动设置）。
 - **续算**：中断后可直接 `cp <PROJECT>-1.restart new.inp` 再运行，或在原输入中加入 `&EXT_RESTART`，详见教程第 10.3 节。

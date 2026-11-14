@@ -55,6 +55,6 @@ python3 plot_optics.py --tauc direct --fit 2.6 3.2   # 示例拟合窗口，请�
 - `SIGMA` 应远小于 `CSHIFT`，否则谱线同时受到高斯和洛伦兹两种展宽。
 - `LOPTICS` 与 `LEPSILON` 不要放在同一次计算中。
 - 若想一步完成，也可以在单个 INCAR 中直接设置 `NBANDS = 32` + `LOPTICS = .TRUE.`（`ALGO = Normal`），对小体系同样可行。
-- 也可以用 py4vasp（`calc.dielectric_function.plot()`）、VASPKIT 711 或 `sumo-optplot` 后处理；仓库的 ../../scripts/optics_post.py 提供更多选项，用 `python ../../scripts/optics_post.py -h` 查看用法。
+- 也可以用 py4vasp（`calc.dielectric_function.plot()`）、VASPKIT 711 或 `sumo-optplot` 后处理；仓库的 [optics_post.py](../../scripts/optics_post.py) 提供更多选项，用 `python ../../scripts/optics_post.py -h` 查看用法。
 
 返回教程：[第14章 介电与光学性质](../../tutorials/14-optics-dielectric.md)

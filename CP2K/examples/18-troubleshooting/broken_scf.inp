@@ -14,7 +14,9 @@
 # leftover from an old cell optimisation input
 &MOTION
   &CELL_OPT
-    # (A) removed in CP2K 2026.2: "found an unknown keyword TYPE in section CELL_OPT"
+    # (A) removed in CP2K 2026.2: "The specified keyword 'TYPE' is not available anymore:
+    #     The keyword MOTION/CELL_OPT/TYPE has been removed because cell optimizations
+    #     now always use DIRECT_CELL_OPT."
     TYPE DIRECT_CELL_OPT
     KEEP_ANGLES T
   &END CELL_OPT
@@ -67,7 +69,7 @@
     &KIND Cu
       # (C) this basis name exists in BASIS_MOLOPT, not in BASIS_MOLOPT_UZH
       BASIS_SET DZVP-MOLOPT-SR-GTH
-      # (E) q1 pseudopotential, but every Cu basis in BASIS_MOLOPT_UZH is a q11 basis
+      # (E) q1 pseudopotential, but every Cu GTH basis in BASIS_MOLOPT_UZH is a q11 basis
       POTENTIAL GTH-PBE-q1
     &END KIND
   &END SUBSYS

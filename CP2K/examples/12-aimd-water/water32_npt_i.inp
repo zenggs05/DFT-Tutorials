@@ -3,6 +3,8 @@
 #   - CUTOFF raised to 600 Ry to reduce the Pulay stress
 #   - CELL_REF fixes the real-space grid on a slightly larger reference cell,
 #     so that the effective cutoff does not drop when the box expands
+#   - RESTART_CELL F is required: otherwise the &CELL section of the NVT restart
+#     file (which has no CELL_REF) silently replaces the whole &CELL below
 # Expect large pressure fluctuations (several kbar) for only 96 atoms.
 
 &GLOBAL
@@ -17,6 +19,8 @@
   RESTART_VEL        T
   RESTART_THERMOSTAT F            ! new thermostat settings below
   RESTART_COUNTERS   F
+  RESTART_CELL       F            ! keep the &CELL of THIS input: the NVT restart
+                                  ! has no CELL_REF and would replace the whole &CELL
 &END EXT_RESTART
 
 &MOTION
@@ -43,9 +47,9 @@
         MD 10
       &END EACH
     &END TRAJECTORY
-    &CELL ON
+    &CELL ON                      ! water32_npt-1.cell: step, time, cell vectors, volume
       &EACH
-        MD 1
+        MD 10                     ! same stride as TRAJECTORY, needed by reftraj_npt.inp
       &END EACH
     &END CELL
     &STRESS ON

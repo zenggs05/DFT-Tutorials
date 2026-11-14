@@ -200,7 +200,7 @@ ls H2O_opt_RF.dat# h2o_rf.xyz h2o_rf.md
 1. 最后一行的 `|Maximum force|` 小于 `MD.Opt.criterion`，而且步数小于 `MD.maxIter`（如果恰好停在 `MD.maxIter`，说明是被截断的）；
 2. `Utot` 在最后几步基本不变；
 3. `.md` 中所有步都是 `scf_conv=1`；
-4. 几何合理：用 OpenMX Viewer 打开 `h2o_rf.md` 观察轨迹，或用本仓库的 `omx_traj.py`（`python ../scripts/omx_traj.py -h`）画能量和最大力随步数的变化。
+4. 几何合理：用 OpenMX Viewer 打开 `h2o_rf.md` 观察轨迹，或用本仓库的 [`omx_traj.py`](../scripts/omx_traj.py)（`python ../scripts/omx_traj.py -h`）画能量和最大力随步数的变化。
 
 作为量级参考，官方手册表 3（同为 H2O，基组不同）中 PBE 的 r(OH) ≈ 0.971 Å、∠HOH ≈ 103.6–103.7°，实验值为 0.957 Å、104.5°。
 
@@ -444,7 +444,7 @@ v0, e0, b0 = EquationOfState(vol, ene, eos="birchmurnaghan").fit()
 print("a0 = %.4f A, B0 = %.1f GPa" % ((4 * v0) ** (1 / 3), b0 * 160.21766))
 ```
 
-本仓库的 `omx_eos_fit.py` 提供"按晶格常数缩放生成输入（固定 `scf.Ngrid`）→ 运行 → 拟合"的一体化流程，用 `python ../scripts/omx_eos_fit.py -h` 查看用法。
+本仓库的 [`omx_eos_fit.py`](../scripts/omx_eos_fit.py) 提供"按晶格常数缩放生成输入（固定 `scf.Ngrid`）→ 运行 → 拟合"的一体化流程，用 `python ../scripts/omx_eos_fit.py -h` 查看用法。
 
 ### 5.3 `MD.Type DF`：Δ 因子用的 7 点扫描
 
@@ -817,7 +817,7 @@ image 被分成 3 组，组内并行，各组依次计算；`MD.NEB.Parallel.Num
 - [issp-center-dev/abICS](https://github.com/issp-center-dev/abICS) — 构型采样，可生成 OpenMX 输入
 - [arifiaapn/OpenMX-tutorial-bahasa-Indonesia-](https://github.com/arifiaapn/OpenMX-tutorial-bahasa-Indonesia-) — 印尼语教程，含晶格优化与 NEB 分支
 - [pranabdas/openmx](https://github.com/pranabdas/openmx) — 英文 OpenMX 教程站（无许可证，仅参考）
-- ASE 的 OpenMX 计算器与 `ase.mep` NEB 工具见 Common 第4章，更多仓库见 [Resources/github-repos.md](../../Resources/github-repos.md)
+- ASE 的 OpenMX 计算器与 `ase.mep` NEB 工具见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)，更多仓库见 [Resources/github-repos.md](../../Resources/github-repos.md)
 
 **关键文献**
 

@@ -257,7 +257,7 @@ grep "Isotropic" camphor_nmr_giao_smd.log | \
                            $2=="C"{printf "%3d C  sigma=%8.3f  delta=%7.2f\n",$1,$5,rc-$5}'
 ```
 
-仓库脚本 `nmr_shift.py` 可以完成 TMS 参比或线性回归换算、等价核平均、多构象 Boltzmann 平均，并与实验值比较给出 MAE，运行 `python ../scripts/nmr_shift.py -h` 查看用法。GaussView 6 也能在 Results → NMR 中选择内置的 TMS 参比并显示谱图，但内置参比的计算水平必须与你的作业一致才有意义。
+仓库脚本 [`nmr_shift.py`](../scripts/nmr_shift.py) 可以完成 TMS 参比或线性回归换算、等价核平均、多构象 Boltzmann 平均，并与实验值比较给出 MAE，运行 `python ../scripts/nmr_shift.py -h` 查看用法。GaussView 6 也能在 Results → NMR 中选择内置的 TMS 参比并显示谱图，但内置参比的计算水平必须与你的作业一致才有意义。
 
 ### 6.3 等价核平均
 

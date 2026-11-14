@@ -131,7 +131,7 @@ phonopy --version
 6. 虚频诊断；(可选) QHA、phono3py  ←──────────────────────────────────────┘
 ```
 
-仓库脚本 `phonopy_workflow.sh` 把上述步骤（生成位移、批量建目录与提交、收集、由 seekpath 生成 band.conf、作图与虚频检测）做成了自动化流程，用法见 `bash ../scripts/phonopy_workflow.sh -h`。下面先手动走一遍，理解每一步。
+仓库脚本 [`phonopy_workflow.sh`](../scripts/phonopy_workflow.sh) 把上述步骤（生成位移、批量建目录与提交、收集、由 seekpath 生成 band.conf、作图与虚频检测）做成了自动化流程，用法见 `bash ../scripts/phonopy_workflow.sh -h`。下面先手动走一遍，理解每一步。
 
 ---
 
@@ -280,7 +280,7 @@ bash run_disp.sh check       # 检查所有 vasprun.xml 是否完整（以 </mod
 bash run_disp.sh collect     # phonopy-init -f disp-*/vasprun.xml -> FORCE_SETS
 ```
 
-位移超胞很多（低对称、多原子）时，用 Slurm job array 提交更方便，见 Common 第2章。
+位移超胞很多（低对称、多原子）时，用 Slurm job array 提交更方便，见 [Common 第2章](../../Common/tutorials/02-job-scheduler.md)。
 
 ### 6.4 检查单点计算
 
@@ -396,7 +396,7 @@ for T, F, S, Cv in zip(tp.temperatures, tp.free_energy, tp.entropy, tp.heat_capa
 
 （以上属性写法在 phonopy 4.10 中验证可用；旧代码里常见的 `get_qpoints_dict()`、`get_thermal_properties_dict()` 在 4.10 中仍可运行，但会给出 DeprecationWarning。）
 
-更多出版级作图方法（sumo 的声子绘图等）见 Common 第5章。
+更多出版级作图方法（sumo 的声子绘图等）见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 

@@ -1,0 +1,93 @@
+#
+# GaAs (zinc blende): SCF + closest Wannier functions (CWFs) guided by
+# pseudo-atomic orbitals (AO): Ga-4s,4p and As-4s,4p -> 8 CWFs that span the
+# 4 valence bands (As-4s band included) and the lowest conduction bands.
+# Ga-3d / As-3d semicore bands are excluded by the polynomial window.
+# Target: OpenMX 4.0 (+patch 4.0.1) only (CWF is new in 4.0), DFT_DATA19.
+#
+
+System.CurrrentDirectory    ./
+System.Name                 gaas_cwf_ao
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            1
+
+# Ga_PBE19: 13 and As_PBE19: 15 valence electrons (3d semicore included)
+Species.Number              2
+<Definition.of.Atomic.Species
+  Ga   Ga7.0-s3p2d2   Ga_PBE19
+  As   As7.0-s3p2d2   As_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1  Ga   0.00  0.00  0.00   6.5  6.5
+  2  As   0.25  0.25  0.25   7.5  7.5
+Atoms.SpeciesAndCoordinates>
+
+# a = 5.653 Ang; fcc primitive vectors a/2(1,1,0), a/2(1,0,1), a/2(0,1,1)
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  2.8265   2.8265   0.0000
+  2.8265   0.0000   2.8265
+  0.0000   2.8265   2.8265
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0
+scf.energycutoff            220.0
+scf.maxIter                 100
+scf.EigenvalueSolver        Band
+scf.Kgrid                   11 11 11    # CWF uses this grid: odd numbers only
+scf.Generation.Kpoint       GCenter
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.001
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.criterion               1.0e-9
+scf.restart                 off         # pp = re-use gaas_cwf_ao_rst/ (see scan_cwf_window.sh)
+
+MD.Type                     Nomd
+
+# L-G-X-U|K-G in units of the primitive reciprocal vectors:
+# L=(1/2,1/2,1/2) X=(1/2,1/2,0) U=(5/8,5/8,1/4) K=(3/4,3/8,3/8)
+Band.dispersion             on          # gives gaas_cwf_ao.Band and gaas_cwf_ao.CWF.Band
+Band.Nkpath                 4
+<Band.kpath
+  30  0.500 0.500 0.500   0.000 0.000 0.000   L  G
+  35  0.000 0.000 0.000   0.500 0.500 0.000   G  X
+  12  0.500 0.500 0.000   0.625 0.625 0.250   X  U
+  37  0.750 0.375 0.375   0.000 0.000 0.000   K  G
+Band.kpath>
+
+#
+# Closest Wannier functions
+#
+CWF.Calc                    on
+CWF.Guiding.Orbitals        AO          # HO | AO | MO (source default: HO)
+# one 0/1 flag for every radial function of the basis (s3p2d2 -> 1s 2s 3s 1p 2p 1d 2d)
+<CWF.Guiding.AOs
+  Ga  1s 1 2s 0 3s 0 1p 1 2p 0 1d 0 2d 0
+  As  1s 1 2s 0 3s 0 1p 1 2p 0 1d 0 2d 0
+CWF.Guiding.AOs>
+
+# polynomial window e0 e1 e2 e3 (eV, relative to the chemical potential):
+# weight 0 below e0 (Ga-3d near -15 eV), 1 between e1 and e2, 0 above e3
+CWF.window.function         Poly
+CWF.disentangling.Erange    -14.5  -13.8  1.0  8.0
+
+CWF.Dis.vs.H                on          # gaas_cwf_ao.CWF.Dis_vs_H (text hoppings)
+CWF.Wannier90.fileout       off         # on: gaas_cwf_ao_0.amn/.mmn/.eig/.win
+
+# cube files of the CWFs on atoms 1 and 2
+CWF.fileout.flag            on
+CWF.Plot.SuperCells         1 1 1       # needs (2*n+1) <= scf.Kgrid
+CWF.fileout.Num             2
+<CWF.fileout.cube
+  1
+  2
+CWF.fileout.cube>

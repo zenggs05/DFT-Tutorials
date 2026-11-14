@@ -1,0 +1,25 @@
+; QM/MM options of the GROMACS-CP2K interface (GROMACS >= 2022 linked with libcp2k).
+; Chapter 16 of the CP2K tutorial. This is a FRAGMENT: append these lines to the .mdp of
+; an ordinary, already equilibrated GROMACS MD run (integrator, dt, nsteps, thermostat,
+; PME electrostatics ... stay as in your classical set-up; use a short dt such as 0.0005 ps).
+;
+; Option names follow the GROMACS mdp reference ("QM/MM simulations with CP2K Interface"):
+;   https://manual.gromacs.org/current/user-guide/mdp-options.html
+;
+; Usage
+;   gmx make_ndx -f conf.gro -o index.ndx            ; create the group named below
+;   gmx grompp -f md_qmmm.mdp -c conf.gro -p topol.top -n index.ndx -o qmmm.tpr
+;   gmx mdrun -deffnm qmmm                           ; writes qmmm_cp2k.inp/.out/.pdb
+;
+; Custom CP2K input instead of a built-in method:
+;   qmmm-cp2k-qmmethod = INPUT   and   gmx grompp ... -qmi my_cp2k.inp
+;   (the file needs RUN_TYPE ENERGY_FORCE, CHARGE, MULTIPLICITY, COORD_FILE_FORMAT PDB,
+;    CHARGE_EXTENDED TRUE, a COORD_FILE_NAME pointing to a pdb file, and no @INCLUDE).
+;   The easiest start is the qmmm_cp2k.inp written by a short run with a built-in method.
+
+qmmm-cp2k-active         = true
+qmmm-cp2k-qmgroup        = QMatoms   ; index group with the QM atoms
+qmmm-cp2k-qmmethod       = PBE       ; PBE, PBE-D3, BLYP, BLYP-D3, B3LYP, ... or INPUT
+qmmm-cp2k-qmcharge       = 0         ; total charge of the QM region
+qmmm-cp2k-qmmultiplicity = 1         ; spin multiplicity of the QM region
+; qmmm-cp2k-qmfilenames  =           ; default: <tpr name>_cp2k

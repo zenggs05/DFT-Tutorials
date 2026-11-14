@@ -60,7 +60,7 @@ grep "average current" negf-chain-0.5.current
 cat iv.csv
 ```
 
-- `lead-chain.Band`（用 `bandgnu13` 或 `../../scripts/omx_band_plot.py` 画图）：两条简并的 π 带穿过化学势，链是金属性的。
+- `lead-chain.Band`（用 `bandgnu13` 或 [`omx_band_plot.py`](../../scripts/omx_band_plot.py) 画图）：两条简并的 π 带穿过化学势，链是金属性的。
 - `<TRAN_Calc_GridBound>` 的标签：L0 的 4 个原子是 `12`（与 L1 有重叠），C0 的 8 个是 `1`，R0 的 4 个是 `13`。如果出现别的组合，或者 C0 原子被标成 12/13，说明几何不满足 NEGF 的重叠条件，需要加长 L0/R0 或 C0。
 - `negf-chain.tran0_0`：第 4 列是能量（eV，以左电极化学势为零），第 6、8 列是自旋向上/向下的透射。E=0 附近 T 应接近 2，并呈现平台/台阶结构，这是理想弹道输运的特征。`.conductance` 中的平均电导（单位 $G_0=e^2/h$，每个自旋通道各列一次）应接近 2 和 2。
 - 0.5 V：`.out` 中左右电极的化学势相差 0.5 eV（4.0 中偏压对称地加在两侧，各为 ±V/2）；`negf-chain-0.5.current` 给出以安培为单位的电流。理想链的电流约等于 $(e^2/h)\times(T_\uparrow+T_\downarrow)\times V$，0.5 V 时为几十 μA 量级，这是粗估。

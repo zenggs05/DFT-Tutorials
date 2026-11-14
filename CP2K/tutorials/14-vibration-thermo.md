@@ -1,6 +1,6 @@
 # 第14章 振动分析、红外与热化学（Vibrational Analysis, IR Intensities & Thermochemistry with CP2K）
 
-本章讲解 CP2K 的 `RUN_TYPE VIBRATIONAL_ANALYSIS`：用有限差分构建 Hessian，得到简谐振动频率、红外（IR）强度、零点能（ZPE）和热化学量（熵、焓、Gibbs 自由能校正）。以 H2O（气相分子：频率 + IR + 热化学）、Pt(111) 表面吸附的 CO（固定衬底的部分 Hessian：吸附物的 ZPE 与振动熵）和第13章 H/Cu(111) 的过渡态（只有一个虚频的验证）三个例子，逐一说明 `DX`、`NPROC_REP`、`INTENSITIES`、`THERMOCHEMISTRY`、`FULLY_PERIODIC`、`&MOLDEN_VIB`、`&MODE_SELECTIVE` 等关键字，以及虚频的诊断与处理、CP2K 热化学输出的局限（对称数恒为 1、默认温度 273.15 K）和 2026.2 新增的未质量加权 Hessian 输出。
+本章讲解 CP2K 的 `RUN_TYPE VIBRATIONAL_ANALYSIS`：用有限差分构建 Hessian，得到简谐振动频率、红外（IR）强度、零点能（ZPE）和热化学量（熵、焓、Gibbs 自由能校正）。以 H2O（气相分子：频率 + IR + 热化学）、Pt(111) 表面吸附的 CO（固定衬底的部分 Hessian：吸附物的 ZPE 与振动熵）和[第13章](13-neb-dimer.md) H/Cu(111) 的过渡态（只有一个虚频的验证）三个例子，逐一说明 `DX`、`NPROC_REP`、`INTENSITIES`、`THERMOCHEMISTRY`、`FULLY_PERIODIC`、`&MOLDEN_VIB`、`&MODE_SELECTIVE` 等关键字，以及虚频的诊断与处理、CP2K 热化学输出的局限（对称数恒为 1、默认温度 273.15 K）和 2026.2 新增的未质量加权 Hessian 输出。
 
 ---
 
@@ -23,7 +23,7 @@
 | 过渡态验证 | 与 NEB/Dimer 同一 `FORCE_EVAL`，检查只有一个虚频 | `ts_freq_check.inp` |
 | 大体系里只关心某几个模式 | `&MODE_SELECTIVE`（Davidson 迭代跟踪指定模式） | §5.6 |
 | 晶体 Γ 点声子 | `FULLY_PERIODIC T`；色散关系请用 phonopy 等 | §6 |
-| 含非谐效应的红外光谱 | AIMD 偶极自相关函数 | 第12章 |
+| 含非谐效应的红外光谱 | AIMD 偶极自相关函数 | [第12章](12-aimd.md) |
 
 示例输入集：[../examples/14-vibration-thermo/README.md](../examples/14-vibration-thermo/README.md)。
 
@@ -337,7 +337,7 @@ plt.xlabel("wavenumber (cm$^{-1}$)"); plt.ylabel("IR intensity (arb. units)")
 plt.gca().invert_xaxis(); plt.tight_layout(); plt.savefig("h2o_ir.png", dpi=200)
 ```
 
-（若输出中有多个振动分析块，请先截取最后一块。）如需更真实的谱形（温度展宽、非谐、溶剂效应），请用 AIMD 偶极自相关函数计算，见 第12章。
+（若输出中有多个振动分析块，请先截取最后一块。）如需更真实的谱形（温度展宽、非谐、溶剂效应），请用 AIMD 偶极自相关函数计算，见 [第12章](12-aimd.md)。
 
 ### 4.5 热化学数据及其局限
 
@@ -376,7 +376,7 @@ plt.gca().invert_xaxis(); plt.tight_layout(); plt.savefig("h2o_ir.png", dpi=200)
 3. **只对孤立分子有意义**：只考虑 Γ 点，基于 RRHO；有固定原子时 CP2K 不输出这一块（§5）。若存在虚频，CP2K 也会把它的负值代入求和，所以过渡态的热化学必须自己去掉虚频后重算。
 
 > [!TIP]
-> 需要 quasi-RRHO、正确对称数、不同温度/压力扫描时，可以把 molden 文件或频率列表交给专门的程序处理（例如 Shermo），或用示例目录中的 `harmonic_thermo.py` 算振动部分、再手工加上平动/转动项。本仓库的 ../scripts/vib_thermo.py 也能解析振动输出并计算 ZPE、U、S、G（用 `python ../scripts/vib_thermo.py -h` 查看用法）。
+> 需要 quasi-RRHO、正确对称数、不同温度/压力扫描时，可以把 molden 文件或频率列表交给专门的程序处理（例如 Shermo），或用示例目录中的 `harmonic_thermo.py` 算振动部分、再手工加上平动/转动项。本仓库的 [vib_thermo.py](../scripts/vib_thermo.py) 也能解析振动输出并计算 ZPE、U、S、G（用 `python ../scripts/vib_thermo.py -h` 查看用法）。
 
 ### 4.6 同位素效应
 
@@ -411,7 +411,7 @@ plt.gca().invert_xaxis(); plt.tight_layout(); plt.savefig("h2o_ir.png", dpi=200)
 
 ### 5.2 输入
 
-共享的 `co_pt111_force_eval.inc` 与第13章的 Cu 例子类似：PBE + D3(BJ)，`DZVP-MOLOPT-PBE-GTH-q18/q4/q6`，对角化 + Broyden + Fermi–Dirac 展宽，`EPS_SCF 1.0E-8`，CUTOFF 500 Ry，偶极校正。先优化（固定底部两层 1–18）：
+共享的 `co_pt111_force_eval.inc` 与[第13章](13-neb-dimer.md)的 Cu 例子类似：PBE + D3(BJ)，`DZVP-MOLOPT-PBE-GTH-q18/q4/q6`，对角化 + Broyden + Fermi–Dirac 展宽，`EPS_SCF 1.0E-8`，CUTOFF 500 Ry，偶极校正。先优化（固定底部两层 1–18）：
 
 ```bash
 mpirun -np 64 cp2k.psmp -i co_pt111_opt.inp -o co_pt111_opt.out
@@ -622,7 +622,7 @@ python3 displace_mode.py h2o_opt.xyz h2o_vib-VIBRATIONS-1.mol --mode 1 --amp 0.1
 原因：`TC_TEMPERATURE` 默认 273.15 K，不是 298.15 K。解决：显式设置 `TC_TEMPERATURE [K] 298.15`。另外别忘了对称数（§4.5）。
 
 **3. 设了 `THERMOCHEMISTRY T`，输出中却没有 `THERMOCHEMICAL DATA`。**
-原因：体系中有固定原子（部分 Hessian），CP2K 此时不计算热化学。解决：这是设计如此；用 `harmonic_thermo.py` 或 ../scripts/vib_thermo.py 在简谐极限下计算。
+原因：体系中有固定原子（部分 Hessian），CP2K 此时不计算热化学。解决：这是设计如此；用 `harmonic_thermo.py` 或 [vib_thermo.py](../scripts/vib_thermo.py) 在简谐极限下计算。
 
 **4. 极小点出现几十 cm⁻¹ 的虚频。**
 原因：几何没有严格收敛、SCF/网格噪声。解决：看 `Minimum Structure - Energy and Forces` 中的残余力；收紧优化和 SCF 判据；提高 CUTOFF；比较不同 `DX`；必要时沿该模式扰动后重新优化。
@@ -637,7 +637,7 @@ python3 displace_mode.py h2o_opt.xyz h2o_vib-VIBRATIONS-1.mol --mode 1 --amp 0.1
 原因：2026.1 之前的版本中力常数的计算有误（2026.1 发布说明中提到已修复）。解决：升级，或只用频率和约化质量。
 
 **8. 振动分析计算量太大。**
-原因：全 Hessian 需要 $6N+1$ 次力计算。解决：部分 Hessian（固定远离反应中心的原子）、`&MODE_SELECTIVE`、或者用 xTB 先做预筛选（第16章）。
+原因：全 Hessian 需要 $6N+1$ 次力计算。解决：部分 Hessian（固定远离反应中心的原子）、`&MODE_SELECTIVE`、或者用 xTB 先做预筛选（[第16章](16-qmmm-xtb.md)）。
 
 **9. 过渡态的 ZPE/热化学包含了虚频。**
 原因：CP2K 的热化学把负频率也代入求和。解决：用 `harmonic_thermo.py` 等工具剔除虚频后重新计算。
@@ -676,7 +676,7 @@ python3 displace_mode.py h2o_opt.xyz h2o_vib-VIBRATIONS-1.mol --mode 1 --amp 0.1
 - [arvpinto/enzyme_neb_cp2k](https://github.com/arvpinto/enzyme_neb_cp2k)：QM/MM 过渡态的频率验证与分析脚本（CC0）
 - [hyfaust/cp2k-learn](https://github.com/hyfaust/cp2k-learn)：中文分级教程，含振动分析一章（2025.2 验证）
 
-**本仓库脚本**：../scripts/vib_thermo.py（解析频率与 IR 强度、检查虚频、ZPE 与 U/S/G）、../scripts/cp2k_outparse.py（检查优化是否收敛）。用法请运行 `python <脚本> -h` 查看。
+**本仓库脚本**：[vib_thermo.py](../scripts/vib_thermo.py)（解析频率与 IR 强度、检查虚频、ZPE 与 U/S/G）、[cp2k_outparse.py](../scripts/cp2k_outparse.py)（检查优化是否收敛）。用法请运行 `python <脚本> -h` 查看。
 
 **关键文献**
 
@@ -689,4 +689,4 @@ python3 displace_mode.py h2o_opt.xyz h2o_vib-VIBRATIONS-1.mol --mode 1 --amp 0.1
 
 ---
 
-[← 上一章](13-neb-dimer.md) | [返回目录](../README.md)
+[← 上一章](13-neb-dimer.md) | [返回目录](../README.md) | [下一章 →](15-metadynamics-plumed.md)

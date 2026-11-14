@@ -236,14 +236,14 @@ Direct
 
 - 每个坐标后跟 3 个 `T`/`F`，分别表示该原子沿 3 个方向能否移动；
 - 官方说明：**这 3 个标志对应的是沿晶格矢量 $\mathbf{a}_1,\mathbf{a}_2,\mathbf{a}_3$ 的分数坐标方向**，与坐标用 Direct 还是 Cartesian 输入无关。对于非正交晶胞，`T F T` 并不等于“只能沿 x 和 z 移动”；
-- 固定原子在 OUTCAR 中仍会显示受力，判断收敛时要排除它们（仓库脚本 `../scripts/check_vasp.py` 会考虑这一点，用 `python ../scripts/check_vasp.py -h` 查看用法）。
+- 固定原子在 OUTCAR 中仍会显示受力，判断收敛时要排除它们（仓库脚本 [`check_vasp.py`](../scripts/check_vasp.py) 会考虑这一点，用 `python ../scripts/check_vasp.py -h` 查看用法）。
 
-板层建模与层数/真空收敛见 [第9章](09-surface-workfunction.md)；建模工具见公共章节 第3章 结构准备。
+板层建模与层数/真空收敛见 [第9章](09-surface-workfunction.md)；建模工具见公共章节 [第3章 结构准备](../../Common/tutorials/03-structure-modeling.md)。
 
 ### 4.4 精度、对称性与 CONTCAR
 
 - 官方建议坐标与晶格参数至少写 **7 位有效数字**。VASP 用 `SYMPREC`（默认 $10^{-5}$）判断对称性，只写 5 位有效数字是临界情况，可能只找到部分对称操作，进而导致 k 点约化错误或 `PRICEL`、`SGRCON` 一类报错；
-- 低精度的结构可以用 spglib/pymatgen 对称化后重新写出（见公共章节 第4章 ASE 与 pymatgen 实战）；
+- 低精度的结构可以用 spglib/pymatgen 对称化后重新写出（见公共章节 [第4章 ASE 与 pymatgen 实战](../../Common/tutorials/04-ase-pymatgen.md)）；
 - **CONTCAR 与 POSCAR 格式相同**，优化中断或需要续算时 `cp CONTCAR POSCAR` 即可；MD 的 CONTCAR 还包含速度和预测-校正坐标，若换系综（如 NVT→NPT）续算，要删掉预测-校正坐标块，否则会崩溃。
 
 ---
@@ -410,7 +410,7 @@ bash make_potcar.sh POSCAR Ti=Ti_pv     # 覆盖默认选择
 PP_SET=potpaw_PBE.54 bash make_potcar.sh
 ```
 
-其他工具：VASPKIT 的 `103`（按默认设置生成 POTCAR，需要在 `~/.vaspkit` 中配置赝势路径）；pymatgen 的 `Potcar` 类（需先用 `pmg config` 设置 `PMG_VASP_PSP_DIR`）；仓库脚本 `../scripts/vasp_inputgen.py` 也能按推荐列表拼接 POTCAR（用 `python ../scripts/vasp_inputgen.py -h` 查看用法）。
+其他工具：VASPKIT 的 `103`（按默认设置生成 POTCAR，需要在 `~/.vaspkit` 中配置赝势路径）；pymatgen 的 `Potcar` 类（需先用 `pmg config` 设置 `PMG_VASP_PSP_DIR`）；仓库脚本 [`vasp_inputgen.py`](../scripts/vasp_inputgen.py) 也能按推荐列表拼接 POTCAR（用 `python ../scripts/vasp_inputgen.py -h` 查看用法）。
 
 > [!CAUTION]
 > 仓库中**永远不要**提交 POTCAR（本仓库的 `.gitignore` 已排除 POTCAR、WAVECAR、CHGCAR 等）。`vaspout.h5` 中也含有 POTCAR 文本，同样不能公开分享。
@@ -536,7 +536,7 @@ print(atoms.get_potential_energy(force_consistent=True))    # free energy TOTEN
 print(atoms.get_forces())
 ```
 
-更多后处理工具（VASPKIT、sumo、pyprocar）见公共章节 第5章 后处理与可视化 与 [第18章](18-postprocess-troubleshooting.md)。
+更多后处理工具（VASPKIT、sumo、pyprocar）见公共章节 [第5章 后处理与可视化](../../Common/tutorials/05-postprocess-visualization.md) 与 [第18章](18-postprocess-troubleshooting.md)。
 
 ---
 

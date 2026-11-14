@@ -326,7 +326,7 @@ mpirun -np 4 openmx Methane.dat -nt 1 | tee met.std
 
 - 对 CH4 这样的小分子，Cluster 计算的 MPI 并行主要分配在本征态上，用 1–4 个进程即可，进程再多反而更慢；
 - 后台运行：`nohup mpirun -np 4 openmx Methane.dat -nt 1 > met.std 2>&1 &`，用 `tail -f met.std` 查看进度；
-- 在集群上请通过作业系统提交，示例目录中的 `job_omx_slurm.sh` 会依次运行三个分子；通用模板见 `job_omx_slurm.sh` 与 第18章。
+- 在集群上请通过作业系统提交，示例目录中的 `job_omx_slurm.sh` 会依次运行三个分子；通用模板见 [`job_omx_slurm.sh`](../scripts/job_omx_slurm.sh) 与 [第18章](18-parallel-on-errors.md)。
 
 ### 5.3 生成的文件
 
@@ -551,7 +551,7 @@ awk '/<coordinates.forces/,/coordinates.forces>/' met.out
 
 ### 7.8 用 Python 提取关键结果
 
-下面是一个只用标准库的最小例子（在示例目录中运行），提取 `Utot`、HOMO/LUMO 与偶极矩并换算成 eV。更完整的解析（SCF 历史、Mulliken、力、优化历史，输出 JSON/CSV）请用仓库脚本 `omx_parse_out.py`，用法见 `python ../scripts/omx_parse_out.py -h`。
+下面是一个只用标准库的最小例子（在示例目录中运行），提取 `Utot`、HOMO/LUMO 与偶极矩并换算成 eV。更完整的解析（SCF 历史、Mulliken、力、优化历史，输出 JSON/CSV）请用仓库脚本 [`omx_parse_out.py`](../scripts/omx_parse_out.py)，用法见 `python ../scripts/omx_parse_out.py -h`。
 
 ```python
 import re
@@ -591,7 +591,7 @@ for f in sys.argv[1:]:
 - **VESTA**：File → Open 打开 `met.dden.cube`，在 Properties → Isosurfaces 中设置正、负等值面（如 ±0.005 e/Bohr³），可以看到 C–H 键区域的电荷积累；
 - **XCrySDen**：先用 OpenMX 自带的 `cube2xsf` 转成 XSF（`cube2xsf met.tden.cube` 生成 `.xsf` 文件，手册第 77 节），再 `xcrysden --xsf <生成的 .xsf 文件>`，在 Tools → Data Grid 中设置等值面。
 
-差分密度 $\Delta\rho=\rho_{\rm SCF}-\sum_i\rho_i^{\rm atom}$ 直观地显示成键引起的电荷重新分布，是理解化学键的好工具。更多 cube 处理（密度差、平面平均、MO 可视化）见 [第10章](10-charge-mo-cube.md)，公共可视化方法见公共篇 第5章。
+差分密度 $\Delta\rho=\rho_{\rm SCF}-\sum_i\rho_i^{\rm atom}$ 直观地显示成键引起的电荷重新分布，是理解化学键的好工具。更多 cube 处理（密度差、平面平均、MO 可视化）见 [第10章](10-charge-mo-cube.md)，公共可视化方法见[公共篇第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 

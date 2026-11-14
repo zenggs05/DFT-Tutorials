@@ -1,0 +1,25 @@
+# Linear optics (independent-particle, RPA without local fields) for VASPKIT 711
+# Step 2 of a two-step run: step 1 = normal SCF with LWAVE = .TRUE. (same ENCUT,
+# KPOINTS, POTCAR). Then copy WAVECAR here and run with this INCAR.
+SYSTEM  = GaAs LOPTICS (frequency-dependent dielectric function)
+
+ISTART  = 1          # read WAVECAR of the SCF step
+ALGO    = Exact      # exact diagonalisation: all NBANDS converged in one step
+NELM    = 1
+NBANDS  = 48         # default ~13 for GaAs; LOPTICS needs many empty bands (test 32/48/64)
+
+PREC    = Accurate
+ENCUT   = 400        # identical to the SCF step
+EDIFF   = 1E-8
+ISMEAR  = 0
+SIGMA   = 0.01       # keep << CSHIFT
+LREAL   = .FALSE.
+
+LOPTICS = .TRUE.
+CSHIFT  = 0.100      # complex shift (Lorentzian broadening, eV) in Kramers-Kronig
+NEDOS   = 2000       # number of frequency grid points (default 301 is too coarse)
+
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+# Optics needs a denser k-mesh than the SCF (e.g. 12x12x12 or more for GaAs).
+# After the run: vaspkit < inputs/cmd_711_optics_eV.in  -> absorption, refractive index, ... (*.dat)

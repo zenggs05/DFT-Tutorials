@@ -22,7 +22,8 @@ def main() -> None:
     print(f"bulk: a = {bulk_res['atoms'].cell.cellpar()[0] * 2**0.5:.4f} A,"
           f" E/atom = {e_bulk:.4f} eV  (dir: {bulk_res['dir_name']})")
 
-    slab = fcc111("Cu", size=(2, 2, 4), vacuum=8.0, a=3.6)
+    a_relaxed = bulk_res["atoms"].cell.cellpar()[0] * 2**0.5   # fcc primitive -> cubic a
+    slab = fcc111("Cu", size=(2, 2, 4), vacuum=8.0, a=a_relaxed)  # consistent with e_bulk
     slab_res = relax_job(slab, opt_params={"fmax": 0.02})
     single = static_job(slab_res["atoms"])
     n = len(single["atoms"])

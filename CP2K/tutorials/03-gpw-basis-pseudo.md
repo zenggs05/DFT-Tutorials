@@ -353,7 +353,7 @@ grep -E "^ *O +6-31" EMSL_BASIS_SETS             # 氧的 Pople 基组名
 |---|---|---|
 | `BASIS` | `SZV`、`DZVP`、`TZVP`、`TZV2P`、`TZV2PX` | 经典 MOLOPT 的全部等级（H、O 都有） |
 | `FAMILY` | `MOLOPT`、`MOLOPT-SR` | SR 只有 SZV 与 DZVP；`TZV2P-MOLOPT-SR-GTH` 不存在，会报基组找不到 |
-| `CUTOFF`/`REL_CUTOFF` | 500/60 Ry | 比第2章更保守，使网格误差远小于基组差别 |
+| `CUTOFF`/`REL_CUTOFF` | 500/60 Ry | 比[第2章](02-input-structure.md)更保守，使网格误差远小于基组差别 |
 | `&MOMENTS PERIODIC .FALSE.` | — | 孤立分子用普通位置算符计算偶极矩；周期体系默认 `PERIODIC T`（Berry 相位公式） |
 | `REFERENCE COM` | — | 以质心为原点（对中性分子偶极矩与原点无关，但带电体系有关） |
 
@@ -615,7 +615,7 @@ cp2k.ssmp -E XCTAG=PBE0 -E ADMM=1 -e ch3oh_kind_templates.inp | grep -E "BASIS_S
 | 杂化泛函 | `…-PBE0-GTH-qN` + `GTH-PBE0-qN` + `admm-dzp-qN` | [第9章](09-hybrid-admm.md) |
 | 全电子/近核性质 | GAPW + `TZVPP-MOLOPT-PBE-ae` 等 | §9 |
 
-本节的输入生成脚本 `cp2k_inpgen.py` 可以从 xyz/cif/POSCAR 结构出发，按元素查找 `BASIS_MOLOPT_UZH`/`POTENTIAL_UZH` 中的条目并核对 `-qN` 是否一致（用 `python ../scripts/cp2k_inpgen.py -h` 查看用法）；生成的输入仍应按本章 §6 的清单人工复核。
+本节的输入生成脚本 [`cp2k_inpgen.py`](../scripts/cp2k_inpgen.py) 可以从 xyz/cif/POSCAR 结构出发，按元素查找 `BASIS_MOLOPT_UZH`/`POTENTIAL_UZH` 中的条目并核对 `-qN` 是否一致（用 `python ../scripts/cp2k_inpgen.py -h` 查看用法）；生成的输入仍应按本章 §6 的清单人工复核。
 
 ---
 

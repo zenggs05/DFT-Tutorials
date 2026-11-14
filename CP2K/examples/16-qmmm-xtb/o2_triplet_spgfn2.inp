@@ -1,0 +1,68 @@
+# Open-shell GFN2-xTB with tblite: triplet O2, geometry optimisation.
+# Chapter 16 of the CP2K tutorial.
+#
+# With UKS (alias LSD) and GFN_TYPE TBLITE, tblite switches on its spin-polarisation term,
+# i.e. spGFN2-xTB (Neugebauer et al., J. Comput. Chem. 44, 2120 (2023)).
+#
+# Version notes
+#   - written for CP2K 2026.2 compiled with tblite (cp2k.psmp -v | grep -o tblite)
+#   - GFN_TYPE TBLITE does not exist before 2026.2 (2025.2/2026.1 use an integer GFN_TYPE
+#     and switch tblite on through the &TBLITE section alone); this open-shell example was
+#     not designed for those versions
+#   - SCC_MIXER is not written: the 2026.2 default AUTO selects the native tblite mixer,
+#     whose convergence is controlled by &TBLITE/ACCURACY
+#
+# Run:  cp2k.psmp -i o2_triplet_spgfn2.inp -o o2_triplet_spgfn2.out
+
+&GLOBAL
+  PROJECT     o2_triplet_spgfn2
+  RUN_TYPE    GEO_OPT
+  PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&MOTION
+  &GEO_OPT
+    OPTIMIZER BFGS
+    MAX_ITER  100
+  &END GEO_OPT
+&END MOTION
+
+&FORCE_EVAL
+  METHOD QUICKSTEP
+  &DFT
+    UKS                            ! = LSD: spin-polarised (spGFN2-xTB in tblite)
+    MULTIPLICITY 3                 ! triplet ground state of O2
+    CHARGE       0
+    &QS
+      METHOD      XTB
+      EPS_DEFAULT 1.0E-12
+      &XTB
+        GFN_TYPE TBLITE
+        &TBLITE
+          METHOD   GFN2
+          ACCURACY 0.1
+        &END TBLITE
+      &END XTB
+    &END QS
+    &SCF
+      SCF_GUESS MOPAC
+      EPS_SCF   1.0E-8
+      MAX_SCF   200
+      ADDED_MOS 2 2                ! a few virtual orbitals per spin channel
+    &END SCF
+  &END DFT
+  &SUBSYS
+    &CELL
+      ABC      15.0 15.0 15.0
+      PERIODIC NONE
+    &END CELL
+    &COORD
+      O   0.000000   0.000000   0.000000
+      O   1.230000   0.000000   0.000000
+    &END COORD
+    &TOPOLOGY
+      &CENTER_COORDINATES
+      &END CENTER_COORDINATES
+    &END TOPOLOGY
+  &END SUBSYS
+&END FORCE_EVAL

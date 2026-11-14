@@ -481,7 +481,7 @@ Multiwfn water_dimer_wfn.fchk
 2. 选择格点质量（格点越细越平滑，但耗时按格点间距三次方增加）；
 3. 导出 δg_inter 和 sign(λ2)ρ 的 cube 文件，用 VMD 绘制 sign(λ2)ρ 着色的 δg_inter 等值面。
 
-着色约定：**蓝色**表示较强的吸引（如氢键、阳离子-氧配位），**绿色**为范德华（色散主导）作用，**红色**为位阻/排斥。等值面取值按体系调整（Sobereva 的示例中蛋白-配体体系用 0.002–0.006 a.u.）。完整的图文教程见 IGMH 官方教程包（链接在上述博文中）和 Multiwfn 手册；批量生成 fchk 与 cube 的脚本见 ../scripts/batch_cube_multiwfn.sh（`bash ../scripts/batch_cube_multiwfn.sh -h` 查看用法），Multiwfn 命令流批处理见 [第16章](16-postprocess-multiwfn.md)。
+着色约定：**蓝色**表示较强的吸引（如氢键、阳离子-氧配位），**绿色**为范德华（色散主导）作用，**红色**为位阻/排斥。等值面取值按体系调整（Sobereva 的示例中蛋白-配体体系用 0.002–0.006 a.u.）。完整的图文教程见 IGMH 官方教程包（链接在上述博文中）和 Multiwfn 手册；批量生成 fchk 与 cube 的脚本见 [../scripts/batch_cube_multiwfn.sh](../scripts/batch_cube_multiwfn.sh)（`bash ../scripts/batch_cube_multiwfn.sh -h` 查看用法），Multiwfn 命令流批处理见 [第16章](16-postprocess-multiwfn.md)。
 
 ### 9.3 预期图像
 
@@ -593,7 +593,7 @@ Multiwfn water_dimer_wfn.fchk
 - T. Lu, Q. Chen, *J. Comput. Chem.* 2022, 43, 539. [DOI: 10.1002/jcc.26812](https://doi.org/10.1002/jcc.26812)（IGMH 方法）
 - T. Lu, F. Chen, *J. Comput. Chem.* 2012, 33, 580. [DOI: 10.1002/jcc.22885](https://doi.org/10.1002/jcc.22885)（Multiwfn）
 
-延伸阅读：后处理与出版级作图的通用流程见 ../../Common/tutorials/05-postprocess-visualization.md；从 log 中批量提取结构用 [../scripts/log2xyz.py](../scripts/log2xyz.py)，生成带碎片标记的 CP 输入可用 [../scripts/gjf_builder.py](../scripts/gjf_builder.py)（均可用 `-h` 查看用法）。
+延伸阅读：后处理与出版级作图的通用流程见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)；从 log 中批量提取结构用 [../scripts/log2xyz.py](../scripts/log2xyz.py)，生成带碎片标记的 CP 输入可用 [../scripts/gjf_builder.py](../scripts/gjf_builder.py)（均可用 `-h` 查看用法）。
 
 ---
 

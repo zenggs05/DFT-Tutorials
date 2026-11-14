@@ -1,0 +1,20 @@
+# ENCUT convergence test - single-point energy (VASP 6.4-6.6)
+# run_encut_scan.sh replaces @ENCUT@ with each value of the scan.
+# Keep EVERYTHING else identical between scan points.
+SYSTEM  = encut-scan
+ISTART  = 0
+ICHARG  = 2
+PREC    = Accurate        # same PREC for every point (it also sets FFT grids)
+ENCUT   = @ENCUT@         # eV, scanned: start at max(ENMAX) and go to ~1.6-2.0 x ENMAX
+EDIFF   = 1E-7            # SCF noise must be far below the 1 meV/atom target
+ALGO    = Normal
+LREAL   = .FALSE.         # reciprocal-space projection: no real-space noise
+LASPH   = .TRUE.          # needed for d/f elements and meta-GGA; harmless otherwise
+ISMEAR  = 0               # Gaussian smearing; use 1 with SIGMA=0.2 for metals
+SIGMA   = 0.05
+NSW     = 0
+IBRION  = -1
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+# Optional: replace the KPOINTS file by an automatic mesh
+# KSPACING = 0.25         # 1/Angstrom, includes 2*pi; KGAMMA = .TRUE. is the default

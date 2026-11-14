@@ -232,7 +232,7 @@ cp2k.psmp -c h2o_pdos_2026.inp       # 只做语法检查，不计算
 | `&BROADEN/TYPE`、`WIDTH` | `GAUSSIAN`、0.2 eV | 线型与 FWHM（默认 0.1 eV）。分子画图常用 0.1–0.3 eV |
 | `&SCF/EPS_LUMO`、`MAX_ITER_LUMO` | 1E-6、400 | 控制 OT 补算空轨道的精度和最大迭代数（默认 1E-5、299） |
 | `&PRINT/&MO` | `ENERGIES T` | 在主输出里列出本征值和占据数，便于核对 |
-| `&POISSON PERIODIC NONE` + `MT` | — | 孤立分子必须与 `&CELL PERIODIC NONE` 一致，见第6章 |
+| `&POISSON PERIODIC NONE` + `MT` | — | 孤立分子必须与 `&CELL PERIODIC NONE` 一致，见[第6章](06-periodic-surface-kpoints.md) |
 
 ### 4.3 运行与输出文件
 
@@ -310,7 +310,7 @@ DOS/PDOS 的上半部分（空态）是否完整，取决于 SCF 方法：
 
 - 只关心价带和带边时，`NLUMO`/`ADDED_MOS` 取占据态数的 10–20% 就够；要看到导带以上数 eV，就要更多，可以先用小值试算看空态覆盖到多高的能量；
 - `NLUMO -1`（全部空轨道）对大体系代价很高，旧版本的手册还提醒过：请求的态数超过基函数能提供的上限可能导致 Cholesky 分解出错；
-- 金属体系用展宽时，`ADDED_MOS` 还必须覆盖费米能以上几个 $k_BT$，这是 SCF 正确性的要求，不只是为了画 DOS（见第5章）；
+- 金属体系用展宽时，`ADDED_MOS` 还必须覆盖费米能以上几个 $k_BT$，这是 SCF 正确性的要求，不只是为了画 DOS（见[第5章](05-scf-strategy.md)）；
 - OT 补算空轨道若 `MAX_ITER_LUMO` 用完仍未收敛，高处的空态能量不可靠，可以提高 `MAX_ITER_LUMO`，或改用对角化做一次单点（从 OT 收敛的 `RESTART.wfn` 起步，通常几步就收敛）。
 
 ---
@@ -642,7 +642,7 @@ head -n 8 graphene_dos-curve-1.dos
 
 | 关键字 | 说明 |
 |---|---|
-| `&KPOINTS SCHEME MONKHORST-PACK 8 8 8` | **自洽**积分用的网格，先按第6章收敛。能带路径与它无关 |
+| `&KPOINTS SCHEME MONKHORST-PACK 8 8 8` | **自洽**积分用的网格，先按[第6章](06-periodic-surface-kpoints.md)收敛。能带路径与它无关 |
 | `&BAND_STRUCTURE/FILE_NAME` | 能带数据文件名，按原样使用（不加项目名前缀）。**以追加方式打开**，重复运行前要删除旧文件；不写则数据打印到主输出 |
 | `&BAND_STRUCTURE/ADDED_MOS`（别名 `ADDED_BANDS`） | 在能带计算中额外增加的带数，与 `&SCF/ADDED_MOS` 是两回事 |
 | `&KPOINT_SET`（可重复） | 一段连续路径。多个 `&KPOINT_SET` 之间不连续，可以用来表示路径中的“跳跃”（如 U\|K） |
@@ -660,7 +660,7 @@ head -n 8 graphene_dos-curve-1.dos
 | X | (1/2, 0, 1/2) | W | (1/2, 1/4, 3/4) |
 | K | (3/8, 3/8, 3/4) | U | (5/8, 1/4, 5/8) |
 
-换了晶胞（例如用常规立方胞，或让程序重新取向）时，这张表就不再适用。可靠的做法是用 SeeK-path（Hinuma 等，2017）或 pymatgen 的 `HighSymmKpath` 生成路径（见 Common 第4章），再按 CP2K 的 `SPECIAL_POINT` 格式写入；注意这些工具可能会先把结构标准化成它们约定的原胞，此时要把**标准化后的晶胞**写回 CP2K 输入，或者把 k 点坐标转换回你的晶胞。
+换了晶胞（例如用常规立方胞，或让程序重新取向）时，这张表就不再适用。可靠的做法是用 SeeK-path（Hinuma 等，2017）或 pymatgen 的 `HighSymmKpath` 生成路径（见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)），再按 CP2K 的 `SPECIAL_POINT` 格式写入；注意这些工具可能会先把结构标准化成它们约定的原胞，此时要把**标准化后的晶胞**写回 CP2K 输入，或者把 k 点坐标转换回你的晶胞。
 
 > [!TIP]
 > 想确认 CP2K 理解的 k 点与你预期一致，看主输出中的 `KPOINTS| Special point` 行，它以 `KPOINTS| In units of b-vector [2pi/Bohr]` 的形式回显了每个特殊点。
@@ -828,7 +828,7 @@ CP2K 中的 “LDOS” 是**指定原子列表上的 PDOS**，不是 STM 分析�
 | [robinzyb/cp2kdata](https://github.com/robinzyb/cp2kdata) | 读 pdos、cube 和输出文件的 Python 库 | 2026.2 的 `.pdos` 多了 `Total` 列，使用前先确认解析正确 |
 | Multiwfn | 读 CP2K 的 molden 文件画 TDOS/PDOS/OPDOS，做轨道成分分析 | molden 的生成见 [第11章](11-cube-charge-workfunction.md)；k 点计算无法输出 molden |
 
-通用的出版级作图（配色、字体、能带与 DOS 并排）见 Common 第5章 后处理与可视化。
+通用的出版级作图（配色、字体、能带与 DOS 并排）见 [Common 第5章 后处理与可视化](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 

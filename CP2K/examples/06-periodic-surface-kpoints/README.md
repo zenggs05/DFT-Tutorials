@@ -68,7 +68,7 @@ column -s, -t kpoint_scan.csv
 
 ## 注意事项
 
-- 截断（350/500 Ry）、电子温度（500 K）和 k 网格都是演示值，正式计算请按第4章、第6章的方法收敛；Pt 的晶格常数 3.97 Å 是近似的 PBE 值，正式计算应先用同一套参数优化体相晶格常数；
+- 截断（350/500 Ry）、电子温度（500 K）和 k 网格都是演示值，正式计算请按[第4章](../../tutorials/04-cutoff-convergence.md)、[第6章](../../tutorials/06-periodic-surface-kpoints.md)的方法收敛；Pt 的晶格常数 3.97 Å 是近似的 PBE 值，正式计算应先用同一套参数优化体相晶格常数；
 - 2026.2 及以前，k 点计算（包括 `SCHEME GAMMA`）不能用 OT；`h2o_isolated_mt.inp` 没有 `&KPOINTS`，因此可以用 OT；
 - `SURFACE_DIPOLE_CORRECTION` 要求表面法向严格沿 `SURF_DIP_DIR` 指定的笛卡尔轴（本例 C 沿 z，A、B 在 xy 平面）；
 - slab 示例的 `&MOTION` 段只在 `RUN_TYPE GEO_OPT`/`MD` 时生效；固定原子的编号与 `pt111_o_p2x2.xyz` 中的顺序对应，改结构后要同步修改；

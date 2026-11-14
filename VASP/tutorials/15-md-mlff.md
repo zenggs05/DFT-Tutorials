@@ -688,7 +688,7 @@ ML_GRACE_MODEL = GRACE-2L-OMAT     # name of a downloaded model
 | NEP（GPUMD） | 神经演化势，GPU 上速度极快，适合百万原子、热输运 | 用 VASP 产生训练集（ML_AB / OUTCAR → extxyz） |
 | MACE、NequIP/Allegro、DeePMD 等 | 等变/深度神经网络势，精度高，生态丰富 | 同上，在 LAMMPS / ASE 中运行 |
 
-把 VASP 的训练数据迁移到其他框架时，可以用 [utf/pymlff](https://github.com/utf/pymlff) 读写和合并 ML_AB，或用 ASE / pymatgen 从 OUTCAR、vasprun.xml 导出 extxyz。本仓库的 [../../Scripts/README.md](../../Scripts/README.md) 收录了 NEP / GPUMD 训练与数据集处理脚本；机器学习势的整体学习路线见 ../../Common/tutorials/07-learning-path.md，高通量工作流见 ../../Common/tutorials/06-workflow-automation.md。
+把 VASP 的训练数据迁移到其他框架时，可以用 [utf/pymlff](https://github.com/utf/pymlff) 读写和合并 ML_AB，或用 ASE / pymatgen 从 OUTCAR、vasprun.xml 导出 extxyz。本仓库的 [../../Scripts/README.md](../../Scripts/README.md) 收录了 NEP / GPUMD 训练与数据集处理脚本；机器学习势的整体学习路线见 [Common 第7章](../../Common/tutorials/07-learning-path.md)，高通量工作流见 [Common 第6章](../../Common/tutorials/06-workflow-automation.md)。
 
 ---
 

@@ -24,7 +24,9 @@
   &MD
     ENSEMBLE    NVT
     STEPS       10000             ! 10000 MORE steps (5 ps) after the restart point
-    MAX_STEPS   14000             ! hard limit on the total step counter
+    ! MAX_STEPS (cap on the TOTAL step counter) is deliberately not set: the step
+    ! that reaches MAX_STEPS is treated as a stop, and without FORCE_LAST its
+    ! output and restart file are not written (see chapter 12, section 6).
     TIMESTEP    0.5
     TEMPERATURE 300.0
     &THERMOSTAT

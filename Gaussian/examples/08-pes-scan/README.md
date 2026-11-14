@@ -65,7 +65,7 @@ awk 'NR==FNR{if(min==""||$2<min)min=$2; next}{printf "%3d %10.3f\n", $1, ($2-min
 - S<sub>N</sub>2 一维扫描：能量先上升，在 C···Cl ≈ 2.3–2.4 Å 附近达到最高，随后 Br⁻ 离去、能量下降；
 - GIC 扫描：输出 `Initial Parameters` 中 RC 的初值应约为 −1.21，此后每个点增加 0.2。
 
-作图：在 GaussView 中打开 `.log`，Results → Scan；或使用仓库脚本 `python ../../scripts/scan_irc_profile.py -h` 查看用法。本仓库不附带输出文件，所有数值以你自己的计算为准。
+作图：在 GaussView 中打开 `.log`，Results → Scan；或使用仓库脚本 [`scan_irc_profile.py`](../../scripts/scan_irc_profile.py)（`python ../../scripts/scan_irc_profile.py -h` 查看用法）。本仓库不附带输出文件，所有数值以你自己的计算为准。
 
 ## 注意事项
 

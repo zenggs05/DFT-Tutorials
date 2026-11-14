@@ -9,9 +9,14 @@ key from https://materialsproject.org/dashboard and export it:
 Usage:
   python pmg_phase_diagram_LiFePO4.py                  # query MP, save entries
   python pmg_phase_diagram_LiFePO4.py --offline        # reuse LiFePO_entries.json
-  python pmg_phase_diagram_LiFePO4.py --my-energy -191.3 --my-formula LiFePO4
-      # add your own calculation (total energy in eV for that formula unit
-      # cell, computed with MP-compatible settings, e.g. MPRelaxSet + GGA+U)
+  python pmg_phase_diagram_LiFePO4.py --offline --my-vasprun myrun/vasprun.xml
+      # recommended way to add your own calculation: the run must use
+      # MP-compatible settings (MPRelaxSet: PBE+U, same U values and POTCARs);
+      # MaterialsProject2020Compatibility then applies the same corrections
+      # as for the MP entries, or rejects the entry if the settings differ.
+  python pmg_phase_diagram_LiFePO4.py --offline --my-energy E_TOTAL --my-formula Li4Fe4P4O16
+      # quick test only: E_TOTAL (eV) of a cell with that composition is used
+      # WITHOUT any correction, so its E_hull is not comparable to MP entries.
 """
 import argparse
 import os
@@ -49,12 +54,27 @@ def get_entries(offline):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true")
-    ap.add_argument("--my-energy", type=float, help="total energy (eV) of your own cell")
+    ap.add_argument("--my-vasprun", help="vasprun.xml of your own MP-compatible relaxation")
+    ap.add_argument("--my-energy", type=float,
+                    help="total energy (eV) of your own cell, used without corrections")
     ap.add_argument("--my-formula", default="LiFePO4", help="composition of that cell")
     a = ap.parse_args()
 
     entries = list(get_entries(a.offline))
+    if a.my_vasprun:
+        from pymatgen.entries.compatibility import MaterialsProject2020Compatibility
+        from pymatgen.io.vasp.outputs import Vasprun
+        vr = Vasprun(a.my_vasprun, parse_dos=False, parse_eigen=False,
+                     parse_potcar_file=False)
+        mine = vr.get_computed_entry(inc_structure=True, entry_id="my_calc")
+        mine = MaterialsProject2020Compatibility().process_entry(mine)
+        if mine is None:
+            raise SystemExit("my_calc rejected by MaterialsProject2020Compatibility: "
+                             "functional/U values/POTCARs are not MP-compatible")
+        entries.append(mine)
     if a.my_energy is not None:
+        print("WARNING: --my-energy is used without MP2020 corrections; "
+              "its E_hull is only a rough indication")
         # NOTE: your energy must be on the same footing (functional, U values,
         # POTCARs, corrections) as the MP entries, otherwise E_hull is meaningless.
         entries.append(PDEntry(Composition(a.my_formula), a.my_energy, name="my_calc"))

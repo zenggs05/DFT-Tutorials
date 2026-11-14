@@ -116,7 +116,7 @@ g16 h2o_sp_b3lyp_def2tzvp.gjf          # writes h2o_sp_b3lyp_def2tzvp.log
 tail -n 1 h2o_sp_b3lyp_def2tzvp.log    # expect: Normal termination of Gaussian 16 ...
 ```
 
-在集群上用示例目录中的 Slurm 脚本：`sbatch run_g16.sh h2o_sp_b3lyp_def2tzvp.gjf`（脚本说明见示例 README，通用作业调度见 ../../Common/tutorials/02-job-scheduler.md）。
+在集群上用示例目录中的 Slurm 脚本：`sbatch run_g16.sh h2o_sp_b3lyp_def2tzvp.gjf`（脚本说明见示例 README，通用作业调度见 [Common 第2章 HPC 作业调度](../../Common/tutorials/02-job-scheduler.md)）。
 
 ### 3.3 找到能量
 
@@ -252,7 +252,7 @@ SCF 达到最大迭代仍未收敛时（示意输出，数值仅供参考）：
  Error termination via Lnk1e in /opt/g16/l502.exe at ...
 ```
 
-注意这里**也有 SCF Done 行**，但前面有 `Convergence criterion not met`，这个能量**不能用**。写批处理脚本时要先检查 `Normal termination`，再取能量。g16_error_doctor.py 可以自动识别这类错误并给出中文建议（`python ../scripts/g16_error_doctor.py -h`）。
+注意这里**也有 SCF Done 行**，但前面有 `Convergence criterion not met`，这个能量**不能用**。写批处理脚本时要先检查 `Normal termination`，再取能量。[`g16_error_doctor.py`](../scripts/g16_error_doctor.py) 可以自动识别这类错误并给出中文建议（`python ../scripts/g16_error_doctor.py -h`）。
 
 ---
 

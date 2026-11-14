@@ -633,7 +633,7 @@ EOF
 ls nio_dudarev_u5.PDOS.Tetrahedron.atom1.*
 ```
 
-也可以用仓库脚本 `../scripts/omx_dos_auto.py` 非交互地驱动 DosMain 并按元素和角动量求和（用 `python ../scripts/omx_dos_auto.py -h` 查看用法）。
+也可以用仓库脚本 [`omx_dos_auto.py`](../scripts/omx_dos_auto.py) 非交互地驱动 DosMain 并按元素和角动量求和（用 `python ../scripts/omx_dos_auto.py -h` 查看用法）。
 
 看什么：
 
@@ -721,6 +721,6 @@ ls nio_dudarev_u5.PDOS.Tetrahedron.atom1.*
 - A. K. Cheetham, D. A. O. Hope, Phys. Rev. B 27, 6964 (1983)（MnO、NiO 等的磁矩）. DOI: [10.1103/PhysRevB.27.6964](https://doi.org/10.1103/PhysRevB.27.6964)
 - J. van Elp et al., Phys. Rev. B 44, 1530 (1991)（MnO 电子结构与带隙）. DOI: [10.1103/PhysRevB.44.1530](https://doi.org/10.1103/PhysRevB.44.1530)
 
-相关章节：[第4章 基组与赝势](04-pao-vps.md)、[第5章 SCF 与收敛](05-scf-kpoints-convergence.md)、[第9章 DOS/PDOS](09-dos-pdos-cohp-optics.md)、[第11章 自旋与非共线](11-spin-noncollinear.md)、第18章 并行与报错、通用后处理 ../../Common/tutorials/05-postprocess-visualization.md。
+相关章节：[第4章 基组与赝势](04-pao-vps.md)、[第5章 SCF 与收敛](05-scf-kpoints-convergence.md)、[第9章 DOS/PDOS](09-dos-pdos-cohp-optics.md)、[第11章 自旋与非共线](11-spin-noncollinear.md)、[第18章 并行与报错](18-parallel-on-errors.md)、[通用后处理与可视化](../../Common/tutorials/05-postprocess-visualization.md)。
 
-[← 上一章](12-soc-topology.md) | [返回目录](../README.md) | [下一章 →](16-surface-esm-workfunction.md)
+[← 上一章](12-soc-topology.md) | [返回目录](../README.md) | [下一章 →](14-wannier.md)

@@ -21,7 +21,7 @@
 
 适用读者：已经拿到 VASP 许可证（或所在课题组有许可证）、需要在个人工作站、WSL2 或 HPC 集群上自行编译的用户；只想“用现成模块”的读者可以直接跳到第 12 节（运行与作业提交）和第 13 节（并行参数）。
 
-前置知识：Linux 命令行、环境变量、`module` 系统和作业调度的基础，请先阅读公共章节 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md) 与 第2章 HPC 作业调度。
+前置知识：Linux 命令行、环境变量、`module` 系统和作业调度的基础，请先阅读公共章节 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md) 与 [第2章 HPC 作业调度](../../Common/tutorials/02-job-scheduler.md)。
 
 ---
 
@@ -559,7 +559,7 @@ tail -f OSZICAR                     # 实时查看电子步/离子步
 
 ### 12.2 Slurm：CPU 作业
 
-下面是完整的单节点 CPU 作业脚本（示例文件 [job_cpu.slurm](../examples/01-setup-compile/job_cpu.slurm)）。分区名、模块名、可执行文件路径需按你的集群修改；更通用的模板见仓库脚本 `../scripts/job_vasp_slurm.sh`（用法见脚本内说明）。
+下面是完整的单节点 CPU 作业脚本（示例文件 [job_cpu.slurm](../examples/01-setup-compile/job_cpu.slurm)）。分区名、模块名、可执行文件路径需按你的集群修改；更通用的模板见仓库脚本 [`job_vasp_slurm.sh`](../scripts/job_vasp_slurm.sh)（用法见脚本内说明或 `bash ../scripts/job_vasp_slurm.sh -h`）。
 
 ```bash
 #!/bin/bash
@@ -659,7 +659,7 @@ mpirun -np "$SLURM_NTASKS" --map-by ppr:"$SLURM_NTASKS_PER_NODE":node:PE="$SLURM
 
 ### 12.4 PBS / Torque 作业
 
-示例文件 [job_pbs.sh](../examples/01-setup-compile/job_pbs.sh)（仓库通用模板为 `../scripts/job_vasp_pbs.sh`）：
+示例文件 [job_pbs.sh](../examples/01-setup-compile/job_pbs.sh)（仓库通用模板为 [`job_vasp_pbs.sh`](../scripts/job_vasp_pbs.sh)）：
 
 ```bash
 #!/bin/bash

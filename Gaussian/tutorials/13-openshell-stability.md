@@ -857,7 +857,7 @@ mokit{ist=1,readuhf='pbz_uhf.fch'}
 - P. G. Wenthold, R. R. Squires, W. C. Lineberger, *J. Am. Chem. Soc.* 1998, 120, 5279. [DOI: 10.1021/ja9803355](https://doi.org/10.1021/ja9803355)（苯炔异构体 S–T 能隙）
 - V. H. Crawford et al., *Inorg. Chem.* 1976, 15, 2107. [DOI: 10.1021/ic50163a019](https://doi.org/10.1021/ic50163a019)（羟桥双核铜的 J–角度关联）
 
-延伸阅读：DFT 理论基础与学习路线见 ../../Common/tutorials/07-learning-path.md；批量提取 ⟨S²⟩、能量用 [../scripts/g16_log_summary.py](../scripts/g16_log_summary.py)，报错诊断用 ../scripts/g16_error_doctor.py（均可用 `-h` 查看用法）。
+延伸阅读：DFT 理论基础与学习路线见 [Common 第7章](../../Common/tutorials/07-learning-path.md)；批量提取 ⟨S²⟩、能量用 [../scripts/g16_log_summary.py](../scripts/g16_log_summary.py)，报错诊断用 [../scripts/g16_error_doctor.py](../scripts/g16_error_doctor.py)（均可用 `-h` 查看用法）。
 
 ---
 

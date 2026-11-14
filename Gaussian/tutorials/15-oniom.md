@@ -689,7 +689,7 @@ GaussView 打开 ONIOM 的 log 时，优化曲线显示的就是外推能量。�
 - A. K. Rappé et al., *J. Am. Chem. Soc.* 1992, 114, 10024. [DOI: 10.1021/ja00051a040](https://doi.org/10.1021/ja00051a040)（UFF）
 - A. V. Marenich, S. V. Jerome, C. J. Cramer, D. G. Truhlar, *J. Chem. Theory Comput.* 2012, 8, 527. [DOI: 10.1021/ct200866d](https://doi.org/10.1021/ct200866d)（CM5 电荷）
 
-延伸阅读：结构准备与建模（截取簇模型、补氢）见 ../../Common/tutorials/03-structure-modeling.md；作业提交与资源设置见 [第17章](17-hpc-jobs.md) 和 ../scripts/sub_g16.sh（`bash ../scripts/sub_g16.sh -h` 查看用法）；生成 ONIOM 输入骨架可参考 [../scripts/gjf_builder.py](../scripts/gjf_builder.py)（`python ../scripts/gjf_builder.py -h`）。
+延伸阅读：结构准备与建模（截取簇模型、补氢）见 [Common 第3章](../../Common/tutorials/03-structure-modeling.md)；作业提交与资源设置见 [第17章](17-hpc-jobs.md) 和 [../scripts/sub_g16.sh](../scripts/sub_g16.sh)（`bash ../scripts/sub_g16.sh -h` 查看用法）；生成 ONIOM 输入骨架可参考 [../scripts/gjf_builder.py](../scripts/gjf_builder.py)（`python ../scripts/gjf_builder.py -h`）。
 
 ---
 

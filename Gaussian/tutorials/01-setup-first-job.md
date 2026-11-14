@@ -17,7 +17,7 @@
 | 读懂 log 中的 Input/Standard orientation、SCF Done、Mulliken 电荷、偶极矩、archive 段 | §9 |
 | 认识 Gaussian 的各种文件类型，避开 CRLF 换行符和中文路径这类常见坑 | §11、§12 |
 
-适用读者：第一次接触 Gaussian 的本科生和研究生，或者从 VASP/CP2K 等周期性程序转过来做分子计算的读者。Linux 命令行基础（cd、ls、vi/nano、ssh、scp）请先看 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md)，集群作业调度见 第2章 HPC 作业调度。
+适用读者：第一次接触 Gaussian 的本科生和研究生，或者从 VASP/CP2K 等周期性程序转过来做分子计算的读者。Linux 命令行基础（cd、ls、vi/nano、ssh、scp）请先看 [第1章 计算环境搭建](../../Common/tutorials/01-linux-hpc.md)，集群作业调度见 [第2章 HPC 作业调度](../../Common/tutorials/02-job-scheduler.md)。
 
 > [!NOTE]
 > Gaussian 是商业软件，需要所在单位购买许可证（站点许可或课题组许可）。本教程不提供任何安装包，只讲已获得合法授权后怎么配置和使用。
@@ -247,7 +247,7 @@ tail -f h2o_b3lyp_opt.log
 
 - 示例目录 [01-first-job-h2o](../examples/01-first-job-h2o/README.md) 里的 `run_g16_local.sh`：在本机依次运行若干 gjf，并检查每个作业是否 Normal termination。
 - 仓库脚本 [`g16_log_summary.py`](../scripts/g16_log_summary.py)：批量汇总 log 的结束状态、最终能量、虚频数等，用 `python ../scripts/g16_log_summary.py -h` 查看用法。
-- 仓库脚本 `sub_g16.sh`：集群提交封装（第17章详细介绍）。
+- 仓库脚本 [`sub_g16.sh`](../scripts/sub_g16.sh)：集群提交封装（[第17章](17-hpc-jobs.md)详细介绍）。
 
 ---
 
@@ -473,7 +473,7 @@ grep -B 15 "Error termination" job.log | head -40
 | l502.exe | `Convergence failure -- run terminated.` | 结构、电荷、多重度；SCF 收敛技巧见 [第4章](04-sp-scf.md) |
 | l9999.exe | `Number of steps exceeded` | 优化不收敛，见 [第5章](05-opt.md) |
 
-仓库脚本 `g16_error_doctor.py` 能自动识别出错的 Link 和常见报错，并给出中文建议（用 `python ../scripts/g16_error_doctor.py -h` 查看用法）。报错大全见 [第18章](18-errors-capstone.md)，也可以查社区整理的 [Solutions for Gaussian Error Messages](https://liyuanhe211.github.io/Solution_for_Every_Gaussian_Error_Message/)。
+仓库脚本 [`g16_error_doctor.py`](../scripts/g16_error_doctor.py) 能自动识别出错的 Link 和常见报错，并给出中文建议（用 `python ../scripts/g16_error_doctor.py -h` 查看用法）。报错大全见 [第18章](18-errors-capstone.md)，也可以查社区整理的 [Solutions for Gaussian Error Messages](https://liyuanhe211.github.io/Solution_for_Every_Gaussian_Error_Message/)。
 
 ---
 

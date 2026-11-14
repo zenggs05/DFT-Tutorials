@@ -57,7 +57,7 @@ IRC 作业依赖 TS 作业生成的 `sn2_ts.chk`，因此两者必须在同一�
 
 所有能量结果请以你自己的计算为准。本仓库没有附带输出文件，也不提供参考数值。
 
-作图与汇总可用仓库脚本：`python ../../scripts/scan_irc_profile.py -h`（IRC 能量曲线）、`python ../../scripts/g16_log_summary.py -h`（终止状态、虚频、热化学汇总）、`python ../../scripts/log2xyz.py -h`（导出 IRC 路径或端点结构）。
+作图与汇总可用仓库脚本：[`scan_irc_profile.py`](../../scripts/scan_irc_profile.py)（IRC 能量曲线）、[`g16_log_summary.py`](../../scripts/g16_log_summary.py)（终止状态、虚频、热化学汇总）、[`log2xyz.py`](../../scripts/log2xyz.py)（导出 IRC 路径或端点结构），均用 `-h` 查看用法，例如 `python ../../scripts/scan_irc_profile.py -h`。
 
 ## 注意事项
 

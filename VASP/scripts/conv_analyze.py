@@ -19,14 +19,22 @@ atom, deviation from the reference run (default: the most accurate one =
 largest ENCUT / densest k-mesh / smallest KSPACING / smallest SIGMA) in
 meV/atom, max force and max force deviation, external pressure, T*S per atom,
 number of irreducible k-points and elapsed time.  The first value from which on
-|dE| stays below ``--tol`` (default 1 meV/atom) is reported as converged.
+|dE| stays below ``--tol`` (default 1 meV/atom) is reported as converged; for
+SIGMA tests the run must in addition have |T*S| below ``--tstol`` (default
+1 meV/atom).
+
+Reference for k-point tests: the x value of a k-mesh run is the PRODUCT
+N1*N2*N3 of the mesh.  ``--ref`` accepts a mesh ("8x8x8"), the product ("512")
+or a single N ("8" -> the run whose mesh is 8x8x8, or 8x8x1 for slabs, i.e. all
+divisions > 1 equal to N); a single N is tried first, then the product.
 
 Usage examples
 --------------
     python conv_analyze.py conv_encut
     python conv_analyze.py conv_kpoints --tol 0.5 --ftol 0.01
     python conv_analyze.py encut_* --param ENCUT -o encut_test.png
-    python conv_analyze.py conv_sigma --energy toten
+    python conv_analyze.py conv_sigma --energy toten --tstol 0.5
+    python conv_analyze.py conv_kpoints --ref 8x8x8   # same as --ref 8 or --ref 512
     python conv_analyze.py conv_encut --show       # interactive window
 
 Outputs: a table on screen, <prefix>.dat (whitespace table) and <prefix>.png.
@@ -44,7 +52,7 @@ from pathlib import Path
 
 import numpy as np
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 FLOAT = r"[-+]?(?:\d+\.?\d*|\.\d+)(?:[EeDd][-+]?\d+)?"
 KNOWN = {"encut": "ENCUT", "kpoints": "KPOINTS", "kspacing": "KSPACING", "sigma": "SIGMA"}
@@ -270,6 +278,38 @@ def collect(paths, args):
 # ---------------------------------------------------------------------------
 # analysis
 # ---------------------------------------------------------------------------
+def pick_reference(valid, param, text):
+    """Run selected by --ref.  For KPOINTS the x value is N1*N2*N3, so a mesh
+    ('8x8x8'), a single N ('8' -> 8x8x8 or 8x8x1) or the product ('512') is
+    accepted; for other tags the nearest numeric value is used."""
+    text = str(text).strip()
+    if param == "KPOINTS":
+        if re.fullmatch(r"\d+[xX*]\d+[xX*]\d+", text):
+            mesh = [int(v) for v in re.split(r"[xX*]", text)]
+            exact = [r for r in valid if r.get("mesh") and list(r["mesh"]) == mesh]
+            if exact:
+                return exact[0]
+            target = float(np.prod(mesh))
+        elif re.fullmatch(r"\d+", text):
+            n = int(text)
+            same = [r for r in valid if r.get("mesh")
+                    and [m for m in r["mesh"] if m > 1]
+                    and all(m == n for m in r["mesh"] if m > 1)]
+            if same:
+                return max(same, key=lambda r: r["x"])
+            target = float(n)          # not a uniform N: interpret as the product N1*N2*N3
+        else:
+            raise SystemExit(f"ERROR: --ref '{text}' is not a k-mesh (e.g. 8x8x8), N or N1*N2*N3")
+        hit = [r for r in valid if abs(r["x"] - target) < 1e-6]
+        if not hit:
+            print(f"WARNING: no k-mesh with N1*N2*N3 = {target:g}; using the nearest one", file=sys.stderr)
+        return hit[0] if hit else min(valid, key=lambda r: abs(r["x"] - target))
+    v = fnum(text)
+    if v is None:
+        raise SystemExit(f"ERROR: --ref '{text}' is not a number")
+    return min(valid, key=lambda r: abs(r["x"] - v))
+
+
 def analyse(runs, args):
     params = {r["param"] for r in runs if r["param"]}
     if len(params) > 1:
@@ -300,7 +340,7 @@ def analyse(runs, args):
     if not valid:
         raise SystemExit("ERROR: no finished run with an energy found (check OUTCAR files)")
     if args.ref is not None:
-        ref = min(valid, key=lambda r: abs(r["x"] - args.ref))
+        ref = pick_reference(valid, param, args.ref)
     elif param in ("KSPACING", "SIGMA"):
         ref = valid[0]          # smallest spacing / smallest smearing
     else:
@@ -321,6 +361,9 @@ def analyse(runs, args):
         ok = all(t["dE"] is not None and abs(t["dE"]) < args.tol for t in tail)
         if args.ftol is not None:
             ok = ok and all(t["dF"] is not None and t["dF"] < args.ftol for t in tail)
+        if param == "SIGMA":
+            # the smearing entropy must be small as well (unknown T*S cannot be checked)
+            ok = ok and all(t["ts_a"] is None or abs(t["ts_a"]) < args.tstol for t in tail)
         if ok and r is not ref:
             conv = r
             break
@@ -347,14 +390,16 @@ def print_table(param, runs, ref, conv, args):
         rows.append(r)
     print()
     crit = f"|dE| < {args.tol:g} meV/atom" + (f" and dF < {args.ftol:g} eV/A" if args.ftol is not None else "")
+    if param == "SIGMA":
+        crit += f" and |T*S| < {args.tstol:g} meV/atom"
     if conv is not None:
         print(f"converged ({crit}) from {param} = {conv['label']} on (reference {ref['label']}).")
     else:
         print(f"no value satisfies {crit} relative to the reference {ref['label']} - extend the test range.")
     if param == "SIGMA":
-        bad = [r for r in runs if r["ts_a"] is not None and abs(r["ts_a"]) > 1.0]
+        bad = [r for r in runs if r["ts_a"] is not None and abs(r["ts_a"]) >= args.tstol]
         if bad:
-            print("T*S > 1 meV/atom for SIGMA = " + ", ".join(str(r["label"]) for r in bad)
+            print(f"|T*S| >= {args.tstol:g} meV/atom for SIGMA = " + ", ".join(str(r["label"]) for r in bad)
                   + " -> too large for total energies (compare energy(sigma->0)).")
     if param == "ENCUT":
         print("note: for variable-cell relaxations use ENCUT >= 1.3 x max(ENMAX) regardless (Pulay stress).")
@@ -431,8 +476,8 @@ def plot(path, param, runs, ref, conv, args, numeric):
     if have_ts:
         ax = axes[k]
         line(ax, [r["ts_a"] for r in runs], C1)
-        ax.axhline(1.0, color=INK2, lw=1.0, ls="--")
-        ax.axhline(-1.0, color=INK2, lw=1.0, ls="--")
+        ax.axhline(args.tstol, color=INK2, lw=1.0, ls="--")
+        ax.axhline(-args.tstol, color=INK2, lw=1.0, ls="--")
         style(ax, "T*S (meV/atom)")
     axes[-1].set_xlabel(xlab, color=INK)
     if categorical:
@@ -457,6 +502,8 @@ def build_parser():
         epilog=("Examples / 示例:\n  python conv_analyze.py conv_encut\n"
                 "  python conv_analyze.py conv_kpoints --tol 0.5 --ftol 0.005\n"
                 "  python conv_analyze.py encut_* --param ENCUT -o encut\n"
+                "  python conv_analyze.py conv_kpoints --ref 8x8x8   (same as --ref 8 or --ref 512)\n"
+                "  python conv_analyze.py conv_sigma --tstol 0.5\n"
                 "Part of DFT-Tutorials (https://github.com/zenggs05/DFT-Tutorials) - MIT License"))
     ap.add_argument("paths", nargs="+", help="test parent directory or run directories")
     ap.add_argument("--param", help="tested INCAR tag if not in conv_info.txt/dir names (ENCUT, SIGMA, ...)")
@@ -464,7 +511,14 @@ def build_parser():
                     help="energy(sigma->0) (default) or free energy TOTEN")
     ap.add_argument("--tol", type=float, default=1.0, help="energy tolerance in meV/atom (default 1)")
     ap.add_argument("--ftol", type=float, help="optional force tolerance in eV/A (e.g. 0.01)")
-    ap.add_argument("--ref", type=float, help="reference x value (default: most accurate run)")
+    ap.add_argument("--ref", metavar="VALUE",
+                    help="reference run (default: most accurate run). Numeric value of the tag "
+                         "(e.g. 600 for ENCUT). For k-point tests the x value is the PRODUCT "
+                         "N1*N2*N3: give the mesh '8x8x8', a single N '8' (matches 8x8x8, or "
+                         "8x8x1 for slabs) or the product '512'")
+    ap.add_argument("--tstol", type=float, default=1.0,
+                    help="SIGMA tests: |T*S| per atom must also be below this value (meV/atom) "
+                         "for the '<- converged' mark (default 1)")
     ap.add_argument("--no-constraints", action="store_true", help="ignore Selective dynamics flags for forces")
     ap.add_argument("-o", "--output", help="output prefix (default conv_<param>)")
     ap.add_argument("--no-plot", action="store_true", help="table only")
@@ -476,7 +530,7 @@ def build_parser():
 
 def main(argv=None) -> int:
     try:
-        sys.stdout.reconfigure(errors="replace")
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except AttributeError:
         pass
     args = build_parser().parse_args(argv)

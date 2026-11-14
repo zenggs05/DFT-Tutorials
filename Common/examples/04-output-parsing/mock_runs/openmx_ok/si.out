@@ -1,4 +1,10 @@
 MOCK FILE for job_status_scanner.py - marker lines only, NOT a real OpenMX output
   This calculation was performed by OpenMX Ver. 4.0
+scf.maxIter                 100
+***********************************************************
+                  SCF history at MD= 1
+***********************************************************
+   SCF=   1  NormRD=  1.000000000000  Uele= -3.500000000000
+   SCF=   2  NormRD=  0.000000000100  Uele= -3.600000000000
   Utot.          -8.000000000000
    Elapsed.Time.        10.000

@@ -69,7 +69,7 @@ ls *-RESTART.wfn *-RESTART.kp
 
 ## 注意事项
 
-- 截断和 k 点网格（H2O 500/600 Ry，Si 350 Ry + 4×4×4，Al 300 Ry + 8×8×8）只是演示值，正式计算请按第4章、第6章做收敛测试；
+- 截断和 k 点网格（H2O 500/600 Ry，Si 350 Ry + 4×4×4，Al 300 Ry + 8×8×8）只是演示值，正式计算请按[第4章](../../tutorials/04-cutoff-convergence.md)、[第6章](../../tutorials/06-periodic-surface-kpoints.md)做收敛测试；
 - 2026.2 及以前，`&OT` 不能与 `&KPOINTS` 或 `ADDED_MOS > 0` 同时使用，分别报 `OT not possible with kpoint calculations` 和 `OT with ADDED_MOS/=0 not implemented`；
 - `&SMEAR` 中务必显式写 `METHOD`：≤ 2026.1 的输入参考把默认值标为 `ENERGY_WINDOW`，2026.2 改为 `GAUSSIAN`；
 - `WFN_RESTART_FILE_NAME` 属于 `&DFT`，不属于 `&SCF`；从 DZVP 重启到 TZV2P 时赝势必须相同；

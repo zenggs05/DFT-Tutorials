@@ -26,7 +26,7 @@
 | 给定电极电势下的表面计算 | 2026.2 的 `&SCF/&GCE` | 8 |
 
 > [!NOTE]
-> 示例输入集在 [../examples/11-cube-charge-workfunction/README.md](../examples/11-cube-charge-workfunction/README.md)。周期 slab 的建模、真空层和 k 点设置见 [第6章](06-periodic-surface-kpoints.md)；DOS/PDOS 见 [第10章](10-dos-pdos-band.md)；通用可视化（VESTA、Multiwfn、出版级作图）见 Common 第5章。
+> 示例输入集在 [../examples/11-cube-charge-workfunction/README.md](../examples/11-cube-charge-workfunction/README.md)。周期 slab 的建模、真空层和 k 点设置见 [第6章](06-periodic-surface-kpoints.md)；DOS/PDOS 见 [第10章](10-dos-pdos-band.md)；通用可视化（VESTA、Multiwfn、出版级作图）见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 
@@ -111,7 +111,7 @@ $$
 
 ### 3.1 输入文件
 
-`h2o_density_mo_cubes.inp` 的 `&PRINT` 部分（其余与第10章的 H2O 输入相同，OT + MT 求解器）：
+`h2o_density_mo_cubes.inp` 的 `&PRINT` 部分（其余与[第10章](10-dos-pdos-band.md)的 H2O 输入相同，OT + MT 求解器）：
 
 ```text
     &PRINT
@@ -274,7 +274,7 @@ cat ACF.dat
 ### 4.4 其他实空间方法：Voronoi 与偶极矩
 
 - `&PRINT/&VORONOI`：基于 LibVori 的 Voronoi 积分（需编译时链接 libvori），可输出原子电荷和分子电多极矩，适合 MD 轨迹（`MOLECULAR_PROPERTIES`、`OUTPUT_EMP`）；
-- `&PRINT/&MOMENTS`：体系偶极矩。孤立体系用 `PERIODIC F`；周期体系默认 `PERIODIC T`，按 Berry 相位公式计算，结果只确定到一个晶格矢量量子的整数倍，MD 中可能出现跳变（官方说明），做 IR 谱时要做去跳处理（见 第12章）。
+- `&PRINT/&MOMENTS`：体系偶极矩。孤立体系用 `PERIODIC F`；周期体系默认 `PERIODIC T`，按 Berry 相位公式计算，结果只确定到一个晶格矢量量子的整数倍，MD 中可能出现跳变（官方说明），做 IR 谱时要做去跳处理（见 [第12章](12-aimd.md)）。
 
 ```bash
 grep -A2 "Dipole moment \[Debye\]" h2o_density_mo_cubes.out
@@ -327,7 +327,7 @@ Multiwfn 读 CP2K 的 molden 文件后，可以做 ADCH/CM5/RESP 电荷、AIM �
 - **k 点计算无法输出 molden**（官方 K-Points 文档：Molden output is not available for k-point calculations），周期体系要用 Γ 点超胞；
 - 半经验方法（xTB、DFTB）不能输出 molden；
 - MOLOPT 基组是广义收缩基，原函数很多，在 Multiwfn 中做实空间函数（AIM、IGMH、ELF）分析耗时较高；Mulliken 型分析对弥散函数敏感，sobereva 建议这类分析用 MOLOPT-SR 等弥散较弱的基组；
-- 用 Multiwfn 生成 CP2K 输入（主菜单输入 `cp2k`，见 <http://sobereva.com/587>）时，它会根据你的选择自动加上 `&MO_MOLDEN` 等设置；生成后先用 `cp2k.psmp -c x.inp` 按当前版本检查，详见 第17章。使用 Multiwfn 的结果发表时请引用 Multiwfn 的论文（见参考资料）。
+- 用 Multiwfn 生成 CP2K 输入（主菜单输入 `cp2k`，见 <http://sobereva.com/587>）时，它会根据你的选择自动加上 `&MO_MOLDEN` 等设置；生成后先用 `cp2k.psmp -c x.inp` 按当前版本检查，详见 [第17章](17-tools-ecosystem.md)。使用 Multiwfn 的结果发表时请引用 Multiwfn 的论文（见参考资料）。
 
 ---
 
@@ -623,7 +623,7 @@ bash run_all.sh             # three single points + chgdiff.py
 ## 练习
 
 1. 对 H2O 分别用 `STRIDE 1`、`2`、`3` 输出密度，比较对 cube 积分得到的电子数和 Bader 电荷，体会网格对定量分析的影响。
-2. 把 H2O 换成 O2 三重态（`UKS`、`MULTIPLICITY 3`，见第8章），输出 `SPIN_DENSITY` cube，并对照 Mulliken 输出中的 `Spin moment` 列。
+2. 把 H2O 换成 O2 三重态（`UKS`、`MULTIPLICITY 3`，见[第8章](08-dispersion-spin-dftu.md)），输出 `SPIN_DENSITY` cube，并对照 Mulliken 输出中的 `Spin moment` 列。
 3. 对 Pt(111) 示例分别取 3、4、5、6 层和 15、20、25 Å 真空，画出功函数随层数和真空厚度的变化。
 4. 在 Pt(111) 的一侧放一个 CO（顶位），分别在开、关偶极校正时计算两侧的真空能级，解释二者的差别。
 5. 对 CO/Cu(111) 示例比较 Hirshfeld、Bader（`bader` 程序）和 $\Delta Q(z)$ 给出的电荷转移量。
@@ -668,4 +668,4 @@ bash run_all.sh             # three single points + chgdiff.py
 
 ---
 
-[← 上一章](10-dos-pdos-band.md) | [返回目录](../README.md) | [下一章 →](13-neb-dimer.md)
+[← 上一章](10-dos-pdos-band.md) | [返回目录](../README.md) | [下一章 →](12-aimd.md)

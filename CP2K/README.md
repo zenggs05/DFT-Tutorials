@@ -22,8 +22,13 @@
 | [第9章 杂化泛函与 ADMM（Hybrid Functionals & ADMM in CP2K）](tutorials/09-hybrid-admm.md) | [09-hybrid-admm](examples/09-hybrid-admm/README.md) |
 | [第10章 电子结构分析：DOS、PDOS 与能带（DOS, PDOS & Band Structure with CP2K）](tutorials/10-dos-pdos-band.md) | [10-dos-pdos-band](examples/10-dos-pdos-band/README.md) |
 | [第11章 实空间性质：cube 文件、电荷分析与功函数（Cube Files, Charge Analysis & Work Function in CP2K）](tutorials/11-cube-charge-workfunction.md) | [11-cube-charge-workfunction](examples/11-cube-charge-workfunction/README.md) |
+| [第12章 从头算分子动力学（AIMD）](tutorials/12-aimd.md) | [12-aimd-water](examples/12-aimd-water/README.md) |
 | [第13章 过渡态搜索：NEB 与 Dimer（Transition-State Search in CP2K: CI-NEB & Dimer）](tutorials/13-neb-dimer.md) | [13-neb-dimer-h-cu111](examples/13-neb-dimer-h-cu111/README.md) |
 | [第14章 振动分析、红外与热化学（Vibrational Analysis, IR Intensities & Thermochemistry with CP2K）](tutorials/14-vibration-thermo.md) | [14-vibration-thermo](examples/14-vibration-thermo/README.md) |
+| [第15章 增强采样：元动力学、PLUMED 与约束 MD（Enhanced Sampling with CP2K: Metadynamics, PLUMED & Constrained MD）](tutorials/15-metadynamics-plumed.md) | [15-metadynamics-nacl](examples/15-metadynamics-nacl/README.md) |
+| [第16章 QM/MM 与半经验方法（xTB/DFTB）（QM/MM and Semi-empirical Methods: GFN-xTB, DFTB）](tutorials/16-qmmm-xtb.md) | [16-qmmm-xtb](examples/16-qmmm-xtb/README.md) |
+| [第17章 自动化与工具生态：ASE、cp2k-input-tools、Multiwfn、cp2kdata（Automation & Tool Ecosystem: ASE, cp2k-input-tools, Multiwfn, cp2kdata）](tutorials/17-tools-ecosystem.md) | [17-automation-tools](examples/17-automation-tools/README.md) |
+| [第18章 常见错误排查、性能调优与版本迁移（Troubleshooting, Performance Tuning & Version Migration）](tutorials/18-troubleshooting.md) | [18-troubleshooting](examples/18-troubleshooting/README.md) |
 
 ## 全部示例
 
@@ -44,10 +49,29 @@
 | [12-aimd-water](examples/12-aimd-water/README.md) | 示例 12：32 个水分子的 AIMD |
 | [13-neb-dimer-h-cu111](examples/13-neb-dimer-h-cu111/README.md) | 示例 13：H 在 Cu |
 | [14-vibration-thermo](examples/14-vibration-thermo/README.md) | 示例 14：振动分析、红外强度与热化学 |
-| [15-metadynamics-nacl](examples/15-metadynamics-nacl/README.md) | 示例 15-metadynamics-nacl |
+| [15-metadynamics-nacl](examples/15-metadynamics-nacl/README.md) | 示例 15：NaCl 在水中解离的自由能 |
 | [16-qmmm-xtb](examples/16-qmmm-xtb/README.md) | 示例 16：半经验方法 |
-| [17-automation-tools](examples/17-automation-tools/README.md) | 示例 17：用 ASE、cp2k-input-tools、cp2kdata 自动化 CP2K |
-| [18-troubleshooting](examples/18-troubleshooting/README.md) | 示例 18：报错排查练习、版本迁移与并行性能测试 |
+| [17-automation-tools](examples/17-automation-tools/README.md) | 示例 17：用 ASE、cp2k-input-tools、Multiwfn、cp2kdata、AiiDA 自动化 CP2K |
+| [18-troubleshooting](examples/18-troubleshooting/README.md) | 示例 18：报错排查练习、版本迁移、重启与并行性能测试 |
+
+## 辅助脚本
+
+完整说明见 [scripts/README.md](scripts/README.md)。
+
+- [band_plot.py](scripts/band_plot.py)
+- [conv_cutoff.py](scripts/conv_cutoff.py)
+- [conv_kpoints.py](scripts/conv_kpoints.py)
+- [cp2k_inpgen.py](scripts/cp2k_inpgen.py)
+- [cp2k_outparse.py](scripts/cp2k_outparse.py)
+- [cube_tools.py](scripts/cube_tools.py)
+- [job_cp2k_pbs.sh](scripts/job_cp2k_pbs.sh)
+- [job_cp2k_slurm.sh](scripts/job_cp2k_slurm.sh)
+- [md_analyze.py](scripts/md_analyze.py)
+- [neb_plot.py](scripts/neb_plot.py)
+- [pdos_plot.py](scripts/pdos_plot.py)
+- [plot_opt.py](scripts/plot_opt.py)
+- [restart_update.py](scripts/restart_update.py)
+- [vib_thermo.py](scripts/vib_thermo.py)
 
 ## 基组与赝势数据
 

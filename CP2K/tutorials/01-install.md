@@ -24,7 +24,7 @@
 | Windows 笔记本教学演示 | WSL2 + conda/静态二进制；社区一键安装包仅限教学 | §9 |
 
 > [!NOTE]
-> 本教程以 **CP2K 2026.2**（2026-07-15 发布，截至 2026-11 的最新稳定版）为准。很多集群仍在用 2023.x–2025.x，凡是输入语法或构建方式有差异的地方，本系列都会同时给出新旧写法并标明版本。Linux 基础、conda、集群登录和文件传输见 [第1章（公共篇）计算环境搭建](../../Common/tutorials/01-linux-hpc.md)，作业调度系统见 第2章（公共篇）HPC 作业调度。
+> 本教程以 **CP2K 2026.2**（2026-07-15 发布，截至 2026-11 的最新稳定版）为准。很多集群仍在用 2023.x–2025.x，凡是输入语法或构建方式有差异的地方，本系列都会同时给出新旧写法并标明版本。Linux 基础、conda、集群登录和文件传输见 [第1章（公共篇）计算环境搭建](../../Common/tutorials/01-linux-hpc.md)，作业调度系统见 [第2章（公共篇）HPC 作业调度](../../Common/tutorials/02-job-scheduler.md)。
 
 ---
 
@@ -48,9 +48,9 @@ $$
 | 方面 | CP2K 的特点 | 对比 |
 |---|---|---|
 | 体系规模 | 几百到几千原子的凝聚相体系（液体、界面、溶液、MOF、蛋白活性中心）是强项；矩阵稀疏 + OT 方法，内存和时间随原子数增长平缓 | 平面波程序（VASP/QE）对同样大小的体系通常更慢、更吃内存 |
-| 从头算分子动力学（AIMD） | 波函数外推（ASPC）、OT 快速收敛，适合几十 ps 的 Born–Oppenheimer MD | 见 第12章 |
-| 多尺度 | 原生 QM/MM、xTB/DFTB 半经验、经典力场（FIST）、机器学习势接口 | 见 第16章 |
-| 增强采样 | 内置元动力学、约束 MD，可接 PLUMED | 见 第15章 |
+| 从头算分子动力学（AIMD） | 波函数外推（ASPC）、OT 快速收敛，适合几十 ps 的 Born–Oppenheimer MD | 见 [第12章](12-aimd.md) |
+| 多尺度 | 原生 QM/MM、xTB/DFTB 半经验、经典力场（FIST）、机器学习势接口 | 见 [第16章](16-qmmm-xtb.md) |
+| 增强采样 | 内置元动力学、约束 MD，可接 PLUMED | 见 [第15章](15-metadynamics-plumed.md) |
 | 杂化泛函 | 实空间 HFX + 截断库仑 + ADMM，凝聚相杂化泛函 AIMD 可行 | 见 [第9章](09-hybrid-admm.md) |
 | 小原胞金属、精细能带 | 可以做（k 点 + 对角化），但不是传统强项；2026.2 及以前 OT 不支持 k 点 | 小原胞金属、能带/费米面研究，平面波程序往往更方便 |
 | 基组 | 高斯基组需要同时收敛“基组质量”和“网格截断”两个维度 | 平面波只需收敛 ENCUT |
@@ -87,13 +87,13 @@ CP2K 每年发布两个版本，版本号为 `年份.序号`：`YYYY.1` 通常�
 | **2026.2** | **2026-07-15** | **当前稳定版**。新增 `build_cp2k.sh`（toolchain 构建）和 `make_cp2k.sh`（Spack 构建）两个脚本；删除 `&MOTION/&CELL_OPT/TYPE`；DOS/PDOS 输入重构为 `&PRINT/&DOS`；REFTRAJ 改用 `EVAL`；删除 Cython Python 绑定；不再支持 GCC 8；数据目录新增带版本号的 UZH 基组/赝势快照 |
 | trunk（master） | 持续更新 | 已有 OT + k 点、OT + 展宽等 2026.2 之后的新功能，预计进入下一版本 |
 
-2026.2 的破坏性变更会让旧输入直接报错，涉及的章节如下（迁移清单见 第18章）：
+2026.2 的破坏性变更会让旧输入直接报错，涉及的章节如下（迁移清单见 [第18章](18-troubleshooting.md)）：
 
 | 变更 | 旧写法的报错 | 处理 | 详见 |
 |---|---|---|---|
 | 删除 `&CELL_OPT` 中的 `TYPE` | `found an unknown keyword TYPE in section CELL_OPT` | 删掉 `TYPE DIRECT_CELL_OPT` 一行 | [第7章](07-geo-cell-opt.md) |
 | `&DFT/&PRINT/&PDOS` 改为 `&DFT/&PRINT/&DOS/&PDOS` | `unknown subsection PDOS of section PRINT` | 改用新的 `&DOS` 段 | [第10章](10-dos-pdos-band.md) |
-| REFTRAJ 删除 `EVAL_ENERGY_FORCES`/`EVAL_FORCES` | 未知关键字 | 改用 `&REFTRAJ` 中的 `EVAL` | 第12章 |
+| REFTRAJ 删除 `EVAL_ENERGY_FORCES`/`EVAL_FORCES` | 未知关键字 | 改用 `&REFTRAJ` 中的 `EVAL` | [第12章](12-aimd.md) |
 
 > [!IMPORTANT]
 > 写论文时请在方法部分注明 CP2K 的**确切版本号**（如 “CP2K 2026.2”）以及所用基组/赝势文件名。不同版本的默认值、基组文件内容可能不同（[第3章](03-gpw-basis-pseudo.md) 会看到 2026.2 的 `BASIS_MOLOPT_UZH` 已更新了部分元素）。各版本对应的手册入口见 <https://manual.cp2k.org/trunk/versions.html>，2026.2 手册为 <https://manual.cp2k.org/cp2k-2026_2-branch/index.html>。
@@ -142,7 +142,7 @@ cp2k.psmp -v
 | `cosma` | COSMA 矩阵乘法 | 部分大规模计算变慢 |
 | `spglib` | 空间群对称性库 | 不能用 `KEEP_SPACE_GROUP` 等依赖对称性的功能（[第7章](07-geo-cell-opt.md)） |
 | `libdftd4`、`s_dftd3`、`mctc-lib` | DFT-D4 / simple-DFT-D3 外部库 | 无法用外部库版本的 D4（[第8章](08-dispersion-spin-dftu.md)） |
-| `tblite` | tblite 库（GFN2-xTB） | 只能用原生 GFN0/GFN1（第16章） |
+| `tblite` | tblite 库（GFN2-xTB） | 只能用原生 GFN0/GFN1（[第16章](16-qmmm-xtb.md)） |
 | `libvori`、`libbqb` | Voronoi 积分、BQB 轨迹压缩 | 相应分析不可用 |
 
 PLUMED、DeePMD、GPU（CUDA/HIP）等可选依赖若已编译进去，也会以各自的标志出现在这一行。**拿到一个新的 CP2K（尤其是集群 module）时，先看 `-v` 输出，再决定能否跑你的任务。**
@@ -598,7 +598,7 @@ grep "CP2K| Data directory path" h2o.out
 | `dftd3.dat` | DFT-D3 参数 | `&VDW_POTENTIAL`（[第8章](08-dispersion-spin-dftu.md)） |
 | `t_c_g.dat` | 截断库仑势表 | 周期性杂化泛函（[第9章](09-hybrid-admm.md)） |
 | `rVV10_kernel_table.dat`、`vdW_kernel_table.dat` | 非局域 vdW 泛函核函数表 | rVV10 / vdW-DF |
-| `xTB0_parameters`、`xTB1_parameters` | 原生 GFN0/GFN1-xTB 参数 | 第16章 |
+| `xTB0_parameters`、`xTB1_parameters` | 原生 GFN0/GFN1-xTB 参数 | [第16章](16-qmmm-xtb.md) |
 | `xc_section/` | 预定义 `&XC` 片段（如 `PBE.sec`），配合预处理器 `@XCTYPE` 使用 | [第2章](02-input-structure.md) |
 
 > [!NOTE]
@@ -626,7 +626,7 @@ grep -E "^Cu " $CP2K_DATA_DIR/POTENTIAL_UZH            # Cu 的赝势有 q1/q11/
 | `-c`, `--check` | 只做输入语法检查，不运行。成功时打印 `SUCCESS, the input could be parsed correctly.` |
 | `-e`, `--echo` | 回显经过预处理、**所有默认值显式写出**的完整输入，不运行（查默认值的利器） |
 | `-E name=value`, `--set name=value` | 设置预处理器变量的初值（[第2章](02-input-structure.md)） |
-| `-s`, `--shell` | 交互式 shell 模式（ASE 等外部程序驱动 CP2K 时使用，见 第17章） |
+| `-s`, `--shell` | 交互式 shell 模式（ASE 等外部程序驱动 CP2K 时使用，见 [第17章](17-tools-ecosystem.md)） |
 | `--xml` | 把整个输入结构导出为 `cp2k_input.xml`（供 cp2k-input-tools、pycp2k 等工具使用） |
 | `-v`, `--version` | 打印版本、源码版本号、`cp2kflags` 与编译器信息 |
 | `-h`, `--help` | 打印帮助 |
@@ -668,7 +668,7 @@ mpirun -np 8 -x OMP_NUM_THREADS cp2k.psmp -i big.inp -o big.out
 - 内存够用时，**以 MPI 为主**（每进程 1–2 线程）通常最快；官方也指出并非所有功能都针对 OpenMP 优化过。
 - 内存紧张（杂化泛函、大体系对角化）时，减少每节点 MPI 进程数、增加线程数，可以降低总内存。
 - 运行前设置 `ulimit -s unlimited`，避免大体系下 Fortran 栈溢出导致的段错误。
-- 不同 MPI×OpenMP 组合的性能差别可能很大，生产计算前用一个代表性输入跑 2–3 种组合比较 timing 表（第18章）。
+- 不同 MPI×OpenMP 组合的性能差别可能很大，生产计算前用一个代表性输入跑 2–3 种组合比较 timing 表（[第18章](18-troubleshooting.md)）。
 
 ### 11.3 集群作业脚本（Slurm 最小示例）
 
@@ -690,7 +690,7 @@ srun --cpu-bind=cores cp2k.psmp -i h2o.inp -o h2o.out
 grep -q "PROGRAM ENDED AT" h2o.out && echo "CP2K finished normally"
 ```
 
-**计算节点上的环境不会自动继承登录节点的设置**，`source cp2k_env`/`module load`/`conda activate` 必须写进作业脚本。更完整的模板（MPI×OpenMP 参数化、结束检查、重启提示）见本节 `job_cp2k_slurm.sh` 与 `job_cp2k_pbs.sh`（用法见脚本头部注释）；Slurm/PBS/LSF 的通用知识见 公共篇第2章。
+**计算节点上的环境不会自动继承登录节点的设置**，`source cp2k_env`/`module load`/`conda activate` 必须写进作业脚本。更完整的模板（MPI×OpenMP 参数化、结束检查、重启提示）见本节 [`job_cp2k_slurm.sh`](../scripts/job_cp2k_slurm.sh) 与 [`job_cp2k_pbs.sh`](../scripts/job_cp2k_pbs.sh)（用法见脚本头部注释）；Slurm/PBS/LSF 的通用知识见 [公共篇第2章](../../Common/tutorials/02-job-scheduler.md)。
 
 ---
 

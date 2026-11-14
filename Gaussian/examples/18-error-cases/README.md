@@ -48,7 +48,7 @@ g16 < err_l502_hard_scf_fixed.gjf > err_l502_hard_scf_fixed.log
 | [FeCl₄]⁻ 稳定性 | `grep -i "stable" err_l502_hard_scf_fixed.log` | 第 1 步结束时波函数稳定 |
 | [FeCl₄]⁻ 自旋污染 | `grep "S\*\*2" err_l502_hard_scf_fixed.log` | 应接近 S(S+1) = 8.75 |
 
-报错信息的确切文字可能随 Gaussian 修订版本略有差异；本仓库没有附带运行日志，请以你自己的输出为准。仓库脚本 `g16_error_doctor.py` 可以自动识别这些报错并给出中文建议（`python ../../scripts/g16_error_doctor.py -h` 查看用法）。
+报错信息的确切文字可能随 Gaussian 修订版本略有差异；本仓库没有附带运行日志，请以你自己的输出为准。仓库脚本 [`g16_error_doctor.py`](../../scripts/g16_error_doctor.py) 可以自动识别这些报错并给出中文建议（`python ../../scripts/g16_error_doctor.py -h` 查看用法）。
 
 ## 注意事项
 

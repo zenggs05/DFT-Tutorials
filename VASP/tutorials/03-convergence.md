@@ -464,9 +464,9 @@ MESHES="3 5 7 9 11" bash run_kpts.sh
 ```
 
 > [!TIP]
-> 仓库还提供了更通用的测试驱动 `../scripts/conv_test.sh` 与分析脚本 `../scripts/conv_analyze.py`（分别用 `bash ../scripts/conv_test.sh -h` 和 `python ../scripts/conv_analyze.py -h` 查看用法）。GitHub 上的 [kavanase/vaspup2.0](https://github.com/kavanase/vaspup2.0) 也是一个流行的 ENCUT/k 点收敛测试流程，可对照参考。
+> 仓库还提供了更通用的测试驱动 [`conv_test.sh`](../scripts/conv_test.sh) 与分析脚本 [`conv_analyze.py`](../scripts/conv_analyze.py)（分别用 `bash ../scripts/conv_test.sh -h` 和 `python ../scripts/conv_analyze.py -h` 查看用法）。GitHub 上的 [kavanase/vaspup2.0](https://github.com/kavanase/vaspup2.0) 也是一个流行的 ENCUT/k 点收敛测试流程，可对照参考。
 
-对于更大规模的自动化（数十个体系同时测试），可以考虑 pymatgen 输入集 + atomate2/jobflow 工作流，见公共章节 第6章 工作流自动化与高通量。
+对于更大规模的自动化（数十个体系同时测试），可以考虑 pymatgen 输入集 + atomate2/jobflow 工作流，见公共章节 [第6章 工作流自动化与高通量](../../Common/tutorials/06-workflow-automation.md)。
 
 ---
 

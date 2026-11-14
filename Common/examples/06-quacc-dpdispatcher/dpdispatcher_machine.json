@@ -7,7 +7,7 @@
         "hostname": "login.cluster.example.edu",
         "username": "myname",
         "port": 22,
-        "key_filename": "~/.ssh/id_ed25519",
+        "key_filename": "/home/myname/.ssh/id_ed25519",
         "timeout": 30
     },
     "retry_count": 2

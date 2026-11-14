@@ -46,14 +46,17 @@ echo "host $(hostname)  NP=${NP}  NT=${NT}  input=${INPUT}  name=${NAME}  start 
 
 # ---------- run ----------
 if [ "${LAUNCH:-mpirun}" = "srun" ]; then
-    srun --cpu-bind=cores "${OPENMX}" "${INPUT}" -nt "${NT}" > "${STD}" 2>&1
+    # some Slurm versions (e.g. 22.05-23.02) do not pass --cpus-per-task from sbatch to srun:
+    # give it explicitly, which is safe for every version
+    export SRUN_CPUS_PER_TASK=${NT}
+    srun --cpus-per-task="${NT}" --cpu-bind=cores "${OPENMX}" "${INPUT}" -nt "${NT}" > "${STD}" 2>&1
 else
     # Open MPI binding (ignored by Intel MPI, which uses I_MPI_PIN_DOMAIN):
     #   mpirun --map-by ppr:${SLURM_NTASKS_PER_NODE}:node:PE=${NT} --bind-to core ...
     mpirun -np "${NP}" "${OPENMX}" "${INPUT}" -nt "${NT}" > "${STD}" 2>&1
 fi
 
-# ---------- check (OpenMX returns exit code 0 even after input errors) ----------
+# ---------- check (do not rely on the exit code: grep the final message) ----------
 if grep -q "The calculation was normally finished." "${STD}"; then
     echo "finished normally $(date)"
     grep -h "Utot\." "${NAME}.out" | tail -n 1

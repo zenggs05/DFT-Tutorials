@@ -4,7 +4,7 @@
 
 - 用一份 `environment.yml` 建好 Python 3.12 的 `dft` 环境（ASE、pymatgen、phonopy、sumo、pyprocar、py4vasp、cclib、GoodVibes、LobsterPy、mp-api、dpdispatcher、RDKit）；
 - 提供 `~/.bashrc`、`~/.config/.pmgrc.yaml`、`~/.config/ase/config.ini`、`~/.vaspkit`、`~/.ssh/config`、`~/.condarc` 的可直接修改的模板；
-- 用 `print_versions.py` 和仓库脚本 `env_check.sh` 自检。
+- 用 [print_versions.py](print_versions.py) 和仓库脚本 [env_check.sh](../../scripts/env_check.sh) 自检。
 
 对应教程：[第1章 计算环境搭建](../../tutorials/01-linux-hpc.md)。
 
@@ -21,7 +21,7 @@
 | `condarc_mirror.example` | `~/.condarc` | 只用 conda-forge，可选清华镜像 |
 | `print_versions.py` | （直接运行） | 打印 Python 与各包版本，缺包不会报错 |
 
-完整的环境检查脚本在仓库的 Common/scripts/env_check.sh（检查包版本、环境变量、`~/.vaspkit`、`ulimit -s`、`OMP_NUM_THREADS`、`OMP_STACKSIZE`，并给出修复建议）。
+完整的环境检查脚本是仓库的 [Common/scripts/env_check.sh](../../scripts/env_check.sh)（检查包版本、环境变量、`~/.vaspkit`、`ulimit -s`、`OMP_NUM_THREADS`、`OMP_STACKSIZE`，并给出修复建议）。
 
 ## 运行步骤
 

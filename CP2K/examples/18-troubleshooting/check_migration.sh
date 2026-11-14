@@ -47,9 +47,9 @@ for f in "$@"; do
       if (name == "PDOS" && top(0) == "PRINT" && top(1) == "DFT")
         report("ERROR", "&DFT/&PRINT/&PDOS is the pre-2026.2 syntax; 2026.2 expects &PRINT/&DOS/&PDOS (PR #5326)")
       if (name == "SMEAR") smear_method = 0
-      if (name == "OT" && has_kp)
-        report("WARN", "&OT together with &KPOINTS aborts on CP2K <= 2026.2 (OT not possible with kpoint calculations)")
-      if (name == "KPOINTS") has_kp = 1
+      # &OT and &KPOINTS may appear in either order: remember both, report in END
+      if (name == "OT" && top(0) == "SCF" && !ot_line) { ot_line = NR; ot_inif = in_if }
+      if (name == "KPOINTS" && top(0) == "DFT") has_kp = 1
       stack[++depth] = name
       next
     }
@@ -63,6 +63,11 @@ for f in "$@"; do
     if (word == "METHOD" && top(0) == "SMEAR") smear_method = 1
   }
   END {
+    if (ot_line && has_kp) {
+      lvl = ot_inif ? "INFO(@IF)" : "WARN"
+      printf "%s:%d: [%s] %s\n", FILE, ot_line, lvl, "&OT together with &KPOINTS aborts on CP2K <= 2026.2 (OT not possible with kpoint calculations)"
+      if (lvl == "WARN") nwarn++
+    }
     printf "%s: %d error(s), %d warning(s)\n", FILE, nerr, nwarn
     exit (nerr > 0) ? 1 : 0
   }' "$f" || status=1

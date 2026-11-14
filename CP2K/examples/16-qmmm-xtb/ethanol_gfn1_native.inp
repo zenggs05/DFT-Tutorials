@@ -3,8 +3,9 @@
 #
 # Version notes
 #   - native GFN1-xTB is available in all recent CP2K versions (2023.x - 2026.2)
-#   - GFN_TYPE (0 | 1 | TBLITE) only exists since CP2K 2025.1; the default is 1,
-#     so it is not written here to keep the input valid for older versions.
+#   - GFN_TYPE only exists since CP2K 2025.1 (integer 0/1 in 2025.1-2026.1,
+#     0 | 1 | TBLITE in 2026.2); the default is 1, so it is not written here
+#     to keep the input valid for older versions.
 #     For GFN0-xTB (CP2K >= 2025.1) add "GFN_TYPE 0" to the XTB section.
 #   - parameter files xTB1_parameters and dftd3.dat are read from CP2K_DATA_DIR
 #

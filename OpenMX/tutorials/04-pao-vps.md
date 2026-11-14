@@ -53,7 +53,7 @@ $$
 N_{\text{basis}}=\sum_{\text{atoms}}\ \sum_{l}\ n_l\,(2l+1),
 $$
 
-对角化代价约随 $N_{\text{basis}}^3$ 增长（O(N) 方法除外，见 第18章），所以基组多一档，时间和内存往往翻倍。
+对角化代价约随 $N_{\text{basis}}^3$ 增长（O(N) 方法除外，见 [第18章](18-parallel-on-errors.md)），所以基组多一档，时间和内存往往翻倍。
 
 **原始轨道与优化轨道。** ADPACK 在限制势（confinement potential）下求解赝原子的基态和激发态，得到的径向函数称为原始 PAO（primitive）：基态无节点，第一激发态一个节点，依次类推。OpenMX 的轨道变分优化（orbital optimization）把若干原始函数线性组合成优化函数，组合系数叫收缩系数（contraction coefficient）。DFT_DATA19 中的 PAO 已经在 2–3 种化学环境（孤立原子、二聚体、体相或水分子等）下做过变分优化，再合并到同一个文件里，所以可移植性较好。数据库网站说明，每个 `.pao` 文件为 l = 0–3 的每个角动量各存了 15 个径向函数，按本征值从低到高排列；`s2` 就是取前两个 s 径向函数。
 
@@ -168,7 +168,7 @@ nb = sum(n_basis(species[s]) * counts[s] for s in counts)
 print("basis functions per cell:", nb)  # 32*14 + 32*13 = 864
 ```
 
-本仓库的 `omx_make_input.py` 内置了 DFT_DATA19 推荐表和价电子数，可以从 POSCAR/CIF 直接生成带 `Definition.of.Atomic.Species` 的输入，用 `python ../scripts/omx_make_input.py -h` 查看用法。
+本仓库的 [`omx_make_input.py`](../scripts/omx_make_input.py) 内置了 DFT_DATA19 推荐表和价电子数，可以从 POSCAR/CIF 直接生成带 `Definition.of.Atomic.Species` 的输入，用 `python ../scripts/omx_make_input.py -h` 查看用法。
 
 ### 3.4 查看 PAO 文件里有什么
 
@@ -662,7 +662,7 @@ done
 
 ### 9.5 比较能带
 
-三个计算都打开了 `Band.dispersion`，会生成 `si_quick.Band` 等文件。用 bandgnu13 或本仓库的 `omx_band_plot.py`（`python ../scripts/omx_band_plot.py -h` 查看用法）画图并读出带隙，详见 [第8章](08-band.md)。一般会看到：
+三个计算都打开了 `Band.dispersion`，会生成 `si_quick.Band` 等文件。用 bandgnu13 或本仓库的 [`omx_band_plot.py`](../scripts/omx_band_plot.py)（`python ../scripts/omx_band_plot.py -h` 查看用法）画图并读出带隙，详见 [第8章](08-band.md)。一般会看到：
 
 - 价带三个基组几乎重合；
 - 导带对基组更敏感，Quick 的导带可能偏高；
@@ -708,10 +708,10 @@ scf.energycutoff     300.0    # raise the grid cutoff when VNA is evaluated on t
 
 ## 11. 生成输入时的基组设置工具
 
-- **本仓库** `omx_make_input.py`：从 POSCAR/CIF 生成 `.dat`，按 Quick/Standard/Precise 自动填基组和价电子数（`python ../scripts/omx_make_input.py -h`）；
+- **本仓库** [`omx_make_input.py`](../scripts/omx_make_input.py)：从 POSCAR/CIF 生成 `.dat`，按 Quick/Standard/Precise 自动填基组和价电子数（`python ../scripts/omx_make_input.py -h`）；
 - **OpenMX Viewer**（浏览器端，2026-05 大更新）：读入 CIF/POSCAR 后导出 OpenMX 输入，可以在界面里选基组；
 - **cif2omx**（4.0 起手册第8.3节正式收录）：从 CIF 生成 `.dat`；
-- 结构准备与格式转换的通用方法见 Common 第3章，ASE 的 OpenMX 接口见 Common 第4章。
+- 结构准备与格式转换的通用方法见 [Common 第3章](../../Common/tutorials/03-structure-modeling.md)，ASE 的 OpenMX 接口见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)。
 
 > [!WARNING]
 > 自动工具写出的基组只是起点。生成后务必打开 `.dat` 核对三件事：PAO 与 VPS 的版本一致、坐标行上下自旋电子数之和等于 `valence.electron`、`DATA.PATH` 指向正确的 DFT_DATA19。

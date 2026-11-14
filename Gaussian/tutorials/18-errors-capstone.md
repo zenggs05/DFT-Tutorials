@@ -90,7 +90,7 @@ grep -B 10 "Error termination" job.log | head -n 20
 
 ### 2.4 工具与外部资源
 
-- 仓库脚本 `g16_error_doctor.py`：自动识别出错的 Link 和常见报错，输出中文解释与建议，并可起草续算输入供人工检查（`python ../scripts/g16_error_doctor.py -h` 查看用法）；
+- 仓库脚本 [`g16_error_doctor.py`](../scripts/g16_error_doctor.py)：自动识别出错的 Link 和常见报错，输出中文解释与建议，并可起草续算输入供人工检查（`python ../scripts/g16_error_doctor.py -h` 查看用法）；
 - [`opt_monitor.py`](../scripts/opt_monitor.py)：画出每一步的能量和 4 个收敛判据，用于诊断 L9999；
 - Gaussian 自带的 `testrt`：只检查 route 语法而不运行计算。把整条 route 作为一个参数（用引号括起来）传给它，例如 `testrt "#p B3LYP/6-31G(d) Opt Freq"`；有语法错误时会报 QPErr；
 - [Solutions for Gaussian Error Messages](https://liyuanhe211.github.io/Solution_for_Every_Gaussian_Error_Message/)：目前最全的报错整理（按 Link 编号），中英文；

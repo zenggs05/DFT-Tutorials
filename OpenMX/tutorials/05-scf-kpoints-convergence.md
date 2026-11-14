@@ -191,11 +191,11 @@ scf.fixed.grid    xxx  yyy  zzz         # same Grid_Origin for every calculation
 |---|---|---|
 | `Cluster` | 分子、团簇 | 不用 k 点；盒子要足够大（第4章 §5.3） |
 | `Band` | 周期体系（体相、表面、一维链） | 需要 `scf.Kgrid`；大超胞也可用 `1 1 1` |
-| `DC` / `DC-LNO` / `Krylov` | 上千原子的大体系 | O(N) 方法，见 第18章 |
+| `DC` / `DC-LNO` / `Krylov` | 上千原子的大体系 | O(N) 方法，见 [第18章](18-parallel-on-errors.md) |
 | `ON2` | 中大体系 | 数值精确的低阶标度方法 |
 | `NEGF` | 输运 | 见 [第17章](17-negf-transport.md) |
 
-大规模计算时还可以用 `scf.eigen.lib` 选择本征值求解库（ELPA1/ELPA2 等），见第18章。
+大规模计算时还可以用 `scf.eigen.lib` 选择本征值求解库（ELPA1/ELPA2 等），见[第18章](18-parallel-on-errors.md)。
 
 ### 5.2 `scf.Kgrid`：网格密度怎么定
 
@@ -529,7 +529,7 @@ KGRIDS="6 8 10 12 14 16 20" bash run_conv.sh kgrid       # custom list
 
 ### 9.4 用仓库脚本做同样的事
 
-本仓库的 `omx_conv_test.py` 可以基于模板批量生成输入、调用 mpirun、解析 `Utot` 并输出 CSV 和 ΔE 曲线，用 `python ../scripts/omx_conv_test.py -h` 查看用法；`omx_parse_out.py` 可以把 `.out` 中的能量、SCF 历史、Mulliken 电荷导出为 JSON/CSV。
+本仓库的 [`omx_conv_test.py`](../scripts/omx_conv_test.py) 可以基于模板批量生成输入、调用 mpirun、解析 `Utot` 并输出 CSV 和 ΔE 曲线，用 `python ../scripts/omx_conv_test.py -h` 查看用法；[`omx_parse_out.py`](../scripts/omx_parse_out.py) 可以把 `.out` 中的能量、SCF 历史、Mulliken 电荷导出为 JSON/CSV。
 
 ### 9.5 把结果写进记录
 
@@ -696,7 +696,7 @@ KGRIDS="10 12 14 16 18 20 24" MPI_RUN="mpirun -np 8" bash run_scan.sh kgrid
 **8. 大体系或开 OpenMP 后出现 `Segmentation fault (signal 11)`**
 
 - 原因：栈空间不足或内存不够。
-- 解决：作业脚本中加 `ulimit -s unlimited` 和 `export OMP_STACKSIZE=512M`，减少 `-nt` 线程数或增加节点，详见 第18章。
+- 解决：作业脚本中加 `ulimit -s unlimited` 和 `export OMP_STACKSIZE=512M`，减少 `-nt` 线程数或增加节点，详见 [第18章](18-parallel-on-errors.md)。
 
 ---
 
@@ -731,7 +731,7 @@ KGRIDS="10 12 14 16 18 20 24" MPI_RUN="mpirun -np 8" bash run_scan.sh kgrid
 - [pohao82/poscar2openmx](https://github.com/pohao82/poscar2openmx) — 按 $n_i\cdot d_i\ge 35$ Å 自动设置 `scf.Kgrid`
 - [samlipton/pyfesm](https://github.com/samlipton/pyfesm) — 轻量 OpenMX 输出解析器，可借鉴其解析思路
 - [hirtatsu/Calculations](https://github.com/hirtatsu/Calculations) — 日文实操笔记，含运行与日志检查流程
-- [ASE OpenMX calculator](https://gitlab.com/ase/ase/-/tree/master/ase/calculators/openmx) — 用 Python 批量生成和运行 OpenMX 计算（见 Common 第4章）
+- [ASE OpenMX calculator](https://gitlab.com/ase/ase/-/tree/master/ase/calculators/openmx) — 用 Python 批量生成和运行 OpenMX 计算（见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)）
 
 **关键文献**
 

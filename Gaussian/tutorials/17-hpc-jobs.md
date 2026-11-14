@@ -17,7 +17,7 @@
 7. 监控作业进度，作业中断后用 `Opt=Restart`、`IRC=Restart`、`Restart` 继续计算；
 8. 用缩放测试为自己的体系选择合适的核数。
 
-**前置知识**：Linux 命令行、集群登录与文件传输（[Common 第1章](../../Common/tutorials/01-linux-hpc.md)），调度系统的一般概念与模板（Common 第2章），Gaussian 安装与环境变量（[第1章](01-setup-first-job.md)），Link 0 命令（[第2章](02-input-anatomy.md)）。
+**前置知识**：Linux 命令行、集群登录与文件传输（[Common 第1章](../../Common/tutorials/01-linux-hpc.md)），调度系统的一般概念与模板（[Common 第2章](../../Common/tutorials/02-job-scheduler.md)），Gaussian 安装与环境变量（[第1章](01-setup-first-job.md)），Link 0 命令（[第2章](02-input-anatomy.md)）。
 
 本章配套示例：[../examples/17-hpc-job-scripts/README.md](../examples/17-hpc-job-scripts/README.md)（Slurm/PBS/GPU/Linda 模板、批量提交、作业数组、依赖作业、缩放测试、`Default.Route` 示例和断点续算输入）。
 
@@ -279,7 +279,7 @@ qdel <jobid>
 export GAUSS_PDEF=$LSB_DJOB_NUMPROC
 ```
 
-LSF 的内存申请写法（`rusage[mem=...]` 的单位、按核还是按作业计）因站点配置而异，请查阅本集群文档。更多调度系统对照见 Common 第2章。
+LSF 的内存申请写法（`rusage[mem=...]` 的单位、按核还是按作业计）因站点配置而异，请查阅本集群文档。更多调度系统对照见 [Common 第2章](../../Common/tutorials/02-job-scheduler.md)。
 
 ---
 
@@ -487,7 +487,7 @@ wait
 
 ### 10.5 用脚本生成输入
 
-批量构象、批量底物的输入不要手工编辑。仓库脚本 [`gjf_builder.py`](../scripts/gjf_builder.py) 可以从 xyz/log/gjf 按任务模板生成输入（`python ../scripts/gjf_builder.py -h` 查看用法）；`sub_g16.sh` 是带自动内存换算、scratch 管理和批量提交功能的提交封装（`bash ../scripts/sub_g16.sh -h`）。用 ASE/pymatgen 驱动 Gaussian 见 Common 第4章，高通量工作流（AiiDA 等）见 Common 第6章。
+批量构象、批量底物的输入不要手工编辑。仓库脚本 [`gjf_builder.py`](../scripts/gjf_builder.py) 可以从 xyz/log/gjf 按任务模板生成输入（`python ../scripts/gjf_builder.py -h` 查看用法）；[`sub_g16.sh`](../scripts/sub_g16.sh) 是带自动内存换算、scratch 管理和批量提交功能的提交封装（`bash ../scripts/sub_g16.sh -h`）。用 ASE/pymatgen 驱动 Gaussian 见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)，高通量工作流（AiiDA 等）见 [Common 第6章](../../Common/tutorials/06-workflow-automation.md)。
 
 ---
 

@@ -6,6 +6,8 @@
 #   (A) &MOTION/&CELL_OPT/TYPE removed (and the unused &MOTION block with it)
 #   (B) DOS/PDOS output written with the syntax of the CP2K version in use, selected
 #       by the preprocessor variable NEWDOS (1 = CP2K >= 2026.2, 0 = CP2K <= 2026.1)
+#       Note: with k-points only 2026.2 writes (broadened) PDOS curves; the old &PDOS of
+#       CP2K <= 2026.1 is not implemented for k-points and only prints a warning.
 #   (C) basis name that really exists in BASIS_MOLOPT_UZH
 #   (D) diagonalisation instead of OT (k-points)
 #   (E) pseudopotential with the same number of valence electrons as the basis (q11)
@@ -67,6 +69,7 @@
 @IF ${NEWDOS-1} == 1
       # CP2K >= 2026.2: PDOS lives inside &DOS, broadened curves via &CURVE
       &DOS
+        NLUMO -1
         &PDOS
         &END PDOS
         &CURVE

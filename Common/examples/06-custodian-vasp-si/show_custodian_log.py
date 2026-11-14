@@ -3,10 +3,12 @@
 
 Usage:
     python show_custodian_log.py [path/to/custodian.json]
+    python show_custodian_log.py job_xxx/custodian.json.gz    # atomate2 gzips it
 
 Only the standard library is used, so it also works on a laptop that does not
 have custodian installed.
 """
+import gzip
 import json
 import sys
 from pathlib import Path
@@ -24,7 +26,11 @@ def main() -> int:
     if not path.is_file():
         print(f"{path} not found (custodian writes it in the run directory)")
         return 1
-    runs = json.loads(path.read_text())
+    if path.suffix == ".gz":
+        with gzip.open(path, "rt", encoding="utf-8") as fh:
+            runs = json.load(fh)
+    else:
+        runs = json.loads(path.read_text(encoding="utf-8"))
     for i, run in enumerate(runs, 1):
         job = run.get("job", {})
         suffix = job.get("suffix", "") if isinstance(job, dict) else ""

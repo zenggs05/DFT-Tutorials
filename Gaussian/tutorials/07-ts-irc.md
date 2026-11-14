@@ -211,7 +211,7 @@ g16 < sn2_cl_ch3br_ts_calcfc.gjf > sn2_cl_ch3br_ts_calcfc.log
 sbatch run_ts_irc.sh
 ```
 
-`%nprocshared`、`%mem` 要与作业调度系统申请的资源匹配，见 [第17章](17-hpc-jobs.md) 和 Common 第2章。也可以用仓库脚本 `sub_g16.sh` 提交（`bash ../scripts/sub_g16.sh -h` 查看用法）。
+`%nprocshared`、`%mem` 要与作业调度系统申请的资源匹配，见 [第17章](17-hpc-jobs.md) 和 [Common 第2章](../../Common/tutorials/02-job-scheduler.md)。也可以用仓库脚本 [`sub_g16.sh`](../scripts/sub_g16.sh) 提交（`bash ../scripts/sub_g16.sh -h` 查看用法）。
 
 ### 4.4 监控优化过程
 
@@ -512,7 +512,7 @@ TS 位于表的中间，能量和反应坐标都是 0。反应坐标一侧为负
 ### 7.5 作图与判断
 
 - **GaussView**：打开 IRC 的 `.log`，Results → IRC/Path，会画出能量–反应坐标曲线，点击曲线上的点可以查看对应结构，并能播放整条路径动画。
-- **仓库脚本**：`python ../scripts/scan_irc_profile.py -h` 查看用法。它会合并正反两个方向、以 kcal/mol 为单位作图。
+- **仓库脚本**：[`scan_irc_profile.py`](../scripts/scan_irc_profile.py)（`python ../scripts/scan_irc_profile.py -h` 查看用法）。它会合并正反两个方向、以 kcal/mol 为单位作图。
 
 判断 IRC 是否成功：
 
@@ -681,7 +681,7 @@ TS 优化达到 `MaxCycles` 仍未收敛。先用 `opt_monitor.py` 或 GaussView
 - 来回振荡：减小 `MaxStep`，用 `RecalcFC=5` 或 `CalcAll`；
 - 结构已经明显偏离预想的反应：换初猜。
 
-更多 L9999 的诊断方法见 [第5章](05-opt.md)。也可以用 `python ../scripts/g16_error_doctor.py -h` 自动识别报错类型。
+更多 L9999 的诊断方法见 [第5章](05-opt.md)。也可以用 [`g16_error_doctor.py`](../scripts/g16_error_doctor.py) 自动识别报错类型（`python ../scripts/g16_error_doctor.py -h` 查看用法）。
 
 ### 4. IRC 报 `Max corrector steps exceded`（L123）
 
@@ -747,7 +747,7 @@ TS 优化达到 `MaxCycles` 仍未收敛。先用 `opt_monitor.py` 或 GaussView
 - [thyheal/gaussian-workflow-copilot](https://github.com/thyheal/gaussian-workflow-copilot)：中文 TS/IRC 自查清单
 - 更多工具见 [../../Resources/github-repos.md](../../Resources/github-repos.md)
 
-**本仓库脚本**：`../scripts/scan_irc_profile.py`（IRC/扫描能量曲线）、`../scripts/log2xyz.py`（提取端点结构）、`../scripts/g16_log_summary.py`（虚频与热化学汇总）、`../scripts/opt_monitor.py`（优化收敛曲线）、`../scripts/g16_error_doctor.py`（报错诊断）、`../scripts/gjf_builder.py`（生成 ts/qst2/irc 模板）。各脚本用 `-h` 查看用法。
+**本仓库脚本**：[`../scripts/scan_irc_profile.py`](../scripts/scan_irc_profile.py)（IRC/扫描能量曲线）、[`../scripts/log2xyz.py`](../scripts/log2xyz.py)（提取端点结构）、[`../scripts/g16_log_summary.py`](../scripts/g16_log_summary.py)（虚频与热化学汇总）、[`../scripts/opt_monitor.py`](../scripts/opt_monitor.py)（优化收敛曲线）、[`../scripts/g16_error_doctor.py`](../scripts/g16_error_doctor.py)（报错诊断）、[`../scripts/gjf_builder.py`](../scripts/gjf_builder.py)（生成 ts/qst2/irc 模板）。各脚本用 `-h` 查看用法。
 
 **关键文献**
 

@@ -553,7 +553,7 @@ MoS2 8x8 / graphene 6x6 R30: L =  25.52 A, strain on graphene = 0.46 %, atoms = 
 
 即 MoS2 的 4×4 超胞与石墨烯的 3(√3×√3)R30° 超胞只差约 0.5%，102 个原子，是常用的计算模型。
 
-3. **更通用的工具**：pymatgen 的 `ZSLGenerator`（`pymatgen.analysis.interfaces.zsl`，Zur–McGill 晶格匹配算法）与 `CoherentInterfaceBuilder`（`pymatgen.analysis.interfaces.coherent_interfaces`）可以对任意晶面自动搜索匹配并生成界面结构；VASPKIT 804（由两个 slab 建异质结）、825（六角莫尔超晶格）也能完成类似工作。建模的通用知识见 Common 第3章。
+3. **更通用的工具**：pymatgen 的 `ZSLGenerator`（`pymatgen.analysis.interfaces.zsl`，Zur–McGill 晶格匹配算法）与 `CoherentInterfaceBuilder`（`pymatgen.analysis.interfaces.coherent_interfaces`）可以对任意晶面自动搜索匹配并生成界面结构；VASPKIT 804（由两个 slab 建异质结）、825（六角莫尔超晶格）也能完成类似工作。建模的通用知识见 [Common 第3章](../../Common/tutorials/03-structure-modeling.md)。
 4. **计算与分析**：异质结同样要固定真空、居中、使用一致的 vdW；不对称异质结必须加偶极校正。能带排列可用两种方式：分别计算两个单层、以各自的真空能级为参考（Anderson 规则）；或在异质结中用投影能带/PDOS 直接读带边，两者的差别反映了界面偶极与杂化。
 
 ---

@@ -106,7 +106,7 @@ bash run_multiwfn_examples.sh
 | IGMH | `ls igmh_cubes` | 含 `sl2r.cub` 和 `dg_inter.cub`；在 VMD 中用 Multiwfn 自带的 `IGM_inter.vmd` 作图，O–H···O 区域应为蓝色小圆盘 |
 | wfx | `ls -l water.wfx` | 文件存在，可被 Multiwfn 直接读取 |
 
-本仓库没有附带输出文件和参考数值，所有数值请以你自己的计算为准。也可以用仓库脚本 `batch_cube_multiwfn.sh` 对一个目录下的所有 chk 批量生成 cube 并调用 Multiwfn（`bash ../../scripts/batch_cube_multiwfn.sh -h` 查看用法），用 [`spectrum_uvvis_ecd.py`](../../scripts/spectrum_uvvis_ecd.py) 在不装 Multiwfn 的情况下画 UV-Vis（`python ../../scripts/spectrum_uvvis_ecd.py -h`）。
+本仓库没有附带输出文件和参考数值，所有数值请以你自己的计算为准。也可以用仓库脚本 [`batch_cube_multiwfn.sh`](../../scripts/batch_cube_multiwfn.sh) 对一个目录下的所有 chk 批量生成 cube 并调用 Multiwfn（`bash ../../scripts/batch_cube_multiwfn.sh -h` 查看用法），用 [`spectrum_uvvis_ecd.py`](../../scripts/spectrum_uvvis_ecd.py) 在不装 Multiwfn 的情况下画 UV-Vis（`python ../../scripts/spectrum_uvvis_ecd.py -h`）。
 
 ## 注意事项
 

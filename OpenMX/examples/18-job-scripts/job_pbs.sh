@@ -8,7 +8,8 @@
 # OpenMX 4.0 hybrid MPI x OpenMP job (PBS Pro / OpenPBS).
 #   qsub -v INPUT=input.dat job_pbs.sh
 # select=<nodes>:ncpus=<cores per node>:mpiprocs=<MPI per node>:ompthreads=<threads per MPI>
-# For Torque use instead:  #PBS -l nodes=2:ppn=64  and set NT by hand.
+# For Torque use instead:  #PBS -l nodes=2:ppn=64, then export OMP_NUM_THREADS
+# yourself and make sure (lines in $PBS_NODEFILE) x NT <= allocated cores.
 set -u
 cd "${PBS_O_WORKDIR}"
 INPUT=${INPUT:-input.dat}
@@ -21,7 +22,7 @@ fi
 OPENMX=${OPENMX:-openmx}
 
 NP=$(wc -l < "${PBS_NODEFILE}")       # one line per MPI process with mpiprocs=
-NT=${OMP_NUM_THREADS:-${NCPUS:-1}}    # PBS Pro sets OMP_NUM_THREADS from ompthreads
+NT=${OMP_NUM_THREADS:-1}              # PBS Pro sets OMP_NUM_THREADS from ompthreads=
 export OMP_NUM_THREADS=${NT}
 export OMP_STACKSIZE=512M
 ulimit -s unlimited

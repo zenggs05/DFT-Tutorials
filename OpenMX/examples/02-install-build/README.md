@@ -95,4 +95,4 @@ RESULT: PASS
 - 编译 `openmx` 需要十几分钟到半小时；脚本不使用并行 make（有用户报告并行编译时 ELPA 模块依赖出错）；
 - 在 Docker 容器中以 root 运行时，Open MPI 会拒绝启动 `mpirun`（`mpirun has detected an attempt to run as root`），请改用普通用户；
 - `-xHOST` 与 `-march=native` 只适合编译机与计算机 CPU 相同的情况；
-- 脚本面向 Linux（含 WSL）编写，编写时验证了 bash 语法、makefile 改写逻辑与 `check_runtest.sh` 的解析（用手册中的 runtest 输出格式），但无法覆盖所有发行版与编译器版本的实际编译；遇到编译错误请对照教程第2章“常见问题与报错”。仓库中的通用版本 `omx_build.sh` 提供相同功能（用法见 `bash omx_build.sh -h`）。
+- 脚本面向 Linux（含 WSL）编写，编写时验证了 bash 语法、makefile 改写逻辑与 `check_runtest.sh` 的解析（用手册中的 runtest 输出格式），但无法覆盖所有发行版与编译器版本的实际编译；遇到编译错误请对照[教程第2章](../../tutorials/02-install.md)“常见问题与报错”。仓库中的通用版本 [`omx_build.sh`](../../scripts/omx_build.sh) 提供相同功能（用法见 `bash ../../scripts/omx_build.sh -h`）。

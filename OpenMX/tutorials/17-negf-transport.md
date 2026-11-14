@@ -402,7 +402,7 @@ awk '!/^#/ && NF>=8 && $4>-0.005 && $4<0.005 {print "T_up(E~0) =", $6}' negf-cha
 
 ### 6.3 作图与平均
 
-示例里的 [plot_tran.py](../examples/17-negf-carbon-chain/plot_tran.py) 对多个 k 文件做等权平均，画出透射谱，并给出零偏压电导和 Seebeck 系数。OpenMX 部分的公共脚本 omx_negf_plot.py 还可以画 I–V 曲线和 k 分辨透射图，用法见 `python ../scripts/omx_negf_plot.py -h`。
+示例里的 [plot_tran.py](../examples/17-negf-carbon-chain/plot_tran.py) 对多个 k 文件做等权平均，画出透射谱，并给出零偏压电导和 Seebeck 系数。OpenMX 部分的公共脚本 [omx_negf_plot.py](../scripts/omx_negf_plot.py) 还可以画 I–V 曲线和 k 分辨透射图，用法见 `python ../scripts/omx_negf_plot.py -h`。
 
 ```bash
 python3 plot_tran.py negf-chain.tran0_0 --plot negf-chain_T.png
@@ -567,7 +567,7 @@ mpirun -np 64 openmx NEGF-7AGNR.dat -nt 2 > negf-7agnr.std 2>&1
 grep "Total Computational Time\|Diagonalization" negf-7agnr.out | head
 ```
 
-更多并行、作业脚本和排错内容见第18章。
+更多并行、作业脚本和排错内容见[第18章](18-parallel-on-errors.md)。
 
 ---
 
@@ -656,4 +656,4 @@ grep "Total Computational Time\|Diagonalization" negf-7agnr.out | head
 
 ---
 
-[← 上一章](16-surface-esm-workfunction.md) | [返回目录](../README.md)
+[← 上一章](16-surface-esm-workfunction.md) | [返回目录](../README.md) | [下一章 →](18-parallel-on-errors.md)

@@ -14,7 +14,7 @@
 | 确认得到的是一阶鞍点、计算指前因子 | 频率分析（IBRION=5 / VTST 动力学矩阵） | §9 | [11-ts-freq-check](../examples/11-ts-freq-check/README.md) |
 | 没有 VTST 版 VASP | VASP 内置 NEB（无爬坡）或 ASE NEB | §11 | — |
 
-**前置知识**：结构优化（[第4章](04-relax-eos.md)）、slab 模型（[第9章](09-surface-workfunction.md)）、吸附与频率（[第10章](10-adsorption-catalysis.md)）。VTST 补丁的编译在[第1章](01-setup-compile.md)。作业调度与多节点并行见 Common 第2章。
+**前置知识**：结构优化（[第4章](04-relax-eos.md)）、slab 模型（[第9章](09-surface-workfunction.md)）、吸附与频率（[第10章](10-adsorption-catalysis.md)）。VTST 补丁的编译在[第1章](01-setup-compile.md)。作业调度与多节点并行见 [Common 第2章](../../Common/tutorials/02-job-scheduler.md)。
 
 > [!NOTE]
 > 本章以 VASP 6.4–6.6 + 对应版本的 vtstcode 为准（[henkelmangroup/vtstcode](https://github.com/henkelmangroup/vtstcode) 按 VASP 版本分目录，必须选与你的 VASP 版本匹配的那一份）。文中的输出片段除特别说明外都是**示意输出，数值仅供参考**。
@@ -441,7 +441,7 @@ nt.plot_band(ax)
 fig.savefig("neb_barrier.png", dpi=200)
 ```
 
-也可以使用仓库脚本 [`neb_tools.py`](../scripts/neb_tools.py)（用法见 `-h`），或 Common 第5章 中的出版级作图方法。
+也可以使用仓库脚本 [`neb_tools.py`](../scripts/neb_tools.py)（用法见 `-h`），或 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md) 中的出版级作图方法。
 
 ### 8.3 检查清单
 
@@ -617,7 +617,7 @@ NSW     = 200
 
 ### 11.2 ASE NEB + VASP 计算器
 
-不能重新编译 VASP 时，也可以在 ASE 中运行 NEB/CI-NEB，由 ASE 的 `Vasp` 计算器逐图像调用 VASP（每个力计算都是一个独立的 VASP 单点）。优点是不需要补丁、可以用 ASE 的各种优化器和 AutoNEB；缺点是效率较低（每步重启 VASP，可读 WAVECAR 部分缓解）。ASE 驱动 VASP 的方法见 Common 第4章。
+不能重新编译 VASP 时，也可以在 ASE 中运行 NEB/CI-NEB，由 ASE 的 `Vasp` 计算器逐图像调用 VASP（每个力计算都是一个独立的 VASP 单点）。优点是不需要补丁、可以用 ASE 的各种优化器和 AutoNEB；缺点是效率较低（每步重启 VASP，可读 WAVECAR 部分缓解）。ASE 驱动 VASP 的方法见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)。
 
 ---
 

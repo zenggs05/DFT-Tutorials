@@ -48,7 +48,7 @@ sbatch run_g16.sh fe_complex_sp_scf_xqc.gjf
 sbatch run_g16.sh guess_read_small_to_big_basis.gjf
 ```
 
-`run_g16.sh` 中的 `module load` 或 `g16.profile` 两行需要按本集群的实际情况修改；scratch 目录默认放在 `/tmp/$USER` 下，可以用环境变量 `SCR_BASE` 改到更大的本地盘。更完整的提交脚本是 sub_g16.sh（`bash ../../scripts/sub_g16.sh -h` 查看用法），作业调度的基础知识见 ../../../Common/tutorials/02-job-scheduler.md。
+`run_g16.sh` 中的 `module load` 或 `g16.profile` 两行需要按本集群的实际情况修改；scratch 目录默认放在 `/tmp/$USER` 下，可以用环境变量 `SCR_BASE` 改到更大的本地盘。更完整的提交脚本是 [`sub_g16.sh`](../../scripts/sub_g16.sh)（`bash ../../scripts/sub_g16.sh -h` 查看用法），作业调度的基础知识见 [Common 第2章 HPC 作业调度](../../../Common/tutorials/02-job-scheduler.md)。
 
 H2O 和 H2 只需几秒；[Cu(NH3)4]²⁺ 和 [Fe(H2O)6]²⁺ 在 8 核上通常为几分钟到几十分钟，取决于机器。
 
@@ -91,4 +91,4 @@ grep -E "instability|wavefunction is stable" h2_stretched_stable_opt.log
 - 内存和核数：`%mem=12GB` 对应 Slurm `--mem=16G`（约 75%）；修改其中一个时要同步修改另一个。
 - `radical_sp_vshift.gjf` 用了 VShift，Gaussian 会关闭自动 archive，所以日志末尾没有 `1\1\` 开头的归档块，属于正常现象。
 - 配合物和团簇的自旋态能量对泛函很敏感，本目录只演示 SCF 技巧，不代表这些体系的推荐计算方案。
-- 如果作业仍然 L502 不收敛，按教程第 5 节的流程排查，也可以用 g16_error_doctor.py 自动识别错误（`python ../../scripts/g16_error_doctor.py -h`）。
+- 如果作业仍然 L502 不收敛，按教程第 5 节的流程排查，也可以用 [`g16_error_doctor.py`](../../scripts/g16_error_doctor.py) 自动识别错误（`python ../../scripts/g16_error_doctor.py -h`）。

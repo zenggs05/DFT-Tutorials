@@ -31,7 +31,7 @@ Gaussian 的计算结果大部分存放在二进制检查点文件（.chk）里�
 | 弱相互作用可视化（NCI/IGMH） | 7.7 |
 | 几十上百个 fchk 自动跑同一套分析 | 8 命令流批处理 |
 
-**前置知识**：输入文件结构与 `%chk`/`%oldchk`（[第2章](02-input-anatomy.md)）、单点能（[第4章](04-sp-scf.md)）。具体性质的计算方法分散在各章：TD-DFT 见 [第10章](10-tddft.md)，布居与 ESP 电荷见 [第12章](12-population-charges.md)，弱相互作用见 [第14章](14-weak-bsse.md)。通用的可视化工具（VESTA、Multiwfn 跨程序用法、出版级作图规范）见 Common 第5章。
+**前置知识**：输入文件结构与 `%chk`/`%oldchk`（[第2章](02-input-anatomy.md)）、单点能（[第4章](04-sp-scf.md)）。具体性质的计算方法分散在各章：TD-DFT 见 [第10章](10-tddft.md)，布居与 ESP 电荷见 [第12章](12-population-charges.md)，弱相互作用见 [第14章](14-weak-bsse.md)。通用的可视化工具（VESTA、Multiwfn 跨程序用法、出版级作图规范）见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 本章配套示例：[../examples/16-postprocess-multiwfn/README.md](../examples/16-postprocess-multiwfn/README.md)（苯酚的 HOMO/LUMO、密度与 ESP cube，ESP 表面分析，TD-DFT UV-Vis 绘谱；水二聚体 IGMH；`Output=WFX` 示例）。
 
@@ -392,7 +392,7 @@ GaussView 也可以直接读入外部 cube（File → Open 选择 .cub），因�
 | Results → IRC/Path | IRC 能量曲线 | 两端结构可另存为新输入，再做端点优化 |
 | Results → UV-VIS / NMR 等 | 激发态和 NMR 谱 | 可设置展宽；NMR 可选择参比物 |
 
-曲线窗口中右键菜单可以把数据导出为文本或保存图片。批量提取扫描和 IRC 能量可用仓库脚本 `scan_irc_profile.py`。
+曲线窗口中右键菜单可以把数据导出为文本或保存图片。批量提取扫描和 IRC 能量可用仓库脚本 [`scan_irc_profile.py`](../scripts/scan_irc_profile.py)。
 
 ### 5.5 导出图片
 
@@ -711,7 +711,7 @@ Multiwfn 导出的文件名大多是固定的（`surfanalysis.txt`、`spectrum_c
 
 现成工具：
 
-- 仓库脚本 `batch_cube_multiwfn.sh`：批量 formchk + cubegen（HOMO/LUMO/密度/ESP），并可按命令流文件调用 Multiwfn（`bash ../scripts/batch_cube_multiwfn.sh -h` 查看用法）；
+- 仓库脚本 [`batch_cube_multiwfn.sh`](../scripts/batch_cube_multiwfn.sh)：批量 formchk + cubegen（HOMO/LUMO/密度/ESP），并可按命令流文件调用 Multiwfn（`bash ../scripts/batch_cube_multiwfn.sh -h` 查看用法）；
 - [BaneWfn](https://github.com/bane-dysta/banewfn)：中文文档的 Multiwfn 批处理工作流工具，把固定的菜单序列模板化；
 - [runMultiwfn.bash](https://github.com/polyluxus/runMultiwfn.bash)：Linux 下非交互运行 Multiwfn 的 bash 封装。
 

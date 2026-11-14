@@ -1,0 +1,44 @@
+#
+# OpenMX 4.0 (+patch 4.0.1) convergence template, database DFT_DATA19
+# run_scan.sh replaces @ECUT@ (Ry) and @KGRID@ (e.g. "8 8 8").
+#
+System.CurrrentDirectory    ./          # official spelling (three r's)
+System.Name                 @NAME@
+DATA.PATH                   /opt/openmx4.0/DFT_DATA19   # EDIT: directory that contains PAO/ and VPS/
+level.of.stdout             1
+level.of.fileout            0           # no cube files during a scan
+
+Species.Number              1
+<Definition.of.Atomic.Species
+  Si   Si7.0-s2p2d1   Si_PBE19
+Definition.of.Atomic.Species>
+
+Atoms.Number                2
+Atoms.SpeciesAndCoordinates.Unit   FRAC
+<Atoms.SpeciesAndCoordinates
+  1   Si   0.00   0.00   0.00   2.0  2.0
+  2   Si   0.25   0.25   0.25   2.0  2.0
+Atoms.SpeciesAndCoordinates>
+Atoms.UnitVectors.Unit      Ang
+<Atoms.UnitVectors
+  0.0000  2.7155  2.7155
+  2.7155  0.0000  2.7155
+  2.7155  2.7155  0.0000
+Atoms.UnitVectors>
+
+scf.XcType                  GGA-PBE
+scf.SpinPolarization        off
+scf.ElectronicTemperature   300.0       # K
+scf.energycutoff            @ECUT@      # Ry, real-space integration grid (default 150)
+scf.EigenvalueSolver        Band
+scf.Kgrid                   @KGRID@
+scf.Mixing.Type             RMM-DIISK
+scf.Init.Mixing.Weight      0.10
+scf.Min.Mixing.Weight       0.01
+scf.Max.Mixing.Weight       0.30
+scf.Mixing.History          20
+scf.Mixing.StartPulay       8
+scf.maxIter                 200
+scf.criterion               1.0e-9      # Hartree, much tighter than the target accuracy
+
+MD.Type                     Nomd

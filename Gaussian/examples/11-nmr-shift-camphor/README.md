@@ -62,7 +62,7 @@ grep "Isotropic" camphor_nmr_giao_smd.log | \
 
 预期：羰基碳 C2 的位移在 200 ppm 以上的低场区，甲基碳和甲基氢位于高场区；具体数值与实验的偏差（MAE）对 13C 通常为数 ppm、对 1H 通常为零点几 ppm 量级（近似范围，取决于方法）。实验值请查阅文献或谱图数据库后自行比较。
 
-也可以使用仓库脚本：`python ../../scripts/nmr_shift.py -h`。
+也可以使用仓库脚本 [`nmr_shift.py`](../../scripts/nmr_shift.py)（`python ../../scripts/nmr_shift.py -h` 查看用法）。
 
 ## 注意事项
 

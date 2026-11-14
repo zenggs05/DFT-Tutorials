@@ -71,12 +71,17 @@
 
 完整说明见 [scripts/README.md](scripts/README.md)。
 
+- [batch_cube_multiwfn.sh](scripts/batch_cube_multiwfn.sh)
+- [g16_error_doctor.py](scripts/g16_error_doctor.py)
 - [g16_log_summary.py](scripts/g16_log_summary.py)
 - [gjf_builder.py](scripts/gjf_builder.py)
 - [log2xyz.py](scripts/log2xyz.py)
+- [nmr_shift.py](scripts/nmr_shift.py)
 - [opt_monitor.py](scripts/opt_monitor.py)
+- [scan_irc_profile.py](scripts/scan_irc_profile.py)
 - [spectrum_ir_raman.py](scripts/spectrum_ir_raman.py)
 - [spectrum_uvvis_ecd.py](scripts/spectrum_uvvis_ecd.py)
+- [sub_g16.sh](scripts/sub_g16.sh)
 - [thermo_qrrho.py](scripts/thermo_qrrho.py)
 
 ## 相关资源

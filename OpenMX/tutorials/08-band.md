@@ -315,7 +315,7 @@ gcc -std=c99 -O2 -Wall -Wextra -pedantic -DCIF2OPENMX_MAIN cif2omx.c -lm -o cif2
 
 ### 6.3 seekpath 与仓库脚本
 
-也可以用 Python 的 seekpath（HPKOT 约定）或 pymatgen 的 `HighSymmKpath` 生成路径。仓库脚本 ../scripts/omx_make_input.py 可从 POSCAR/CIF 生成 `.dat` 并可选写入 `<Band.kpath`，用 `python ../scripts/omx_make_input.py -h` 查看用法。
+也可以用 Python 的 seekpath（HPKOT 约定）或 pymatgen 的 `HighSymmKpath` 生成路径。仓库脚本 [omx_make_input.py](../scripts/omx_make_input.py) 可从 POSCAR/CIF 生成 `.dat` 并可选写入 `<Band.kpath`，用 `python ../scripts/omx_make_input.py -h` 查看用法。
 
 > [!CAUTION]
 > seekpath 会先把晶胞**标准化**（可能旋转、换轴或换成另一种原胞），它给出的 k 坐标对应标准化后的晶胞。要么用 seekpath 返回的晶胞做 SCF，要么把 k 坐标变换回你自己的晶胞；不同工具（Setyawan–Curtarolo、HPKOT）对同一晶系的标签和路径也可能不同，与文献对比时要说明所用约定。
@@ -388,7 +388,7 @@ note: VBM/CBM are searched only on the k points of the path
 
 判定逻辑：以化学势为零点，所有 ≤ 0 的本征值视为占据。若某条能带在路径上同时有 ≤ 0 和 > 0 的值，就是穿过费米能的金属/半金属能带，此时不报告带隙。对半导体，OpenMX 在有限电子温度下确定的化学势位于带隙之中，所以"VBM < 0 < CBM"。
 
-仓库还提供功能更全的 ../scripts/omx_band_plot.py（自动从 `.dat` 读路径标签、画自旋分辨能带），用 `python ../scripts/omx_band_plot.py -h` 查看用法。浏览器端的 [mfukudaQED/PQViewer_Band_DOS](https://github.com/mfukudaQED/PQViewer_Band_DOS) 可以同时显示能带与 DOS/PDOS、标记带隙与 VBM/CBM，并能读取展开能带。
+仓库还提供功能更全的 [omx_band_plot.py](../scripts/omx_band_plot.py)（自动从 `.dat` 读路径标签、画自旋分辨能带），用 `python ../scripts/omx_band_plot.py -h` 查看用法。浏览器端的 [mfukudaQED/PQViewer_Band_DOS](https://github.com/mfukudaQED/PQViewer_Band_DOS) 可以同时显示能带与 DOS/PDOS、标记带隙与 VBM/CBM，并能读取展开能带。
 
 ---
 
@@ -595,7 +595,7 @@ gcc intensity_map.c -lm -o intensity_map            # in openmx4.0/source
 
 - **费米面**：在 DOS 计算（`Dos.fileout on`，较密的 `Dos.Kgrid`，如 61×61×61）中加 `FermiSurfer.fileout on`，会输出 `System.Name.FermiSurf0.bxsf`（XCrySDen）和按原子分解的 `*.frmsf`（FermiSurfer）；自旋极化时有 `FermiSurf0/1`，非共线时为 `FermiSurf.bxsf`。**patch 4.0.1 起 bxsf/frmsf 的单位从 Hartree/Bohr 改为 eV/Å**，旧脚本若仍按原单位处理会得到错误数值。DOS 相关设置见[第9章](09-dos-pdos-cohp-optics.md)。
 - **有效质量**：在 VBM/CBM 附近加一段短而密的路径（如 ±0.05 × 2π/a、21 个点），用 `band_parse.py` 读出后做抛物线拟合 $E=\hbar^2k^2/2m^*$。
-- **Wannier 插值能带**：见第14章。
+- **Wannier 插值能带**：见[第14章](14-wannier.md)。
 - **能带的轨道成分**：不做展开时（不写 `<Unfolding.ReferenceVectors`），`unfold_orbup` 就是原胞能带的轨道分解（"fat band"），手册 55.1 节用它区分 SiC 的 σ 与 π 带。
 
 ---
@@ -670,7 +670,7 @@ gcc intensity_map.c -lm -o intensity_map            # in openmx4.0/source
 - [hikaruri/DFT_startup](https://github.com/hikaruri/DFT_startup) — 含用 gnuplot 画三维能带的入门资料
 - [pranabdas/openmx](https://github.com/pranabdas/openmx) — 英文 OpenMX 教程站，含 Si/金刚石能带示例
 - [materialscloud-org/seekpath](https://github.com/materialscloud-org/seekpath) — HPKOT 约定的高对称路径生成
-- 本仓库：../scripts/omx_band_plot.py、../scripts/omx_make_input.py、第5章 后处理与可视化、第3章 结构准备
+- 本仓库：[omx_band_plot.py](../scripts/omx_band_plot.py)、[omx_make_input.py](../scripts/omx_make_input.py)、公共篇 [第5章 后处理与可视化](../../Common/tutorials/05-postprocess-visualization.md)、[第3章 结构准备](../../Common/tutorials/03-structure-modeling.md)
 
 **关键文献**
 

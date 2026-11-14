@@ -33,7 +33,7 @@ g16 < hcn_hnc_qst2.gjf > hcn_hnc_qst2.log
 g16 < hcn_hnc_qst3.gjf > hcn_hnc_qst3.log
 ```
 
-在集群上运行时，可以参考 [../07-ts-irc-sn2/run_ts_irc.sh](../07-ts-irc-sn2/run_ts_irc.sh) 的写法，或使用仓库脚本 `bash ../../scripts/sub_g16.sh -h` 查看用法。
+在集群上运行时，可以参考 [../07-ts-irc-sn2/run_ts_irc.sh](../07-ts-irc-sn2/run_ts_irc.sh) 的写法，或使用仓库脚本 [`sub_g16.sh`](../../scripts/sub_g16.sh)（`bash ../../scripts/sub_g16.sh -h` 查看用法）。
 
 ## 预期结果 / 如何检查
 

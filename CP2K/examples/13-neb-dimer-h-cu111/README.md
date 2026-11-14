@@ -10,7 +10,7 @@
 2. 用 `RUN_TYPE BAND` + `BAND_TYPE CI-NEB` 求最小能量路径和能垒；
 3. 对 TS 猜测结构做只动 H 的部分 Hessian，得到虚频模式（molden 文件）；
 4. 用 Dimer（`GEO_OPT TYPE TRANSITION_STATE`）从该模式出发精修鞍点；
-5. 用第14章的 `ts_freq_check.inp` 确认只有一个虚频。
+5. 用[第14章](../../tutorials/14-vibration-thermo.md)的 `ts_freq_check.inp` 确认只有一个虚频。
 
 体系：3×3 表面晶胞、3 层 Cu（27 个原子，底层 9 个固定）+ 1 个 H，PBE，`DZVP-MOLOPT-PBE-GTH-q11/q1`（`BASIS_MOLOPT_UZH` + `POTENTIAL_UZH`），只算 Γ 点，对角化 + Broyden + Fermi–Dirac 500 K。
 

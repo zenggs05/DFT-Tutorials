@@ -1,0 +1,17 @@
+SYSTEM  = GaAs PBE band structure along a line-mode path (non-SCF)
+
+PREC    = Accurate
+ENCUT   = 400        # MUST equal the SCF value
+EDIFF   = 1E-7
+ISMEAR  = 0
+SIGMA   = 0.02
+LREAL   = .FALSE.
+
+ICHARG  = 11         # read CHGCAR, keep the density fixed (non-self-consistent)
+NBANDS  = 24         # 18 valence electrons -> 9 occupied bands; add empty bands
+LORBIT  = 11         # lm-decomposed PROCAR / vasprun.xml projections (fat bands)
+
+NSW     = 0
+IBRION  = -1
+LCHARG  = .FALSE.    # never overwrite the SCF CHGCAR
+LWAVE   = .FALSE.    # set .TRUE. only if you need WAVECAR (unfolding, wavefunctions)

@@ -18,7 +18,7 @@
 | 理解积分格点和 G16/G09 默认值的差别 | §9 |
 | 使用双杂化泛函，并理解冻芯设置 | §10 |
 
-前置知识：输入文件结构见 [第2章](02-input-anatomy.md)。DFT 理论背景和学习路线见公共篇 第7章 DFT 理论速览、学习路线与资源汇总。本章示例在 [examples/03-method-basis](../examples/03-method-basis/README.md)。
+前置知识：输入文件结构见 [第2章](02-input-anatomy.md)。DFT 理论背景和学习路线见[公共篇第7章 DFT 理论速览、学习路线与资源汇总](../../Common/tutorials/07-learning-path.md)。本章示例在 [examples/03-method-basis](../examples/03-method-basis/README.md)。
 
 > [!NOTE]
 > 不存在"万能"的方法和基组。本章给出的是被大量基准测试支持的**常用起点**。正式研究中应查阅与你的体系最接近的基准研究，必要时自己用小体系做测试（与实验或高精度 CCSD(T) 数据比较）。

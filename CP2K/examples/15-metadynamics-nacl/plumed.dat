@@ -7,7 +7,9 @@ UNITS LENGTH=A ENERGY=kj/mol TIME=fs
 d:  DISTANCE ATOMS=1,2
 cn: COORDINATION GROUPA=1 GROUPB=3-186:3 R_0=3.0 NN=12 MM=24
 
-# bias factor 6 at 300 K, Gaussian every 40 steps (20 fs), sigma 0.185 A
+# bias factor 6 at 300 K, Gaussian every 40 steps (20 fs), sigma 0.185 A.
+# TEMP is mandatory with BIASFACTOR: CP2K does not pass the temperature to PLUMED.
+# To continue a run, add a line "RESTART" right after the UNITS line.
 metad: METAD ARG=d SIGMA=0.185 HEIGHT=1.05 PACE=40 BIASFACTOR=6 TEMP=300 FILE=HILLS GRID_MIN=1.0 GRID_MAX=8.0 GRID_BIN=700
 
 # harmonic upper wall at 5.6 A (box half-length is 6.21 A)

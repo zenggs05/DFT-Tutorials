@@ -259,7 +259,7 @@ cp INCAR.hse INCAR && mpirun -np 16 vasp_std > vasp_hse.out     # HSE06 from tha
 - VASPKIT：`vaspkit -task 252`；
 - sumo：`sumo-bandplot`（可识别并拼接 `--split` 产生的 split-01、split-02… 目录）；
 - pymatgen：`Vasprun("vasprun.xml").get_band_structure(kpoints_filename="KPOINTS", line_mode=True)`，显式 KPOINTS 中高对称点要带标签；
-- 本仓库 `../scripts/plot_band.py` 会自动剔除非零权重点（用法见 `python ../scripts/plot_band.py -h`）。
+- 本仓库 [`plot_band.py`](../scripts/plot_band.py) 会自动剔除非零权重点（用法见 `python ../scripts/plot_band.py -h`）。
 
 ---
 

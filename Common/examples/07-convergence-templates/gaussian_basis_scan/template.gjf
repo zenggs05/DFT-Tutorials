@@ -1,0 +1,25 @@
+%nprocshared=8
+%mem=8GB
+%chk=@TAG@_hcn.chk
+#p PBE1PBE/@BASIS@ Opt Int=@GRID@ SCF=Tight
+
+HCN, basis/grid scan (@BASIS@, @GRID@)
+
+0 1
+H    0.000000    0.000000   -1.066000
+C    0.000000    0.000000    0.000000
+N    0.000000    0.000000    1.156000
+
+--Link1--
+%nprocshared=8
+%mem=8GB
+%chk=@TAG@_hnc.chk
+#p PBE1PBE/@BASIS@ Opt Int=@GRID@ SCF=Tight
+
+HNC, basis/grid scan (@BASIS@, @GRID@)
+
+0 1
+H    0.000000    0.000000   -0.995000
+N    0.000000    0.000000    0.000000
+C    0.000000    0.000000    1.169000
+

@@ -26,16 +26,17 @@ cp2klint "$TEMPLATE"
 
 # 2) generate one input per cutoff; project names are zipped with the cutoffs
 projects=$(echo "$CUTOFFS" | tr ',' '\n' | sed 's/^/c/' | paste -sd, -)
+tbase=$(basename "$TEMPLATE")
 mkdir -p "$WORK"
 cp "$TEMPLATE" "$WORK/"
 (
   cd "$WORK"
-  cp2kgen --zip "$TEMPLATE" \
+  cp2kgen --zip "$tbase" \
     "force_eval/dft/mgrid/cutoff=[${CUTOFFS}]" \
     "global/project_name=[${projects}]"
 )
 
-stem=${TEMPLATE%.inp}
+stem=${tbase%.inp}
 for c in $(echo "$CUTOFFS" | tr ',' ' '); do
   d="$WORK/c$c"
   mkdir -p "$d"
@@ -48,7 +49,8 @@ echo "generated $(ls -d "$WORK"/c* | wc -l) inputs in $WORK/"
 for c in $(echo "$CUTOFFS" | tr ',' ' '); do
   (
     cd "$WORK/c$c"
-    cp2k.psmp -c run.inp > check.log 2>&1 || { echo "c$c: cp2k -c failed, see check.log" >&2; exit 1; }
+    cp2k.psmp -c run.inp > check.log 2>&1 || true
+    grep -q "SUCCESS, the input could be parsed" check.log || { echo "c$c: cp2k -c failed, see $WORK/c$c/check.log" >&2; exit 1; }
     rm -f run.out
     $CP2K_CMD -i run.inp -o run.out
   )

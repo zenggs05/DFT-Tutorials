@@ -3,7 +3,7 @@
 本章从零搭建第一性原理计算的日常工作环境：在 Windows 上用 WSL2（或直接用 Linux/macOS）获得 Linux 命令行，用 SSH 密钥登录 HPC 集群，用 scp/rsync 传输文件、用 tmux/screen 保持会话，用 conda/mamba 建一个 Python ≥ 3.11 的 `dft` 环境，安装 ASE、pymatgen、phonopy、sumo、pyprocar、py4vasp、cclib、GoodVibes、LobsterPy 等工具，并正确设置 `VASP_PP_PATH`、`PMG_VASP_PSP_DIR`、`MP_API_KEY` 等环境变量。最后用 `environment.yml` 锁定版本、用自检脚本确认一切就绪（Linux / WSL2 / conda / SSH / rsync setup for VASP, Gaussian, CP2K and OpenMX users）。
 
 > [!NOTE]
-> 本章讲的是“周边环境”：Python 前后处理工具、登录与传输方法、环境变量。VASP、Gaussian、CP2K、OpenMX 本体的编译与安装分别见 [VASP 第1章](../../VASP/tutorials/01-setup-compile.md)、[Gaussian 第1章](../../Gaussian/tutorials/01-setup-first-job.md)、[CP2K 第1章](../../CP2K/tutorials/01-install.md) 和 [OpenMX 第2章](../../OpenMX/tutorials/02-install.md)；作业脚本与并行设置见 第2章。
+> 本章讲的是“周边环境”：Python 前后处理工具、登录与传输方法、环境变量。VASP、Gaussian、CP2K、OpenMX 本体的编译与安装分别见 [VASP 第1章](../../VASP/tutorials/01-setup-compile.md)、[Gaussian 第1章](../../Gaussian/tutorials/01-setup-first-job.md)、[CP2K 第1章](../../CP2K/tutorials/01-install.md) 和 [OpenMX 第2章](../../OpenMX/tutorials/02-install.md)；作业脚本与并行设置见 [第2章](02-job-scheduler.md)。
 
 ---
 
@@ -47,7 +47,7 @@
 
 1. **登录节点不跑计算**。在登录节点上直接 `mpirun -np 64 vasp_std` 会影响所有人，通常会被管理员杀掉甚至封号。几秒钟的小测试和 Python 后处理一般可以，具体以集群规定为准。
 2. **计算放在大容量工作盘**。`/home` 通常有几十 GB 的配额，一个 WAVECAR 就可能把它塞满；用 `quota -s`、`df -h ~`、`du -sh *` 查看用量（有些集群用自己的命令，如 `lfs quota -h -u $USER /work`）。
-3. **软件环境要和作业一致**。登录节点上 `module load` 过的东西不会自动进入作业，作业脚本里必须再写一遍（见 第2章）。
+3. **软件环境要和作业一致**。登录节点上 `module load` 过的东西不会自动进入作业，作业脚本里必须再写一遍（见 [第2章](02-job-scheduler.md)）。
 4. **大文件不下载**。WAVECAR、CHGCAR、`*.wfn`、`*.rwf` 动辄 GB 级，后处理尽量在集群上完成，只下载图和小文件。
 
 ---
@@ -100,7 +100,7 @@ xcode-select --install                 # 命令行编译工具
 brew install tmux rsync dos2unix wget htop
 ```
 
-Apple Silicon（M 系列）上 conda-forge 提供原生 arm64 包，下文的 Miniforge 安装方式相同；VESTA 3.90.x 开发版已有原生 Apple Silicon 构建（见 第5章）。
+Apple Silicon（M 系列）上 conda-forge 提供原生 arm64 包，下文的 Miniforge 安装方式相同；VESTA 3.90.x 开发版已有原生 Apple Silicon 构建（见 [第5章](05-postprocess-visualization.md)）。
 
 ### 3.3 原生 Linux 或虚拟机
 
@@ -219,7 +219,7 @@ ssh -N -L 8888:localhost:8888 hpc   # 把集群上 8888 端口的 Jupyter 映射
 ```
 
 > [!TIP]
-> X11 转发显示 VESTA、GaussView 这类重图形程序非常慢。更高效的做法是：在集群上把结构/电荷密度处理好，用 `rsync` 拉回小文件（POSCAR、CHGCAR 截取后的 `.vasp`、`.cube`）在本地打开；或者在集群的计算节点上开 Jupyter，用 nglview 交互查看（见 第5章）。
+> X11 转发显示 VESTA、GaussView 这类重图形程序非常慢。更高效的做法是：在集群上把结构/电荷密度处理好，用 `rsync` 拉回小文件（POSCAR、CHGCAR 截取后的 `.vasp`、`.cube`）在本地打开；或者在集群的计算节点上开 Jupyter，用 nglview 交互查看（见 [第5章](05-postprocess-visualization.md)）。
 
 ---
 
@@ -343,7 +343,7 @@ conda --version && mamba --version
 | pyprocar | 6.5.0 | ≥ 3.8 | v6 起 API 改为 `dirname=` 参数 |
 | cclib | 1.8.1 | ≥ 3.7 | 2.0a1 为 alpha 版，解析 Gaussian 有已知 bug |
 | goodvibes | 4.4.0 | ≥ 3.9 | 命令改为 `goodvibes`（不再用 `python -m goodvibes`） |
-| ovito（pip 版） | 3.17.2 | ≥ 3.11 | 官方提示不要 pip 装进 Anaconda 环境，见第5章 |
+| ovito（pip 版） | 3.17.2 | ≥ 3.11 | 官方提示不要 pip 装进 Anaconda 环境，见[第5章](05-postprocess-visualization.md) |
 
 结论：**Python 3.12 能同时满足以上所有包**；3.13 也可以，3.10 及以下会导致 pymatgen、phonopy、mp-api 无法升级到当前版本。
 
@@ -374,7 +374,7 @@ pip install mp-api sumo pyprocar py4vasp "cclib==1.8.1" goodvibes lobsterpy dpdi
 
 | 包 | 用途 | 相关章节 |
 |---|---|---|
-| ase | 结构读写/建模、计算器驱动四款软件、NEB、ase db | 第3章、第4章 |
+| ase | 结构读写/建模、计算器驱动四款软件、NEB、ase db | [第3章](03-structure-modeling.md)、[第4章](04-ase-pymatgen.md) |
 | pymatgen + mp-api | 结构对象、VASP 输入集、输出解析、相图、MP 数据库 | 第3章、第4章 |
 | spglib / seekpath | 对称性、原胞/标准胞、高对称 k 路径 | 第3章、第5章 |
 | phonopy | 声子谱、热力学性质 | [VASP 第12章](../../VASP/tutorials/12-phonon.md) |
@@ -382,7 +382,7 @@ pip install mp-api sumo pyprocar py4vasp "cclib==1.8.1" goodvibes lobsterpy dpdi
 | cclib / goodvibes | Gaussian 输出解析、准谐自由能 | 第4章、[Gaussian 第6章](../../Gaussian/tutorials/06-freq-thermo.md) |
 | lobsterpy | COHP 成键分析 | [VASP 第16章](../../VASP/tutorials/16-charge-bonding.md) |
 | rdkit | SMILES → 3D 分子结构 | 第3章 |
-| dpdispatcher | 批量生成/提交作业脚本 | 第2章 |
+| dpdispatcher | 批量生成/提交作业脚本 | [第2章](02-job-scheduler.md) |
 
 ### 7.5 无外网的集群：conda-pack 打包迁移
 
@@ -425,7 +425,7 @@ python -c "import pymatgen.core, ase; print('ok')"
 | `CP2K_DATA_DIR` | CP2K、ASE | `$HOME/cp2k/data` | 基组、赝势、dftd3.dat 所在目录 |
 | `OPENMX_DFT_DATA_PATH` | ASE | `$HOME/openmx4.0/DFT_DATA19` | OpenMX 的 PAO/VPS 数据库 |
 | `g16root`、`GAUSS_SCRDIR` | Gaussian | `/opt/gaussian`、`/tmp/$USER/g16` | 需 `source $g16root/g16/bsd/g16.profile` |
-| `OMP_NUM_THREADS` | 所有 OpenMP 程序 | 纯 MPI 时为 `1` | 见第2章 |
+| `OMP_NUM_THREADS` | 所有 OpenMP 程序 | 纯 MPI 时为 `1` | 见[第2章](02-job-scheduler.md) |
 | `OMP_STACKSIZE` | Multiwfn、OpenMP 程序 | `200M` | 太小会段错误 |
 
 把这些写进 `~/.bashrc` 的模板见 [bashrc_dft_snippet.sh](../examples/01-env-setup/bashrc_dft_snippet.sh)。修改后执行 `source ~/.bashrc`，并用 `echo $VASP_PP_PATH`、`env | grep -E "VASP|PMG|MP_"` 检查。
@@ -495,7 +495,7 @@ unset MP_API_ENDPOINT PMG_MAPI_ENDPOINT                # 删除指向旧 v2 地�
 python -c "from mp_api.client import MPRester; m=MPRester(); print(m.get_structure_by_material_id('mp-149'))"
 ```
 
-`pymatgen.ext.matproj.MPRester` 在 key 长度不是 32 时会直接报 `ValueError: Invalid or old API key. Please obtain an updated API key at https://materialsproject.org/dashboard.`。用法详见 第3章。
+`pymatgen.ext.matproj.MPRester` 在 key 长度不是 32 时会直接报 `ValueError: Invalid or old API key. Please obtain an updated API key at https://materialsproject.org/dashboard.`。用法详见 [第3章](03-structure-modeling.md)。
 
 > [!CAUTION]
 > API key 是个人凭证。不要写进会上传到 GitHub 的脚本或 notebook；放在 `~/.bashrc` 或 `~/.config/.pmgrc.yaml` 并 `chmod 600`。
@@ -512,7 +512,7 @@ echo 'export PATH=$HOME/software/vaspkit.1.5.1/bin:$PATH' >> ~/.bashrc
 which python             # conda activate dft 之后，把这个路径填到 PYTHON_BIN
 ```
 
-[vaspkit_rc.example](../examples/01-env-setup/vaspkit_rc.example) 按官方模板的键名整理。VASPKIT 1.5.0 起，如果 `~/.vaspkit` 不存在会读取 `/etc/vaspkit`（管理员统一配置）；新版本若引入了新变量，需要手动把新模板中的条目补进你的 `~/.vaspkit`。VASPKIT 的具体功能见 第5章。
+[vaspkit_rc.example](../examples/01-env-setup/vaspkit_rc.example) 按官方模板的键名整理。VASPKIT 1.5.0 起，如果 `~/.vaspkit` 不存在会读取 `/etc/vaspkit`（管理员统一配置）；新版本若引入了新变量，需要手动把新模板中的条目补进你的 `~/.vaspkit`。VASPKIT 的具体功能见 [第5章](05-postprocess-visualization.md)。
 
 ### 8.6 Gaussian、CP2K、OpenMX、Multiwfn
 
@@ -578,7 +578,7 @@ ldd $(which vasp_std) | grep -i -E "mpi|mkl|scalapack|fftw|not found"
 | `forrtl: severe (174): SIGSEGV, segmentation fault occurred` | 栈空间不足，或 MPI/OpenMP 混用不当，或编译器运行库不匹配 | `ulimit -s unlimited`；纯 MPI 时 `export OMP_NUM_THREADS=1`；核对模块版本 |
 
 > [!TIP]
-> 把“能跑通”的模块组合原样写进作业脚本（见第2章模板），并在计算记录里保存 `module list` 的输出。半年后复现结果时，这比任何记忆都可靠。
+> 把“能跑通”的模块组合原样写进作业脚本（见[第2章](02-job-scheduler.md)模板），并在计算记录里保存 `module list` 的输出。半年后复现结果时，这比任何记忆都可靠。
 
 ---
 
@@ -611,7 +611,7 @@ grep -nP '[^\x00-\x7F]' INCAR     # 找出非 ASCII 字符（中文、全角等�
 
 - VS Code：右下角状态栏点击 `CRLF` 改为 `LF`；在设置中把 `files.eol` 设为 `\n`。Notepad++：编辑 → 文档格式转换 → 转为 Unix (LF)。
 - Git：在仓库根目录 `.gitattributes` 写 `* text=auto eol=lf`（本仓库已经这样配置），或 `git config --global core.autocrlf input`。
-- 本仓库第2章的作业模板在运行前会自动检查输入文件里有没有 CRLF。
+- 本仓库[第2章](02-job-scheduler.md)的作业模板在运行前会自动检查输入文件里有没有 CRLF。
 
 ---
 
@@ -653,7 +653,7 @@ pip check                                     # 依赖是否一致
 python Common/examples/01-env-setup/print_versions.py
 ```
 
-更完整的检查用本仓库的 env_check.sh：它会逐项检查 Python 版本和关键包版本、`VASP_PP_PATH`/`PMG_VASP_PSP_DIR`/`MP_API_KEY` 是否设置、`~/.vaspkit` 是否存在、`ulimit -s`、`OMP_NUM_THREADS` 和 Multiwfn 所需的 `OMP_STACKSIZE`，并给出修复建议。运行 `bash Common/scripts/env_check.sh`，可用选项见脚本开头的说明或 `-h`。
+更完整的检查用本仓库的 [env_check.sh](../scripts/env_check.sh)：它会逐项检查 Python 版本和关键包版本、`VASP_PP_PATH`/`PMG_VASP_PSP_DIR`/`MP_API_KEY` 是否设置、`~/.vaspkit` 是否存在、`ulimit -s`、`OMP_NUM_THREADS` 和 Multiwfn 所需的 `OMP_STACKSIZE`，并给出修复建议。运行 `bash Common/scripts/env_check.sh`，可用选项见脚本开头的说明或 `-h`。
 
 （示意输出，数值仅供参考）
 
@@ -755,4 +755,4 @@ mp-api           0.47.0
 - [northword/wiki](https://github.com/northword/wiki) — 中文学习笔记，含 Linux 基础与 PBS 作业管理入门。
 - [tamaswells/VASP_script](https://github.com/tamaswells/VASP_script) — 中文社区常用 VASP 小脚本（含 CRLF 修正），无许可证，仅供参考链接。
 
-[返回目录](../README.md)
+[返回目录](../README.md) | [下一章 →](02-job-scheduler.md)

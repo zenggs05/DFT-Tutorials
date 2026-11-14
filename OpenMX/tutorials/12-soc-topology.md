@@ -24,7 +24,7 @@
 | 磁性拓扑、量子反常霍尔 | calB（Chern 数）、OMXsigmaxy | §8、§9 |
 | Rashba 表面、费米面自旋织构 | kSpin FermiLoop、FermiSurfer 输出 | §7、§10 |
 | 磁各向异性、轨道磁矩 | 见 [第11章](11-spin-noncollinear.md) §8、§9 | — |
-| 表面态、Wannier 紧束缚模型 | 见 第14章 | — |
+| 表面态、Wannier 紧束缚模型 | 见 [第14章](14-wannier.md) | — |
 
 > [!NOTE]
 > 本章以 [第8章](08-band.md) 的能带计算、[第11章](11-spin-noncollinear.md) 的非共线输入为基础；scfout 文件的通用说明见 [第10章](10-charge-mo-cube.md) §10。VASP 中的 SOC 设置可对照 [VASP 第7章](../../VASP/tutorials/07-magnetism-u-soc.md)。
@@ -182,7 +182,7 @@ python soc_splitting.py gaas_nosoc.Band --at G L
 | L 价带顶 | 4 重简并 | 两组 2 重 | 手册表 6：L3v 劈裂 0.213 eV |
 | 带隙 | — | 比无 SOC 小约 Δ0/3（Γ8 上移） | GGA 严重低估绝对带隙（实验 1.52 eV） |
 
-用 `bandgnu13 gaas_soc.Band` 生成 `gaas_soc.GNUBAND`（能量已换算为 eV、以化学势为零点），或用 `../scripts/omx_band_plot.py`（`-h` 查看用法）把 SOC 与无 SOC 能带画在同一张图上。
+用 `bandgnu13 gaas_soc.Band` 生成 `gaas_soc.GNUBAND`（能量已换算为 eV、以化学势为零点），或用 [`omx_band_plot.py`](../scripts/omx_band_plot.py)（`-h` 查看用法）把 SOC 与无 SOC 能带画在同一张图上。
 
 > [!TIP]
 > 若想复现手册表 6 的数值，可参照手册设置（LDA：`scf.XcType LSDA-CA` 配 `*_CA19` 赝势，Ga7.0-s2p2d2 / As7.0-s2p2d2，12³ k 点，140 Ry）。patch 4.0.1 修正了官方 work 目录里的 `GaAs.dat`，正是为了让手册 38.1 节的结果可以复现。
@@ -513,7 +513,7 @@ OpenMX 本身之外，有几类基于 scfout 的社区工具（均为外部程�
 | [HWC](https://github.com/Ncmexp2717/HWC) | scfout | 混合 Wannier 电荷中心（WCC 演化）、层极化 | 复制进 OpenMX source 后 `make HWC`；WCC 随 k 的"缠绕"可判断 Z2 与 Chern 数 |
 | [pymx](https://github.com/knhr0727/pymx) | scfout | Python 构建 H(k)，示例含 Bi2Se3 能带、宇称本征值与 WCC（Wilson loop） | 适合理解宇称判据（Fu–Kane）的实现思路 |
 | [HopTB.jl](https://github.com/HopTB/HopTB.jl) | OpenMX 哈密顿量 | 紧束缚模型上的 Berry 曲率、AHC、光学与非线性响应 | Julia |
-| Wannier90 / WannierTools | OpenMX 的 Wannier90 格式输出 | 表面态、Wilson loop、Weyl 点 | 见 第14章 的 MLWF/CWF 接口 |
+| Wannier90 / WannierTools | OpenMX 的 Wannier90 格式输出 | 表面态、Wilson loop、Weyl 点 | 见 [第14章](14-wannier.md) 的 MLWF/CWF 接口 |
 
 > [!TIP]
 > 对有反演中心的体系（如 Bi2Se3），Fu–Kane 宇称判据给出 $(-1)^{\nu_0}=\prod_{i=1}^{8}\prod_{m}\xi_{2m}(\Gamma_i)$（8 个 TRIM 点上占据 Kramers 对的宇称乘积），是 Z2FH 结果的独立检验。pymx 的示例实现了这一计算，可作为思路参考（不要复制其代码，自己实现时只需 scfout 中的哈密顿量与重叠矩阵）。
@@ -592,7 +592,7 @@ OpenMX Viewer（2026-05 更新）可以直接读 BXSF/FRMSF，显示第一布里
 | nc + SOC + CDDF 光学计算段错误，或 `Parameter 10 was incorrect on entry to ZHEEVX` | 4.0 已知问题 | 参考 [klsk007/openmx-soc-cddf-fix](https://github.com/klsk007/openmx-soc-cddf-fix) 的分析，或关注官方补丁 |
 | 费米面能量/尺度不对 | patch 4.0.1 前后 bxsf/frmsf 单位不同 | 打补丁后为 eV/Å，按版本处理 |
 | 自旋螺旋 + SOC 报错 | 广义 Bloch 定理与 SOC 不兼容 | 二者不能同时使用（见 [第11章](11-spin-noncollinear.md) §10） |
-| SOC 计算内存不足 | 维度加倍 | 减少每节点 MPI 进程、改用 MPI×OpenMP、或减小基组（见 第18章） |
+| SOC 计算内存不足 | 维度加倍 | 减少每节点 MPI 进程、改用 MPI×OpenMP、或减小基组（见 [第18章](18-parallel-on-errors.md)） |
 
 ---
 

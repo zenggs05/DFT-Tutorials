@@ -1,0 +1,25 @@
+SYSTEM  = GaAs HSE06 band structure with zero-weight k-points
+
+PREC    = Accurate
+ENCUT   = 400
+EDIFF   = 1E-6
+ISMEAR  = 0
+SIGMA   = 0.02
+LREAL   = .FALSE.
+
+LHFCALC  = .TRUE.    # hybrid functional
+HFSCREEN = 0.2       # 0.2 1/A: HSE06 (AEXX defaults to 0.25)
+ALGO     = Damped    # robust for hybrids; ALGO = All is an alternative
+TIME     = 0.4
+
+ISTART  = 1          # optional: reuse WAVECAR of a PBE run done with this KPOINTS file
+NBANDS  = 24
+LORBIT  = 11
+
+NSW     = 0
+IBRION  = -1
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.
+# The run is self-consistent: the weighted points of KPOINTS_hse_zero_weight
+# define the density, the zero-weight points only give eigenvalues.
+# Do NOT use ICHARG = 11 with hybrid functionals.

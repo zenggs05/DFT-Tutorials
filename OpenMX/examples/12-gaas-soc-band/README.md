@@ -30,7 +30,7 @@ python soc_splitting.py gaas_soc.Band   --at G L
 python soc_splitting.py gaas_nosoc.Band --at G L
 ```
 
-画能带可用 `bandgnu13 gaas_soc.Band` 后 `gnuplot gaas_soc.GNUBAND`，或仓库脚本 `../../scripts/omx_band_plot.py`（`-h` 查看用法）。
+画能带可用 `bandgnu13 gaas_soc.Band` 后 `gnuplot gaas_soc.GNUBAND`，或仓库脚本 [`omx_band_plot.py`](../../scripts/omx_band_plot.py)（`-h` 查看用法）。
 
 ## 预期结果 / 如何检查
 

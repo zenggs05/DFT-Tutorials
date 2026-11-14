@@ -27,12 +27,13 @@ command -v cp2k.psmp >/dev/null || { echo "cp2k.psmp not found in PATH" >&2; exi
 if [ $# -gt 0 ]; then
   inputs="$*"
 else
-  inputs="ethanol_gfn1_native.inp ice_gfn2_tblite_kpoints.inp dftb_md.inp water_qmmm_tip3p.inp"
+  inputs="ethanol_gfn1_native.inp ice_gfn2_tblite_kpoints.inp o2_triplet_spgfn2.inp dftb_md.inp"
+  inputs="$inputs xtb_qmmm_water.inp water_qmmm_tip3p.inp"
   # the AMBER variant needs the tleap output first
   [ -f water125.prmtop ] && inputs="$inputs water_qmmm_amber.inp"
 fi
 
-# tblite is optional at compile time: skip the GFN2 example if it is missing
+# tblite is optional at compile time: skip the tblite examples if it is missing
 has_tblite=0
 cp2k.psmp -v 2>/dev/null | grep -qi tblite && has_tblite=1
 
@@ -41,13 +42,18 @@ TB_FLAGS=${TB_FLAGS:-}
 
 for inp in $inputs; do
   extra=""
-  if [ "$inp" = "ice_gfn2_tblite_kpoints.inp" ]; then
-    if [ "$has_tblite" -eq 0 ]; then
-      echo "=== skip $inp: this cp2k.psmp was built without tblite"
-      continue
-    fi
-    extra=$TB_FLAGS
-  fi
+  case "$inp" in
+    ice_gfn2_tblite_kpoints.inp|o2_triplet_spgfn2.inp)
+      if [ "$has_tblite" -eq 0 ]; then
+        echo "=== skip $inp: this cp2k.psmp was built without tblite"
+        continue
+      fi
+      # o2_triplet_spgfn2.inp is written for 2026.2 only (no NEWTB switch)
+      if [ "$inp" = "ice_gfn2_tblite_kpoints.inp" ]; then
+        extra=$TB_FLAGS
+      fi
+      ;;
+  esac
   out=${inp%.inp}.out
   rm -f "$out"                     # -o appends to an existing file
   echo "=== $inp -> $out  ($(date))"

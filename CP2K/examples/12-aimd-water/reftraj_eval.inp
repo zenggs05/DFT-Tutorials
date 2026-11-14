@@ -17,7 +17,7 @@
 &MOTION
   &MD
     ENSEMBLE REFTRAJ
-    STEPS    10                   ! number of frames to evaluate
+    STEPS    10                   ! ignored: reset to LAST-FIRST+1 = 901, every STRIDE-th -> 10 frames
     &REFTRAJ
       TRAJ_FILE_NAME water32_prod-pos-1.xyz
       FIRST_SNAPSHOT 1
@@ -46,7 +46,7 @@
     &END MGRID
     &QS
       EPS_DEFAULT   1.0E-12
-      EXTRAPOLATION USE_PREV_WF   ! frames are 50 fs apart: only reuse the previous WFN
+      EXTRAPOLATION USE_PREV_WF   ! frames are 500 fs apart: only reuse the previous WFN
     &END QS
     &SCF
       SCF_GUESS ATOMIC

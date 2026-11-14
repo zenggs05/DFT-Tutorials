@@ -208,10 +208,12 @@ def parse_log(path):
                 cur["predicted"] = to_float(m.group(1))
                 continue
             if "Optimization completed" in line:
-                if "negligible forces" in line:
-                    info["negligible"] = True
                 if job_kind == "opt" and steps:
                     steps[-1]["converged"] = True
+                    # only the Opt step itself counts; the Freq re-check prints the same phrase
+                    if "negligible forces" in line:
+                        steps[-1]["negligible"] = True
+                        info["negligible"] = True
                 elif job_kind == "other":
                     info["freq_check"] = "converged"
                 continue
@@ -230,7 +232,7 @@ def parse_log(path):
 # --------------------------------------------------------------------------------------
 # diagnosis
 # --------------------------------------------------------------------------------------
-def diagnose(steps, info, is_ts=False):
+def diagnose(steps, info, is_ts=False, log="opt.log"):
     """Return a list of (Chinese) diagnosis lines for the last optimization in `steps`."""
     out = []
     if not steps:
@@ -239,7 +241,7 @@ def diagnose(steps, info, is_ts=False):
     n = len(steps)
     if last["converged"]:
         out.append("优化已收敛（Stationary point found），共 %d 步。" % n)
-        if info.get("negligible"):
+        if last.get("negligible"):
             out.append("注意：是按“力可以忽略”判据收敛的（位移未达标）。势能面可能很平坦，"
                        "频率计算中留意低频/小虚频。")
         if info.get("freq_check") == "NOT converged":
@@ -270,13 +272,14 @@ def diagnose(steps, info, is_ts=False):
         out.append("这是 TS 优化：能量先升后降属正常；关键是 Hessian 是否始终只有 1 个负本征值。")
     if sign_changes >= 3 and ups >= 2:
         out.append("诊断：振荡。能量和力在几个结构之间来回跳动。")
-        out.append("建议：从能量最低的一步重新开始（log2xyz.py --lowest --gjf），并用 Opt=CalcFC（或 ReadFC/"
-                   "Recalc=N）获得准确 Hessian，减小步长 Opt=MaxStep=10，必要时 Int=SuperFine；"
-                   "同时确认每一步 SCF 都已收敛（无 'Convergence criterion not met'）。")
+        out.append("建议：从能量最低的一步重新开始（log2xyz.py %s --lowest --gjf restart.gjf），"
+                   "并用 Opt=CalcFC（或 Opt=ReadFC、Opt=RecalcFC=N 每 N 步重算一次 Hessian）获得准确 Hessian，"
+                   "减小步长 Opt=MaxStep=10，必要时 Int=SuperFine；"
+                   "同时确认每一步 SCF 都已收敛（无 'Convergence criterion not met'）。" % log)
     elif drop > 0.3 and ups <= 2:
         out.append("诊断：缓慢但稳定地下降，只是步数不够。")
         out.append("建议：从最后一步续算并增大 MaxCycles（Opt=(Restart,MaxCycles=200) 需要 chk；或 "
-                   "log2xyz.py --gjf --maxcycles 200），初始结构很差时先用小基组或 xtb 预优化。")
+                   "log2xyz.py %s --gjf restart.gjf --maxcycles 200），初始结构很差时先用小基组或 xtb 预优化。" % log)
     elif spread < 0.05:
         if forces_ok:
             out.append("诊断：平坦势能面——力已达标，位移迟迟不达标（如甲基/苯环转动等软模式）。")
@@ -490,7 +493,7 @@ def main(argv=None):
         lastgrp = [s for s in steps if s["job"] == steps[-1]["job"] and s["scan_point"] == steps[-1]["scan_point"]]
         is_ts = bool(info["route"] and re.search(r"(?i)\bts\b|qst[23]", info["route"]))
         print("-" * 78)
-        for line in diagnose(lastgrp, info, is_ts):
+        for line in diagnose(lastgrp, info, is_ts, os.path.basename(log)):
             print(line)
         if args.csv:
             write_csv(steps, args.csv)

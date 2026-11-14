@@ -49,7 +49,7 @@
 > [!TIP]
 > 选择原则：**交互式快速出结果用 VASPKIT；需要可重复、可批量的分析用 Python（pymatgen/ASE/py4vasp）；VASP 6.4 以后新增的输出（KPOINTS_OPT、部分电荷 h5、声子 h5、MLFF）优先用 py4vasp。** 同一个量最好用两种工具交叉验证一次（例如 VASPKIT 911 与 pymatgen 的带隙）。
 
-本仓库自带的脚本（由各章作者编写，用 `-h` 查看用法）：[plot_band.py](../scripts/plot_band.py)、[plot_dos.py](../scripts/plot_dos.py)、[chgdiff.py](../scripts/chgdiff.py)、[locpot_workfunction.py](../scripts/locpot_workfunction.py)、optics_post.py、[elastic_post.py](../scripts/elastic_post.py)、[md_analysis.py](../scripts/md_analysis.py)、[check_vasp.py](../scripts/check_vasp.py)、[vasp_inputgen.py](../scripts/vasp_inputgen.py)、[conv_test.sh](../scripts/conv_test.sh)、job_vasp_slurm.sh 等。通用的 ASE/pymatgen 用法见 Common 第4章，跨软件的作图见 Common 第5章。
+本仓库自带的脚本（由各章作者编写，用 `-h` 查看用法）：[plot_band.py](../scripts/plot_band.py)、[plot_dos.py](../scripts/plot_dos.py)、[chgdiff.py](../scripts/chgdiff.py)、[locpot_workfunction.py](../scripts/locpot_workfunction.py)、[optics_post.py](../scripts/optics_post.py)、[elastic_post.py](../scripts/elastic_post.py)、[md_analysis.py](../scripts/md_analysis.py)、[check_vasp.py](../scripts/check_vasp.py)、[vasp_inputgen.py](../scripts/vasp_inputgen.py)、[conv_test.sh](../scripts/conv_test.sh)、[job_vasp_slurm.sh](../scripts/job_vasp_slurm.sh)、[job_vasp_pbs.sh](../scripts/job_vasp_pbs.sh)、[phonopy_workflow.sh](../scripts/phonopy_workflow.sh) 等，各脚本的详细说明见 [scripts/README.md](../scripts/README.md)。通用的 ASE/pymatgen 用法见 [Common 第4章](../../Common/tutorials/04-ase-pymatgen.md)，跨软件的作图见 [Common 第5章](../../Common/tutorials/05-postprocess-visualization.md)。
 
 ---
 
@@ -330,7 +330,7 @@ jid2=$(sbatch --parsable --dependency=afterok:$jid1 band.slurm)
 sbatch --dependency=afterok:$jid2 post.slurm
 ```
 
-调度器的更多用法见 Common 第2章；仓库的 job_vasp_slurm.sh / job_vasp_pbs.sh 是通用模板。
+调度器的更多用法见 [Common 第2章](../../Common/tutorials/02-job-scheduler.md)；仓库的 [job_vasp_slurm.sh](../scripts/job_vasp_slurm.sh) / [job_vasp_pbs.sh](../scripts/job_vasp_pbs.sh) 是通用模板。
 
 ### 8.3 作业健康检查
 
@@ -372,7 +372,7 @@ run_locally(flow, create_folders=True)       # 双重弛豫 -> 均匀网格与�
 
 - 运行前在 `~/.atomate2.yaml` 中设置 `VASP_CMD`（或环境变量 `ATOMATE2_VASP_CMD`），并按 §4.3 配置 pymatgen 的 POTCAR 路径；
 - atomate2 内置弛豫、能带、弹性、声子、缺陷、LOBSTER、MLFF 等工作流，底层用 custodian 运行 VASP；
-- `run_locally` 适合在一个作业中顺序执行；成百上千个任务应使用 jobflow-remote 或 FireWorks 管理队列与数据库，见 Common 第6章。
+- `run_locally` 适合在一个作业中顺序执行；成百上千个任务应使用 jobflow-remote 或 FireWorks 管理队列与数据库，见 [Common 第6章](../../Common/tutorials/06-workflow-automation.md)。
 
 示例脚本：[atomate2_relax_band.py](../examples/18-postprocess-toolkit/atomate2_relax_band.py)。
 
@@ -395,7 +395,7 @@ grep -n "WARNING" OUTCAR | head -20
 grep -n -A12 "ADVICE" OUTCAR | head -60      # 含 ADVICE 字样的提示框（例如大超胞时建议 LREAL = Auto）
 
 # 4) 收敛过程：电子步是否到达 NELM、能量是否振荡
-grep -E "^ *(DAV|RMM|CG|SDA) *:" OSZICAR | awk '{print $2}' | sort -n | tail -1   # 最大电子步数
+grep -E "^ *(DAV|RMM|CGA?|SDA) *:" OSZICAR | awk '{print $2}' | sort -n | tail -1   # 最大电子步数（CGA: 对应 ALGO = All）
 grep " F= " OSZICAR | tail -5
 
 # 5) 结构是否合理：最近邻距离、是否原子重叠
@@ -466,7 +466,7 @@ VASP 官方于 2026 年 6 月 16 日发布了 AI 工具使用指南，核心原�
 | 需要大规模入库 | pymatgen + JSON/数据库，或 atomate2 自带的数据存储 |
 | 计算数 < 50 | Shell 循环 + 作业数组 + check 脚本 |
 | 计算数 50–1000 | 作业数组 + custodian；或 atomate2 + jobflow-remote |
-| 计算数 > 1000、多步依赖 | atomate2/FireWorks/AiiDA 等工作流引擎（Common 第6章） |
+| 计算数 > 1000、多步依赖 | atomate2/FireWorks/AiiDA 等工作流引擎（[Common 第6章](../../Common/tutorials/06-workflow-automation.md)） |
 | 结果需要论文复现 | 记录所有软件版本（VASP、POTCAR 版本、pymatgen、phonopy 等），脚本放进仓库，数据上传平台 |
 
 ### 提交前检查清单
