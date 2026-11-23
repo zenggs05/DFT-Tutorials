@@ -1,0 +1,26 @@
+{
+  "projectName": "DFT-Tutorials",
+  "projectOwner": "zenggs05",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [],
+  "imageSize": 80,
+  "commit": false,
+  "contributorsPerLine": 7,
+  "contributors": [
+    {
+      "login": "zenggs05",
+      "name": "Gaoshan Zeng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/147889749?v=4",
+      "profile": "https://github.com/zenggs05",
+      "contributions": ["code", "doc", "maintenance"]
+    },
+    {
+      "login": "lvnana-01",
+      "name": "lvnana-01",
+      "avatar_url": "https://avatars.githubusercontent.com/u/242550473?v=4",
+      "profile": "https://github.com/lvnana-01",
+      "contributions": ["code", "bug", "test"]
+    }
+  ]
+}

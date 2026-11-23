@@ -230,6 +230,17 @@ python VASP/scripts/plot_band.py -h
 
 不方便打赏也完全没关系：点一个 ⭐ **Star**、转发给身边做计算的同学，或者在 Issues 里指出错误、提出想看的主题，同样是很大的鼓励。谢谢你！
 
+## 👥 贡献者
+
+感谢所有为本项目贡献代码、修正错误和提出建议的朋友！
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="160"><a href="https://github.com/zenggs05"><img src="https://github.com/zenggs05.png?size=100" width="80" alt="zenggs05"><br><sub><b>Gaoshan Zeng</b></sub></a><br><sub>项目作者与维护者</sub></td>
+    <td align="center" valign="top" width="160"><a href="https://github.com/lvnana-01"><img src="https://github.com/lvnana-01.png?size=100" width="80" alt="lvnana-01"><br><sub><b>lvnana-01</b></sub></a><br><sub>修复 GPUMD/CP2K/VASP 等多个脚本的 bug 并补充回归测试（#4、#5）</sub></td>
+  </tr>
+</table>
+
 ## 🤝 参与贡献
 
 欢迎通过 [Issues](https://github.com/zenggs05/DFT-Tutorials/issues) 报告错误、提出新主题，或提交 Pull Request 补充教程与脚本。如果这个仓库对你有帮助，请点一个 ⭐ Star，让更多做计算的同学看到它！

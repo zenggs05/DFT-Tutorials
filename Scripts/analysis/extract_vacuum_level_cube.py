@@ -43,7 +43,7 @@ def get_vacuum_level_and_export(cube_file_path):
     plt.plot(z_axis, planar_avg_ev, color='blue', linewidth=2, label='Planar Average Potential')
     plt.axhline(y=e_vac, color='red', linestyle='--', label=f'Vacuum Level: {e_vac:.4f} eV')
 
-    plt.xlabel('Z axis ($\AA$)', fontsize=12)
+    plt.xlabel(r'Z axis ($\AA$)', fontsize=12)
     plt.ylabel('Electrostatic Potential (eV)', fontsize=12)
     plt.title('Macroscopic Average Electrostatic Potential', fontsize=14)
     plt.legend()

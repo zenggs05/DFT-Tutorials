@@ -183,6 +183,15 @@ Writing and checking these tutorials took a lot of spare time. If they saved you
   </tr>
 </table>
 
+## Contributors
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="160"><a href="https://github.com/zenggs05"><img src="https://github.com/zenggs05.png?size=100" width="80" alt="zenggs05"><br><sub><b>Gaoshan Zeng</b></sub></a><br><sub>author & maintainer</sub></td>
+    <td align="center" valign="top" width="160"><a href="https://github.com/lvnana-01"><img src="https://github.com/lvnana-01.png?size=100" width="80" alt="lvnana-01"><br><sub><b>lvnana-01</b></sub></a><br><sub>fixed bugs in GPUMD/CP2K/VASP scripts and added regression tests (#4, #5)</sub></td>
+  </tr>
+</table>
+
 ## Contributing
 
 Issues and pull requests are welcome. If you find this useful, please give it a ⭐ star!
