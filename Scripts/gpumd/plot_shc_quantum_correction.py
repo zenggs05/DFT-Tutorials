@@ -74,7 +74,7 @@ shc_sample = 2*num_corr_points + freq_points - 1
 shc = np.zeros((freq_points, run_num))
 Fe = Fex if dic == 'x' else Fey if dic == 'y' else Fez
 for i in range(run_num):
-    shc_run = shc_raw[:shc_sample * run_num * (i + 1), :]
+    shc_run = shc_raw[shc_sample * i:shc_sample * (i + 1), :]
     shc_kwi = shc_run[-freq_points:, 1] * 1602.17662 / (float(Fe) * T * V)
     shc_kwo = shc_run[-freq_points:, 2] * 1602.17662 / (float(Fe) * T * V)
     shc_kw = shc_kwi + shc_kwo
