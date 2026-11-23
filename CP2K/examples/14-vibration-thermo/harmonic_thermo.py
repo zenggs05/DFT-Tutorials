@@ -82,6 +82,8 @@ def main():
     ap.add_argument("--floor", type=float, default=0.0,
                     help="raise real frequencies below this value (cm^-1) to it, e.g. 50; default: off")
     args = ap.parse_args()
+    if not math.isfinite(args.temperature) or args.temperature <= 0:
+        ap.error("temperature must be finite and positive")
 
     if args.file.lower().endswith((".mol", ".molden")):
         nu = freqs_from_molden(args.file)
@@ -113,8 +115,9 @@ def main():
         if f < 1e-6:
             continue
         x = e / kT
-        u += e / math.expm1(x)
-        s += KB_EV * (x / math.expm1(x) - math.log(-math.expm1(-x)))
+        occupation = math.exp(-x) / (-math.expm1(-x))
+        u += e * occupation
+        s += KB_EV * (x * occupation - math.log(-math.expm1(-x)))
     if not real:
         sys.exit("no real modes left")
     ts = T * s

@@ -48,7 +48,7 @@ with open('run.in', 'r') as file:
         elif 'compute_shc' in line:
             num_corr_points = int(line.split()[2])
             max_corr_t = int(line.split()[1])*num_corr_points/1000
-            freq_points, num_omega = int(line.split()[4]), int(line.split()[5])
+            freq_points, num_omega = int(line.split()[4]), float(line.split()[5])
         elif 'compute' in line:
             if len(line.split()) == 5:
                 Ns = int(line.split()[3])*int(line.split()[2])

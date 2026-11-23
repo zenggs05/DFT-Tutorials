@@ -30,11 +30,19 @@ HB2_2M = 3.80998212   # hbar^2 / (2 m_e) in eV * Angstrom^2
 def read_lattice(poscar):
     with open(poscar) as fh:
         lines = fh.readlines()
-    scale = float(lines[1].split()[0])
+    scale = np.array([float(x) for x in lines[1].split()])
     lat = np.array([[float(x) for x in lines[i].split()[:3]] for i in (2, 3, 4)])
-    if scale < 0:
-        return lat * (abs(scale) / abs(np.linalg.det(lat))) ** (1 / 3)
-    return lat * scale
+    if len(scale) not in (1, 3) or not np.all(np.isfinite(scale)):
+        raise ValueError("POSCAR requires one or three finite scaling factors")
+    if len(scale) == 1 and scale[0] < 0:
+        volume = abs(np.linalg.det(lat))
+        if volume <= 0 or not np.isfinite(volume):
+            raise ValueError("POSCAR lattice has invalid volume")
+        scale = (-scale[0] / volume) ** (1 / 3)
+    elif np.any(scale <= 0):
+        raise ValueError("POSCAR scaling factors must be positive (or one negative volume)")
+    lat = lat * scale
+    return lat
 
 
 def read_eigenval(path):

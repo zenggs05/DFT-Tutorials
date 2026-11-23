@@ -215,7 +215,7 @@ def read_fermi_ev(path):
             for line in fh:
                 m = re.search(r"Fermi energy:\s*(" + NUM + r")", line)
                 if m:
-                    ef = float(m.group(1)) * HA2EV
+                    ef = float(m.group(1).replace("D", "E").replace("d", "e")) * HA2EV
     except OSError as exc:
         die(f"cannot read {path}: {exc}")
     if ef is None:

@@ -2,20 +2,25 @@ import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from ase.io.cube import read_cube_data
+from ase.io.cube import read_cube
 
 
 def get_vacuum_level_and_export(cube_file_path):
     print(f"正在读取 {cube_file_path} ... 这可能需要几十秒钟。")
-    data, atoms = read_cube_data(cube_file_path)
+    with open(cube_file_path) as fh:
+        cube = read_cube(fh)
+    data = cube["data"]
 
     planar_avg_hartree = np.mean(data, axis=(0, 1))
 
     planar_avg_ev = planar_avg_hartree * 27.2114
 
-    cell_z = atoms.cell[2, 2]
+    # Cube samples follow the voxel vectors; the last sample is not the cell boundary.
+    # A z-directed planar average requires the first two voxel vectors to lie in xy.
+    if not np.allclose(cube["spacing"][:2, 2], 0):
+        raise ValueError("The first two cube grid vectors must lie in the xy plane")
     nz = data.shape[2]
-    z_axis = np.linspace(0, cell_z, nz)
+    z_axis = cube["origin"][2] + np.arange(nz) * cube["spacing"][2, 2]
 
     e_vac = np.max(planar_avg_ev)
     print(f"成功! 计算得到的真空能级 (Evac) 为: {e_vac:.6f} eV\n")

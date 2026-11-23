@@ -53,9 +53,9 @@ k_L = np.zeros_like(length)
 numpy_version = importlib.metadata.version('numpy')
 for i, el in enumerate(length):
     if numpy_version < '2':
-        k_L[i] = np.trapz(shc_kw/(1+lambda_i/el), shc_nu)
+        k_L[i] = np.trapz(mask_kw/(1+lambda_i/el), mask_nu)
     else:
-        k_L[i] = np.trapezoid(shc_kw/(1+lambda_i/el), shc_nu)
+        k_L[i] = np.trapezoid(mask_kw/(1+lambda_i/el), mask_nu)
 
 figure(figsize=(12,10))
 subplot(2,2,1)

@@ -34,9 +34,18 @@ EV_A2_TO_N_M = 16.02176634
 def area_from_poscar(path):
     with open(path) as fh:
         lines = fh.read().splitlines()
-    scale = float(lines[1].split()[0])
+    scale = np.array([float(x) for x in lines[1].split()])
     lat = np.array([[float(x) for x in lines[i].split()[:3]] for i in (2, 3, 4)])
-    lat = lat * scale if scale > 0 else lat
+    if len(scale) not in (1, 3) or not np.all(np.isfinite(scale)):
+        raise ValueError("POSCAR requires one or three finite scaling factors")
+    if len(scale) == 1 and scale[0] < 0:
+        volume = abs(np.linalg.det(lat))
+        if volume <= 0 or not np.isfinite(volume):
+            raise ValueError("POSCAR lattice has invalid volume")
+        scale = (-scale[0] / volume) ** (1 / 3)
+    elif np.any(scale <= 0):
+        raise ValueError("POSCAR scaling factors must be positive (or one negative volume)")
+    lat = lat * scale
     return float(np.linalg.norm(np.cross(lat[0], lat[1])))
 
 

@@ -36,9 +36,9 @@ def fermi_energy(outfile):
     ef = None
     with open(outfile) as f:
         for line in f:
-            m = re.search(r"Fermi energy:\s+(-?\d+\.\d+)", line)
+            m = re.search(r"Fermi energy:\s*([-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[EeDd][-+]?\d+)?)", line)
             if m:
-                ef = float(m.group(1))
+                ef = float(m.group(1).replace("D", "E").replace("d", "e"))
     if ef is None:
         raise SystemExit("no 'Fermi energy:' line found (smearing switched off?)")
     return ef * HA2EV

@@ -61,15 +61,16 @@
                 tmp_system.data["coords"][0] = np.matmul(
                     tmp_system.data["coords"][0], cell_perturb_matrix
                 )
+                pert_indices = list(range(len(tmp_system.data["coords"][0])))
                 if elem_pert_list is not None:
                     if all(isinstance(el, str) for el in elem_pert_list):
                         elements = [tmp_system.data["atom_names"][types] for types in tmp_system.data["atom_types"]]
-                        perturb_indices = [idx for idx, el in enumerate(elements) if el in elem_pert_list]
+                        pert_indices = [idx for idx, el in enumerate(elements) if el in elem_pert_list]
                     elif all(isinstance(el, int) for el in elem_pert_list):
-                        perturb_indices = elem_pert_list
+                        pert_indices = elem_pert_list
                     else:
-                        pert_indices = list(range(len(tmp_system.data["coords"][0])))
-                pert_natoms = int(atom_pert_prob * len(pert_indices)
+                        raise ValueError("elem_pert_list must contain only element names or only atom indices")
+                pert_natoms = int(atom_pert_prob * len(pert_indices))
                 pert_atom_id = sorted(
                     np.random.choice(
                         pert_indices,

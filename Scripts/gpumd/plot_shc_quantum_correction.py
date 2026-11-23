@@ -22,7 +22,7 @@ with open('run.in', 'r') as file:
             max_corr_t = int(line.split()[1])*int(line.split()[2])/1000
             dic = 'x' if int(line.split()[3]) ==0 else 'y' if int(line.split()[3]) ==1 else 'z'
             freq_points = int(line.split()[4])
-            num_omega = int(line.split()[5])
+            num_omega = float(line.split()[5])
         elif 'compute_hnemd' in line:
             hnemd_sample = int(line.split()[1])
             Fex, Fey, Fez = line.split()[2], line.split()[3], line.split()[4]

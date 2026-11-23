@@ -215,13 +215,16 @@ def element(sym):
 # --------------------------------------------------------------------------- thermo
 def vib_terms(nu, T, qrrho=False, w0=100.0):
     """Per-mode ZPE, thermal U (incl. ZPE), S for real frequencies nu (cm^-1); J/mol, J/mol/K."""
+    if not math.isfinite(T) or T <= 0:
+        raise ValueError("temperature must be finite and positive")
     zpe = u = s = 0.0
     for v in nu:
         e = H * C_CM * v                       # J
         x = e / (KB * T)
         zpe += 0.5 * e * NA
-        u += (0.5 * e + e / math.expm1(x)) * NA
-        s_ho = R * (x / math.expm1(x) - math.log(-math.expm1(-x)))
+        occupation = math.exp(-x) / (-math.expm1(-x))
+        u += (0.5 * e + e * occupation) * NA
+        s_ho = R * (x * occupation - math.log(-math.expm1(-x)))
         if qrrho:
             mu = H / (8 * math.pi ** 2 * C_CM * v)
             bav = 1.0e-44
@@ -292,8 +295,8 @@ def main():
             mol = f
         else:
             out = f
-    if any(t <= 0 for t in args.temperature):
-        die("temperatures must be positive")
+    if any(not math.isfinite(t) or t <= 0 for t in args.temperature):
+        die("temperatures must be finite and positive")
     if args.sigma < 1 or args.mult < 1:
         die("--sigma and --mult must be >= 1")
 

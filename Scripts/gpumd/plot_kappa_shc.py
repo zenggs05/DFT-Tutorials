@@ -22,7 +22,7 @@ with open('run.in', 'r') as file:
             max_corr_t = int(line.split()[1])*int(line.split()[2])/1000
             dic = 'x' if int(line.split()[3]) ==0 else 'y' if int(line.split()[3]) ==1 else 'z'
             freq_points = int(line.split()[4])
-            num_omega = int(line.split()[5])
+            num_omega = float(line.split()[5])
         elif 'compute_hnemd' in line:
             hnemd_sample = int(line.split()[1])
             Fex, Fey,Fez = line.split()[2], line.split()[3], line.split()[4]
@@ -31,8 +31,8 @@ print("请在run.in平衡阶段中添加dump_thermo命令")
 
 kappa = np.loadtxt('kappa.out')
 run_time = hnemd_sample * time_step * len(kappa)
-t = np.arange(1, len(kappa) + 1) * time_step * 0.001
-xlimit = int(run_time * 0.000001)
+t = np.arange(1, len(kappa) + 1) * hnemd_sample * time_step * 1e-6
+xlimit = run_time * 1e-6
 
 def set_tick_params():
     tick_params(axis='x', which='both', direction='in', top=True, bottom=True)
@@ -59,7 +59,7 @@ else:
 if dic == 'x' or dic == 'y':
     figure(figsize=(12,4))
     subplot(1,3,1)
-    plot(t, kappa[:,2],color='C7',alpha=0.5)
+    plot(t, kappa[:,0 if dic == 'x' else 2],color='C7',alpha=0.5)
     plot(t, ki_ra, linewidth=2)
     xlim([0, xlimit])
     gca().set_xticks(linspace(0,xlimit,3))
@@ -71,7 +71,7 @@ if dic == 'x' or dic == 'y':
     title('(a)')
 
     subplot(1,3,2)
-    plot(t, kappa[:,3],color='C7',alpha=0.5)
+    plot(t, kappa[:,1 if dic == 'x' else 3],color='C7',alpha=0.5)
     plot(t, ko_ra, linewidth=2, color='C3')
     xlim([0, xlimit])
     gca().set_xticks(linspace(0,xlimit,3))
